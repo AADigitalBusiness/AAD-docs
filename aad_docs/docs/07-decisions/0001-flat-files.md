@@ -39,3 +39,4 @@ All documentation is `.md`, `.yml`, `.csv` or `.json` in the repository. The app
 ## Next
 
 - [0002 · Documentation lives inside each app](0002-docs-inside-each-app.md)
+- Narrowed by [0009 · An optional database index](0009-optional-database-index.md)

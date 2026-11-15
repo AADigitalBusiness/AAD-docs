@@ -9,6 +9,7 @@ flowchart LR
     m2 --> m3["M3<br/>Tables and flows"]
     m3 --> m4["M4<br/>Spanish, checks, screenshots"]
     m4 --> m5["M5<br/>First project"]
+    m5 -.-> m6["M6 · future<br/>Database index"]
 ```
 
 ## Goal
@@ -30,7 +31,7 @@ Keep the documentation of every project current, navigable and consistent, so th
 ## Out of scope
 
 - Editing documentation in the browser. Files are edited in the editor and reviewed in git.
-- A database. The app defines no models.
+- A database in the core. The app defines no models through M5. A later delivery adds an optional index: see M6.
 - Hosting a public documentation site.
 - Documenting code that is not a Django app.
 
@@ -113,6 +114,26 @@ Accepted when: the owner can find a model, a route and a class of that app from 
 
 The project is not chosen yet.
 
+### M6 · Database index (future delivery)
+
+Recommended, not scheduled. Start it after M5, once a real project shows which of its gains are needed.
+
+Combine the file-based documentation with [django-tree-queries](https://github.com/feincms/django-tree-queries) in an optional module, `aad_docs.index`. The files stay the source; the index is derived from them and rebuilt by a command. The reasons and the alternatives are in [decision 0009](../aad_docs/docs/07-decisions/0009-optional-database-index.md).
+
+| Side | Deliverable |
+|---|---|
+| Backend | `DocNode` model on django-tree-queries; `docs_sync` and `docs_sync --check`; search; link from a node to a model; permissions per node |
+| Frontend | Search box and results with their path in the tree; help link in the admin of a linked model |
+
+Build order: search first, then the link between nodes and models, then permissions.
+
+Accepted when:
+
+- The core still works, with no model and no migration, in a project that does not install the module.
+- Deleting every row and running `docs_sync` restores the same index.
+- A search for a word in any page returns that page with its path in the tree.
+- The admin of a linked model opens its documentation page.
+
 ## Risks
 
 | Risk | Effect | Response |
@@ -122,6 +143,7 @@ The project is not chosen yet.
 | Class discovery is fuzzy | The code map lists noise or misses services | Start with models, views and URL patterns, which Django can enumerate; add other classes by convention (`services/`) and by opt-in |
 | Spanish falls behind | Users read outdated pages | `synced` header checked by `docs_check` in CI |
 | Generated files drift from code | The map lies | `docs_codemap --check` in CI |
+| The database index falls behind the files (M6) | Search and links show outdated content | The index is never edited by hand; `docs_sync --check` in CI |
 | Docs missing from installed packages | Empty nodes in production | Package data declared at M0; a check at startup |
 
 ## Open decisions
@@ -131,6 +153,7 @@ The project is not chosen yet.
 | Frontend technology | Django templates and plain JavaScript in the package | [0007](../aad_docs/docs/07-decisions/0007-frontend-django-templates.md) |
 | Package name, versions, libraries | `aad_docs`; Python 3.11+, Django 4.2+; `markdown-it-py`, `PyYAML`; Mermaid vendored | [0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md) |
 | First project for M5 | Not chosen | This page |
+| Database index | Optional module on django-tree-queries, in a future delivery | [0009](../aad_docs/docs/07-decisions/0009-optional-database-index.md) |
 | Screenshot tool | Playwright against the local server | Decide at M4 |
 
 ## Next

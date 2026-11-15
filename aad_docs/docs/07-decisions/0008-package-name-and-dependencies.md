@@ -50,3 +50,4 @@ The design used `appdocs` as a provisional name. The repository is `AAD-docs`. T
 
 - Every setting: [settings.csv](../06-reference/settings.csv)
 - What gets built: [PLAN.md](../../../docs/PLAN.md)
+- [0009 · An optional database index](0009-optional-database-index.md)
