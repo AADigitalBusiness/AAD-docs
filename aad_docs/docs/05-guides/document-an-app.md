@@ -75,10 +75,11 @@ The examples use an app called `orders`.
 
 ## Result
 
-`/docs/orders/` shows the overview, and the code map opens as an explorer where each model, route and class names its file. `docs_check` reports nothing.
+`/docs/orders/` shows the overview, each model has its own page at `/docs/orders/<model-slug>/`, and the code map opens as an explorer where each model, route and class names its file. `docs_check` reports nothing.
 
 ## Next
 
+- Show a table, a flow or a model inside a page: [embed-a-piece.mdx](embed-a-piece.mdx)
 - Add a guide for a task: create `orders/docs/05-guides/` with an `__init__.py`.
 - Add a Spanish page for non-technical users: `01-overview.es.md` next to `01-overview.md`.
 - If `docs_check` reports a finding, look it up in [checks.csv](../06-reference/checks.csv).

@@ -22,7 +22,7 @@ Documentation kept outside the repository falls behind the code, has its own his
 
 ## Decision
 
-All documentation is `.md`, `.yml`, `.csv` or `.json` in the repository. The app has no models and stores nothing.
+All documentation is `.md`, `.mdx`, `.yml`, `.csv` or `.json` in the repository. The app has no models and stores nothing.
 
 ## Alternatives
 

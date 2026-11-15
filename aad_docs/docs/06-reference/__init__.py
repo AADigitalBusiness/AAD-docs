@@ -5,5 +5,5 @@ node = Node(
     title="Reference",
     title_es="Referencia",
     order=60,
-    pages=["node-options", "settings", "commands", "checks", "file-types"],
+    pages=["node-options", "settings", "commands", "checks", "file-types", "mdx-tags"],
 )

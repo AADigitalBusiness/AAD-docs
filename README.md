@@ -5,7 +5,7 @@ Read this page to learn what AAD-docs is and where to go next. It takes five min
 ```mermaid
 flowchart LR
     code["Your Django apps<br/>models, urls, classes"] --> aad["aad_docs"]
-    files["&lt;app&gt;/docs/<br/>.md .yml .csv .json"] --> aad
+    files["&lt;app&gt;/docs/<br/>.md .mdx .yml .csv .json"] --> aad
     aad --> site["/docs/&lt;slug&gt;/<br/>navigable documentation"]
     aad --> gen["Generated files<br/>code-map.yml, reference tables"]
 ```

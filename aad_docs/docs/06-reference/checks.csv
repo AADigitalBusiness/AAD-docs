@@ -5,6 +5,8 @@ D003,A node's __init__.py fails to import or declares no valid node,Fix the erro
 D004,A name in pages matches no file or child node,Fix the name or remove it
 D005,A link points to a file that does not exist,Fix the link
 D006,A file has an extension the app does not read,"Move it to assets/ if it is an image, else remove it"
+D007,A section and a model of the same app produce the same slug,Rename the section folder
+D008,A .md and a .mdx with the same name sit in the same folder,Keep one of the two
 D010,A Spanish page was synced before its source last changed,Update the Spanish page and its synced date
 D011,A Spanish page has no source and synced header,Add the header
 D012,A Spanish page names a source that does not exist,Fix the source name
@@ -18,3 +20,6 @@ D041,A generated file is out of date with the code,Run docs_codemap
 D050,A page does not open with a purpose line,Add one line under the title that says what the reader gets
 D051,A .md page has no diagram,Add a Mermaid diagram after the purpose line
 D052,A guide step with interface has no screenshot,Run docs_screenshots
+D060,A .mdx uses a tag that is not listed in mdx-tags.csv,Use a listed tag or remove it
+D061,A tag points to a file or a model that does not exist,Fix its src or name
+D062,A .mdx contains import or export or a JavaScript expression,Remove it; the app compiles nothing

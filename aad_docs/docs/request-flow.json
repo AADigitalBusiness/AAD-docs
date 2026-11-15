@@ -23,9 +23,9 @@
     },
     {
       "id": "node",
-      "title": "The node is found",
-      "detail": "The tree is searched for the slug 'aad-docs'. An unknown slug returns 404.",
-      "file": "aad_docs/views.py"
+      "title": "The address is resolved",
+      "detail": "resolve_path() finds the node 'aad-docs' and reads 'overview' as a section, a model or a page, in that order. An unknown slug returns 404.",
+      "file": "aad_docs/routing.py"
     },
     {
       "id": "language",

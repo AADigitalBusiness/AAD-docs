@@ -1,5 +1,6 @@
 extension,holds,written_by,reader,shown_as,milestone
 .md,Pages,A person,readers/markdown.py,Text with Mermaid diagrams and screenshots,M1
+.mdx,"Pages that embed a piece: a table, a flow, a model",A person,readers/mdx.py,Text with the interactive pieces inside the page,M3
 .yml,"Structured data: the code map, a glossary",A command,readers/yaml.py,Click-through explorer,M2
 .csv,"Tables: fields, parameters, permissions",A command,readers/csv.py,Table that sorts and filters,M3
 .json,"Data for interactive pieces: flows, API schemas",A person or a command,readers/json.py,Step-by-step simulator or viewer,M3

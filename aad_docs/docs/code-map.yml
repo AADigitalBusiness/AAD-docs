@@ -10,22 +10,23 @@ routes:
     name: aad_docs:index
     view: IndexView
     file: aad_docs/views.py
-  - path: /docs/<slug>/
+  - path: /docs/<app_slug>/
     name: aad_docs:node
     view: NodeView
     file: aad_docs/views.py
-  - path: /docs/<slug>/<path:page>/
+  - path: /docs/<app_slug>/<path:path>/
     name: aad_docs:page
     view: PageView
     file: aad_docs/views.py
-  - path: /docs/<slug>/assets/<path:file>
+    resolves: [section, model, page]
+  - path: /docs/<app_slug>/assets/<path:file>
     name: aad_docs:asset
     view: AssetView
     file: aad_docs/views.py
 
 modules:
   - file: aad_docs/__init__.py
-    exports: [Node]
+    exports: [Node, docs_url]
 
   - file: aad_docs/apps.py
     classes:
@@ -69,6 +70,10 @@ modules:
     functions:
       - name: read
         does: Renders a .md to HTML, keeping Mermaid blocks for the browser.
+  - file: aad_docs/readers/mdx.py
+    functions:
+      - name: read
+        does: Renders the Markdown of a .mdx and replaces each known tag with the data of its piece.
   - file: aad_docs/readers/yaml.py
     functions:
       - name: read
@@ -87,6 +92,14 @@ modules:
       - name: pick_variant
         does: Returns name.<lang>.md when it exists for the active language, else name.md.
 
+  - file: aad_docs/routing.py
+    functions:
+      - name: resolve_path
+        does: Turns the path after the app slug into a section, a model or a page.
+        uses: [build_tree]
+      - name: docs_url
+        does: Returns the address of an app, a model or one of their pages.
+
   - file: aad_docs/urls.py
     does: URL patterns under the aad_docs namespace.
 
@@ -101,8 +114,8 @@ modules:
         uses: [build_tree]
       - name: PageView
         kind: view
-        does: Shows one page in the active language.
-        uses: [build_tree, read_page]
+        does: Shows one page or one model in the active language.
+        uses: [resolve_path, read_page]
       - name: AssetView
         kind: view
         does: Serves a screenshot from a node's assets folder.
@@ -150,6 +163,7 @@ templates:
   - aad_docs/templates/aad_docs/base.html
   - aad_docs/templates/aad_docs/node.html
   - aad_docs/templates/aad_docs/page_md.html
+  - aad_docs/templates/aad_docs/page_model.html
   - aad_docs/templates/aad_docs/page_explorer.html
   - aad_docs/templates/aad_docs/page_table.html
   - aad_docs/templates/aad_docs/page_simulator.html

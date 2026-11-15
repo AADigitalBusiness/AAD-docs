@@ -18,9 +18,10 @@ flowchart LR
 AAD-docs is a Django app that turns the `docs/` folder of each installed app into navigable documentation.
 
 - Documentation lives inside the app it describes. Move or delete the app and its documentation goes with it.
-- Everything is a flat file: `.md`, `.yml`, `.csv` or `.json`. It reads in full on GitHub or in an editor with nothing installed.
+- Everything is a flat file: `.md`, `.mdx`, `.yml`, `.csv` or `.json`. It reads in full on GitHub or in an editor with nothing installed.
 - The parts of the documentation that the code already knows are generated from the code: models, fields, relations, routes, classes.
 - The app adds what flat files cannot: a menu, a language switch and interactive views of the data files.
+- Every app, page and model gets a fixed address under `/docs/`, taken from its own name.
 
 ## When to use it
 

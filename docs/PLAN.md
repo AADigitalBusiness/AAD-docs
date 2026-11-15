@@ -21,8 +21,9 @@ Keep the documentation of every project current, navigable and consistent, so th
 | Navigate a project without reading all its code | Code map generated from models, routes and classes |
 | Very visual | Every page opens with a diagram; data files become interactive views |
 | English for technical readers, Spanish for non-technical users | `name.es.md` next to `name.md`; Django translations for model texts |
-| Screenshots and interactive pieces | `docs_screenshots`; explorer, table and simulator drawn from data files |
-| Flat files | `.md`, `.yml`, `.csv`, `.json` inside each app's `docs/` |
+| Screenshots and interactive pieces | `docs_screenshots`; explorer, table and simulator drawn from data files; `.mdx` pages that embed them |
+| Flat files | `.md`, `.mdx`, `.yml`, `.csv`, `.json` inside each app's `docs/` |
+| A fixed address for every app, page and model on the live site | Addresses taken from app and model metadata; `docs_url()` |
 | Explains itself | Fixed page anatomy; `HOW-DOCS-WORK.md` |
 | Installable Django app | `aad_docs` in `INSTALLED_APPS`; `__init__.py` resolves each node |
 | Model metadata resolves model documentation | `docs_codemap` reads `_meta`, field options and docstrings |
@@ -55,7 +56,7 @@ The demo app exists because `aad_docs` has no models. It is the only place where
 
 | Side | Deliverable |
 |---|---|
-| Backend | Discovery, nodes, `.md` reader, URLs and views, staff-only access |
+| Backend | Discovery, nodes, `.md` reader, routing for apps, sections and pages, `docs_url()`, URLs and views, staff-only access |
 | Frontend | Base layout, navigation menu, page with Mermaid |
 
 Accepted when:
@@ -63,19 +64,22 @@ Accepted when:
 - `/docs/aad-docs/` and `/docs/project/` in the demo render every `.md` in this repository, diagrams included.
 - An empty `__init__.py` produces a node with default slug, title and page order.
 - A folder without `__init__.py` does not appear.
+- Each page answers at the address its file name gives it, and `docs_url("aad_docs")` returns `/docs/aad-docs/`.
 - A non-staff user gets no access.
 
 ### M2 · Code map
 
 | Side | Deliverable |
 |---|---|
-| Backend | `docs_codemap`: models from `_meta`, routes from the URL resolver, classes and docstrings; `.yml` reader; generated-file manifest |
+| Backend | `docs_codemap`: models from `_meta`, routes from the URL resolver, classes and docstrings; `.yml` reader; generated-file manifest; model pages and their addresses |
 | Frontend | Explorer: route, view, service, model, each with its file |
 
 Accepted when:
 
 - `docs_codemap` writes `aad_docs/docs/code-map.yml`, replacing the hand-written design target, and `demo/catalog/docs/code-map.yml` with the demo model.
 - The model diagram of `demo/catalog` is drawn from its relations.
+- Each model of `demo/catalog` has a page at `/docs/catalog/<model-slug>/` with no file written, and `docs_url(Model)` returns that address.
+- A file in `demo/catalog/docs/<model-slug>/` shows under the address of that model.
 - Editing a generated file by hand makes the next run stop and report it.
 - `docs_codemap --check` fails when the code changed and the files did not.
 
@@ -83,13 +87,14 @@ Accepted when:
 
 | Side | Deliverable |
 |---|---|
-| Backend | `.csv` and `.json` readers; reference tables generated from model metadata, settings defaults and command help |
-| Frontend | Table that sorts and filters; simulator for `"type": "flow"` |
+| Backend | `.csv`, `.json` and `.mdx` readers; reference tables generated from model metadata, settings defaults and command help |
+| Frontend | Table that sorts and filters; simulator for `"type": "flow"`; pieces mounted inside an `.mdx` page |
 
 Accepted when:
 
 - Every file in `aad_docs/docs/06-reference/` opens as a sortable, filterable table.
 - `request-flow.json` plays step by step.
+- `embed-a-piece.mdx` shows its table and its flow inside the page.
 - The field table of the demo model is generated, with `help_text` as its description.
 
 ### M4 · Spanish, checks, screenshots
@@ -153,6 +158,8 @@ Accepted when:
 | Frontend technology | Django templates and plain JavaScript in the package | [0007](../aad_docs/docs/07-decisions/0007-frontend-django-templates.md) |
 | Package name, versions, libraries | `aad_docs`; Python 3.11+, Django 4.2+; `markdown-it-py`, `PyYAML`; Mermaid vendored | [0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md) |
 | First project for M5 | Not chosen | This page |
+| Addresses | Taken from app and model metadata; model slug is `model_name` | [0010](../aad_docs/docs/07-decisions/0010-addresses-from-metadata.md) |
+| `.mdx` | Markdown plus a closed list of tags; no JavaScript, no build | [0011](../aad_docs/docs/07-decisions/0011-mdx-closed-tag-set.md) |
 | Database index | Optional module on django-tree-queries, in a future delivery | [0009](../aad_docs/docs/07-decisions/0009-optional-database-index.md) |
 | Screenshot tool | Playwright against the local server | Decide at M4 |
 

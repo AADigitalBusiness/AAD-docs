@@ -41,10 +41,29 @@ Every page opens the same way and closes the same way, so nobody has to explain 
 
 ## File types
 
-The app reads four extensions: `.md`, `.yml`, `.csv` and `.json`. What each one holds, who writes it and how it is shown is in [file-types.csv](../aad_docs/docs/06-reference/file-types.csv).
+The app reads five extensions: `.md`, `.mdx`, `.yml`, `.csv` and `.json`. What each one holds, who writes it and how it is shown is in [file-types.csv](../aad_docs/docs/06-reference/file-types.csv).
 
-- Write pages as `.md`. Everything else is data that the app draws as an interactive view.
+- Write pages as `.md`. The `.yml`, `.csv` and `.json` files are data that the app draws as interactive views.
+- Use `.mdx` only when a page needs one of those views inside its text. An `.mdx` is Markdown plus a closed list of tags, listed in [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv). GitHub shows an `.mdx` as plain text, so a page that must read well there stays `.md`.
 - Screenshots are the only other file allowed. They live in `<app>/docs/assets/` and are only linked from a `.md`.
+
+## Write for the reader
+
+A document written during a conversation tends to answer the person who asked for it. Its reader was not in that conversation, and a page that replies to a request leaves that reader without the problem, the context or the reason.
+
+- Before you write, name the reader: who reads the page, what they already know and what they need to do.
+- Do not answer a request inside the document. If a sentence only makes sense to someone who knows who asked for it or why, rewrite it.
+- Present each rule with the problem it solves and one example. Without them the reader cannot tell why the rule exists or when it applies.
+- A title names the subject the way the reader would look for it, not the words of the request.
+
+| Document | Who reads it | What they already know |
+|---|---|---|
+| README | Anyone who arrives at the project | Nothing about the project |
+| `01-overview` and guides in Spanish | The person who uses the system | The business, not the code |
+| `02-getting-started`, `08-operations` | The person who installs or maintains the project | Django and the terminal |
+| `03-architecture`, `04-code-map`, `06-reference` | The person who will change the code | Django, not this project |
+| `07-decisions` | The person who picks the project up months later | The code as it is today, not its history |
+| `HOW-DOCS-WORK` | The person who will write documentation | The project, not the standard |
 
 ## Tone
 
@@ -74,7 +93,7 @@ English is the source and the only language for technical documents. Spanish cov
 | A guide a non-technical user performs | Yes | Yes (`name.es.md`) |
 | Everything else | Yes | No |
 
-- A Spanish page sits next to its English source with the suffix `.es.md`. Both are the same page.
+- A Spanish page sits next to its English source with the suffix `.es.md`, or `.es.mdx` for an `.mdx`. Both are the same page.
 - Spanish is written for the person who uses the system: no jargon, no commands, a screenshot on each step.
 - A Spanish page starts with a header that names its source and the date it was synced. `docs_check` reports it when the source changed after that date.
 
@@ -89,7 +108,11 @@ English is the source and the only language for technical documents. Spanish cov
 
 ## One owner per fact
 
-Each fact has one owner. Every other place links to it or displays it, and never copies it.
+Documentation goes stale in two ways. The same fact is written in two places, one is updated and the other keeps saying the old thing. Or a command regenerates a file and erases what a person had corrected by hand.
+
+One rule prevents both: each fact has one owner. Every other place links to it or displays it, and never copies it.
+
+Example: the `status` field of `Order` is explained in its `help_text`. No page describes it again. A page that needs to show it uses `<Model name="orders.Order" />` in an `.mdx`, or links to the model page, and the explanation changes when the field does.
 
 | Fact | Owner | Not repeated in |
 |---|---|---|
@@ -118,9 +141,12 @@ Each fact has one owner. Every other place links to it or displays it, and never
 
 ## Status of this repository
 
-Until the commands exist, three kinds of file here are written by hand as the design target: `code-map.yml`, `request-flow.json` and the tables in `06-reference/`. `code-map.yml` and the reference tables become generated at milestone 2, and the first run replaces them. No screenshots exist yet; `docs_screenshots` takes them at milestone 4.
+One page here is an `.mdx`, as the example of that format: [embed-a-piece.mdx](../aad_docs/docs/05-guides/embed-a-piece.mdx).
+
+Until the commands exist, three kinds of file here are written by hand as the design target: `code-map.yml`, `request-flow.json` and the tables in `06-reference/`. `code-map.yml` becomes generated at milestone 2 and the reference tables at milestone 3, and the first run replaces them. No screenshots exist yet; `docs_screenshots` takes them at milestone 4.
 
 ## Next
 
+- Which address a page gets: [03-architecture.md](03-architecture.md#addresses)
 - Document one of your apps: [document-an-app.md](../aad_docs/docs/05-guides/document-an-app.md)
 - Exact options of a node: [node-options.csv](../aad_docs/docs/06-reference/node-options.csv)

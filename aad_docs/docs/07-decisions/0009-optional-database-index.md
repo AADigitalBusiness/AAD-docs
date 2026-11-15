@@ -59,3 +59,4 @@ It does not make navigation faster. With hundreds of nodes the in-memory tree is
 
 - When it is built: [PLAN.md](../../../docs/PLAN.md)
 - The decision it narrows: [0001 · Documentation is flat files](0001-flat-files.md)
+- [0010 · Addresses come from metadata](0010-addresses-from-metadata.md)

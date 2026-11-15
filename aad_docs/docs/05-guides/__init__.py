@@ -5,5 +5,5 @@ node = Node(
     title="Guides",
     title_es="Guías",
     order=50,
-    pages=["browse-the-docs", "document-an-app"],
+    pages=["browse-the-docs", "document-an-app", "embed-a-piece"],
 )
