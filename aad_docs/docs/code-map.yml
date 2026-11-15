@@ -80,7 +80,7 @@ modules:
   - file: aad_docs/readers/mdx.py
     data:
       - name: MDX_TAGS
-        does: Closed registry of tags: form, attributes, allowed parent and template. Owner of mdx-tags.csv.
+        does: Closed registry of tags with their form, attributes, allowed parent and template. Owner of mdx-tags.csv.
     functions:
       - name: read
         does: Renders the Markdown of a .mdx with raw HTML disabled and replaces each known tag, outside code, with its component, either a tag on one line or a container whose body is rendered as Markdown.
