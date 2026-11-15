@@ -10,6 +10,6 @@ Steps,container,none,Numbered list drawn as a sequence of steps,The ordered list
 Tabs,container,none,"Tabs, one for each Tab it holds",Its Tab tags,enhance,.mdx,M3
 Tab,container,title: tab label; only inside Tabs,One panel of a Tabs,The Markdown between its tags,enhance,.mdx,M3
 Cards,container,none,Grid of cards,Its Card tags,none,.mdx,M3
-Card,container,title: card heading; href: optional link; only inside Cards,One card,The Markdown between its tags,none,.mdx,M3
+Card,container,title: card heading; href: optional url; only inside Cards,One card,The Markdown between its tags,none,.mdx,M3
 details,container,"open: optional, shows it open at first",Section the reader opens and closes,The Markdown between its tags,none,.md and .mdx,M3
 summary,container,none; only inside details,The line of a details that is always visible,Its text,none,.md and .mdx,M3

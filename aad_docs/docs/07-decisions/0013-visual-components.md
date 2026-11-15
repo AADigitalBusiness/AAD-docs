@@ -55,6 +55,7 @@ Run `docs_codemap --check` before you merge.
 - Nothing in a Markdown file ever runs. Raw HTML is never rendered: a tag that the registry does not list shows as text. The owner chose this on 2026-11-15, so that no page can run a script.
 - Each component declares in the registry whether it needs JavaScript: `none` (HTML and CSS are enough), `enhance` (it works without JavaScript and the script improves it, as `Tabs` and `Table`) or `required` (it does not appear without the script, as `Explorer` and `Flow`).
 - A page loads only the scripts that the components it uses ask for. Scripts are static files of the package, never inline. A `required` component shows a short notice when JavaScript is off.
+- An attribute that becomes a link, such as `href` of a `Card`, has the type `url` in the registry. It accepts only `http`, `https`, `mailto` and relative paths, so `javascript:` and `data:` values are refused. A value outside that list shows no link, and `docs_check` reports it (D064).
 - Text attributes, such as `title` and `summary`, are translated in the `.es.mdx` file.
 - An author cannot define a component in a page. A new component is a registry entry, a template and a test, and `mdx-tags.csv` is regenerated from it.
 
@@ -68,7 +69,7 @@ Run `docs_codemap --check` before you merge.
 
 - GitHub shows the tags of an `.mdx` as text. A page that must read well there stays `.md`.
 - A component is a contract: its attributes and template are part of the interface, and renaming one is a breaking change.
-- `docs_check` reports an unclosed container or a tag in the wrong parent (D063) and a missing or unlisted attribute (D064).
+- `docs_check` reports an unclosed container or a tag in the wrong parent (D063) and a missing or unlisted attribute, or a `url` value with a scheme that is not allowed (D064).
 - The appearance of every page changes in one place, the templates.
 - A page that uses only components with `js: none` loads no script. A policy that allows only own scripts (`script-src 'self'`) works.
 - `docs_check` reports an HTML tag outside the registry (D065), because it would show as text.
