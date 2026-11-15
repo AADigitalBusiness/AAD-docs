@@ -81,7 +81,7 @@ A document written during a conversation tends to answer the person who asked fo
 - Model and route diagrams are generated from the code. Only architecture and flow diagrams are drawn by hand.
 - Color only with meaning: one accent for the entry point.
 - A decision shows the state before and after it.
-- Callouts, steps, tabs and cards are components of an `.mdx` page, never hand-written HTML. The list is in [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv).
+- Callouts, steps, tabs and cards are components of an `.mdx` page. The semantic tags `<details>` and `<summary>` work in `.md` too. Any other HTML shows as text and never runs. The list is in [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv).
 
 ## Languages
 

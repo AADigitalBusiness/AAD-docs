@@ -44,7 +44,7 @@ Orders are never deleted; they are closed.
 - A tag is a line, alone on its line, or a container that opens and closes on its own lines. A tag inside a sentence is not replaced and shows as text.
 - The visual components, such as callouts, steps, tabs and cards, are tags of the same registry: [0013](0013-visual-components.md).
 - Tags inside code blocks and inline code are text, so a guide can show an example without running it.
-- Raw HTML outside the tags is disabled.
+- Raw HTML is never rendered. The only HTML names read as tags are the semantic ones that the registry lists, such as `details` and `summary`: [0013](0013-visual-components.md).
 - The `src` of a tag resolves inside the folder of its node. A path that leaves it is an error.
 
 ## Alternatives

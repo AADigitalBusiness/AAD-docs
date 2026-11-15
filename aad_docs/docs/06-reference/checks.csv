@@ -25,3 +25,4 @@ D061,A tag points to a file or a model that does not exist,The src or name of a 
 D062,A .mdx contains import or export or a JavaScript expression,"import, export or a JavaScript expression appears outside code blocks and inline code",Remove it; the app compiles nothing
 D063,"A container tag is not closed, is closed out of order, or sits in a parent the registry does not allow",Tags are matched as a stack; Tab is valid only inside Tabs and Card only inside Cards,"Close the tag, or move it into its parent"
 D064,A tag lacks a required attribute or has a value the registry does not list,"Each attribute is checked against the registry: required, and for type the values note, tip, warning and danger",Add the attribute or use a listed value
+D065,A page contains an HTML tag that is not in the registry; it shows as text,A lowercase HTML tag outside code blocks and inline code whose name the registry does not list,Use a component of the registry or remove the tag

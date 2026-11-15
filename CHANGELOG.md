@@ -13,4 +13,5 @@
 - Added decision 0012: each reference table is generated from its owner in Python.
 - Documented the rules of the reader: loading a node by path, safe import, raw HTML off, a closed list of image types, tags alone on a line, section precedence, criteria for each check.
 - Added visual components for `.mdx` pages: callout, steps, tabs, cards and details, from a closed registry rendered by Django templates (decision 0013, checks D063 and D064).
+- Raw HTML is never rendered; the semantic tags `details` and `summary` are read in `.md` and `.mdx`, and each component declares whether it needs JavaScript (decision 0013, check D065).
 - No code yet.

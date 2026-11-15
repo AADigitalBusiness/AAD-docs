@@ -36,7 +36,7 @@ flowchart LR
    <Model name="orders.Order" />
    ```
 
-3. Wrap text in a component when it needs to stand out. A container opens and closes on its own lines and holds Markdown.
+3. Wrap text in a component when it needs to stand out. A container opens and closes on its own lines and holds Markdown. `details` and `summary` keep their HTML names and also work in a `.md` page.
 
    ```mdx
    <Callout type="warning">
@@ -56,6 +56,11 @@ flowchart LR
    `py -m venv .venv`
    </Tab>
    </Tabs>
+
+   <details>
+   <summary>See the detail</summary>
+   Text that opens and closes.
+   </details>
    ```
 
 4. Check the page.
@@ -66,7 +71,7 @@ flowchart LR
 
 ## Result
 
-The page shows the flow, the field table and the components in place. `docs_check` reports no unknown tag, no missing `src`, no import, no unclosed container (D063) and no missing attribute (D064).
+The page shows the flow, the field table and the components in place. `docs_check` reports no unknown tag, no missing `src`, no import, no unclosed container (D063), no missing attribute (D064) and no HTML tag outside the registry (D065).
 
 ## Next
 

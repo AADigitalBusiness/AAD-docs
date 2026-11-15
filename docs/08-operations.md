@@ -48,7 +48,8 @@ The documentation exposes models, routes and class names. Treat it as internal.
 - Default: only staff users can open `/docs/`.
 - Change it with the `ACCESS` setting: see [settings.csv](../aad_docs/docs/06-reference/settings.csv).
 - A node can hide a page per request, because `__init__.py` is Python.
-- Markdown is rendered with raw HTML disabled, so a public setting does not let a page run scripts.
+- Raw HTML is never rendered, so no page can run a script, whatever `ACCESS` says. Only the tags of the registry, such as `details`, are read as tags; any other shows as text.
+- Scripts load from static files only, and only those that the components of a page need. A policy that allows own scripts only (`script-src 'self'`) works.
 - Only `.png`, `.jpg`, `.jpeg`, `.webp` and `.gif` are served from `assets/`. SVG is not, because it can carry scripts.
 - Mermaid runs in strict mode.
 - A path is resolved inside the folder of its node and never outside it.

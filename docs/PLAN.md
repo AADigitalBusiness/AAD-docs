@@ -109,8 +109,8 @@ Accepted when:
 
 | Side | Deliverable |
 |---|---|
-| Backend | `.csv`, `.json` and `.mdx` readers; the closed tag registry with its visual components (callout, steps, tabs, cards, details); each table of `06-reference/` generated from its owner in Python ([0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md)); the field table of a model |
-| Frontend | Table that sorts and filters; simulator for `"type": "flow"`; pieces mounted inside an `.mdx` page; one template for each component and `tabs.js` |
+| Backend | `.csv`, `.json` and `.mdx` readers; the closed tag registry with its visual components (callout, steps, tabs, cards, and the semantic tags `details` and `summary`, which the `.md` reader also reads); each table of `06-reference/` generated from its owner in Python ([0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md)); the field table of a model |
+| Frontend | Table that sorts and filters; simulator for `"type": "flow"`; pieces mounted inside an `.mdx` page; one template for each component and `tabs.js`; each page loads only the scripts its components need |
 
 Accepted when:
 
@@ -119,6 +119,7 @@ Accepted when:
 - `embed-a-piece.mdx` shows its table and its flow inside the page, and the tags in its code blocks stay as text.
 - A tag with a `src` that leaves the node folder is an error.
 - A page with a callout, steps, tabs and cards renders each as a design-system component; an unclosed container is reported (D063).
+- A `<details>` in a `.md` page opens and closes. A `<script>` shows as text and never runs, and is reported as D065.
 - The field table of the demo model is generated, with `help_text` as its description.
 
 ### M4 · Checks and screenshots
@@ -174,7 +175,7 @@ Accepted when:
 | Importing `__init__.py` runs arbitrary code at startup | A broken node breaks the docs, or the project | Import inside a guard; a failing node is reported by `docs_check` and skipped, never fatal |
 | The package imports Django code before Django is ready | `AppRegistryNotReady` in every node file | `aad_docs/__init__.py` imports only pure-Python `Node`; `docs_url` loads the routing on first call |
 | A root `docs/` package collides with another package named `docs` | The wrong module is loaded | Every `__init__.py` is loaded by path under a unique module name |
-| Raw HTML or SVG in documentation opened with `ACCESS = "public"` | A script runs in a reader's browser | HTML disabled in Markdown, SVG not served, Mermaid in strict mode |
+| Raw HTML or SVG in documentation opened with `ACCESS = "public"` | A script runs in a reader's browser | Raw HTML never rendered, SVG not served, Mermaid in strict mode, scripts only from static files |
 | A reference table and its owner in code disagree | The table lies | Tables are generated from the owner; `docs_codemap --check` in CI |
 | Docs expose internal structure | Models and routes visible to the wrong reader | Staff-only by default; `ACCESS` setting |
 | Class discovery is fuzzy | The code map lists noise or misses services | Start with models, views and URL patterns, which Django can enumerate; add other classes by convention (`services/`) and by opt-in |
@@ -194,7 +195,7 @@ Accepted when:
 | `.mdx` | Markdown plus a closed list of tags; no JavaScript, no build | [0011](../aad_docs/docs/07-decisions/0011-mdx-closed-tag-set.md) |
 | Database index | Optional module on django-tree-queries, in a future delivery | [0009](../aad_docs/docs/07-decisions/0009-optional-database-index.md) |
 | Screenshot tool and test runner | Playwright in the `[screenshots]` extra; `pytest` and `pytest-django` in `[dev]` | [0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md) |
-| Visual components | Closed registry, Django templates, no JavaScript except tabs | [0013](../aad_docs/docs/07-decisions/0013-visual-components.md) |
+| Visual components and raw HTML | Closed registry, Django templates; raw HTML never rendered; each component declares if it needs JavaScript | [0013](../aad_docs/docs/07-decisions/0013-visual-components.md) |
 | Reference tables | Generated from their owner in Python | [0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md) |
 
 ## Next
