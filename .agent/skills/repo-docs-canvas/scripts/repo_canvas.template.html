@@ -1,0 +1,48 @@
+<title>%%TITLE%%</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: sticky file tree on the left, every repository file as a section on the right, in repo order */
+:root{--bg:#f7f8f7;--panel:#fff;--fg:#1c2421;--mut:#5d6b66;--line:#dde3e0;--acc:#0f6b57;--accbg:#e3f1ed;--code:#eef1ef;--warn:#8a5200;--warnbg:#fff1d2;--warnln:#e0a53a;
+--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111614;--panel:#171d1a;--fg:#e4eae7;--mut:#93a39c;--line:#27302c;--acc:#5cc9ac;--accbg:#183029;--code:#1d2521;--warn:#f2bd62;--warnbg:#33270f;--warnln:#a87a22;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111614;--panel:#171d1a;--fg:#e4eae7;--mut:#93a39c;--line:#27302c;--acc:#5cc9ac;--accbg:#183029;--code:#1d2521;--warn:#f2bd62;--warnbg:#33270f;--warnln:#a87a22;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:20px}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;max-width:1180px;margin:0 auto}
+header{grid-column:1/-1}
+h1.t{font-size:22px;margin:0;font-weight:600}
+header p{margin:2px 0 0;color:var(--mut)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;max-height:100vh;overflow:auto;padding-bottom:20px}
+nav .g{margin-bottom:14px}
+nav h3{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:0 0 4px;font-weight:600}
+nav a{display:block;padding:2px 8px;border-radius:5px;color:var(--fg);text-decoration:none;font-size:13px;word-break:break-all}
+nav a:hover{background:var(--accbg)}
+main{min-width:0}
+section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px 26px;margin-bottom:22px;scroll-margin-top:12px;min-width:0}
+section:target{border-color:var(--acc)}
+.path{font-family:var(--mono);font-size:12px;color:var(--mut);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:14px}
+section h1{font-size:24px;margin:.2em 0 .5em;line-height:1.25;text-wrap:balance}
+section h2{font-size:18px;margin:1.6em 0 .4em;text-wrap:balance}
+section h3{font-size:15px;margin:1.3em 0 .3em}
+section p,section li{max-width:78ch}
+a{color:var(--acc)}
+code{font-family:var(--mono);font-size:.88em;background:var(--code);padding:1px 5px;border-radius:4px}
+pre.code{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:12.5px;line-height:1.5}
+pre.code code{background:none;padding:0}
+pre.mermaid{background:var(--panel);overflow-x:auto;text-align:center;border:1px dashed var(--line);border-radius:8px;padding:12px}
+.badge{display:inline-block;font-size:12px;color:var(--acc);background:var(--accbg);padding:2px 10px;border-radius:99px;margin:0 0 12px}
+table{border-collapse:collapse;font-size:13px;width:100%}
+th,td{border:1px solid var(--line);padding:5px 9px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tw,section>table{overflow-x:auto;display:block}
+blockquote{margin:0;padding-left:12px;border-left:3px solid var(--line);color:var(--mut)}
+@media (max-width:820px){.wrap{grid-template-columns:minmax(0,1fr)}nav{position:static;max-height:none;border-bottom:1px solid var(--line);margin-bottom:6px}section{padding:16px}}
+.warn{color:var(--warn)!important;background:var(--warnbg)}
+nav a.warn::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--warnln);margin-right:6px}
+section.pend{border-left:4px solid var(--warnln)}
+.warnbox{background:var(--warnbg);color:var(--warn);border:1px solid var(--warnln);border-radius:6px;padding:6px 12px;max-width:none}
+.pl{padding-left:18px}.pl li{margin:4px 0}.pl span{color:var(--warn);background:var(--warnbg);padding:1px 8px;border-radius:99px;font-size:12px;margin-left:6px}
+.note{color:var(--mut);font-size:13px}
+</style>
+<div class="wrap"><header><h1 class="t">%%TITLE%%</h1><p>%%COUNT%% files as they stand in the repository after the latest commit. Links between pages work as they would in the documentation site.</p></header>
+<nav>%%NAV%%</nav><main>%%BODY%%</main></div>
