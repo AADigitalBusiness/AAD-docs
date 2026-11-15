@@ -10,7 +10,7 @@ flowchart LR
     folder --> open["Open /docs/ in the browser"]
 ```
 
-**Status: planned.** These steps describe the target. Milestone 1 of the [plan](PLAN.md) makes them true.
+**Status: planned.** These steps describe the target. Milestones M1a and M1 of the [plan](PLAN.md) make them true.
 
 ## Before you start
 
@@ -43,9 +43,12 @@ flowchart LR
 
    urlpatterns = [
        # ...
+       path("i18n/", include("django.conf.urls.i18n")),
        path("docs/", include("aad_docs.urls")),
    ]
    ```
+
+   The language switcher posts to Django's `set_language` view, so it needs the `i18n/` URLs and `django.middleware.locale.LocaleMiddleware` in `MIDDLEWARE`.
 
 4. Create the documentation folder of one app.
 
@@ -66,6 +69,17 @@ flowchart LR
 ## Result
 
 The page shows a menu with one node, `Orders`, and the overview page you wrote. An empty `__init__.py` is enough: the slug comes from the app name and the title from its `verbose_name`.
+
+## Work on AAD-docs itself
+
+The `demo/` project installs the app and points `AAD_DOCS["ROOT"]` at this repository's `docs/`, so the demo renders this documentation.
+
+```bash
+pip install -e ".[dev]"
+python demo/manage.py check
+pytest
+python demo/manage.py runserver
+```
 
 ## Next
 

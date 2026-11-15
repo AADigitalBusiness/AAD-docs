@@ -15,12 +15,12 @@ AAD-docs/
 │   ├── 08-operations.md          ← release, CI, access
 │   ├── HOW-DOCS-WORK.md          ← the documentation standard
 │   └── PLAN.md                   ← milestones and acceptance criteria
-└── aad_docs/                     ← the Django app (code arrives at milestone 1)
+└── aad_docs/                     ← the Django app (code arrives at milestone 1a)
     └── docs/                     ← app node: documentation of aad_docs itself
         ├── __init__.py           ← resolves the app node
         ├── 01-overview.md        ← what it is and is not
         ├── 01-overview.es.md
-        ├── 04-code-map.md        ← where to start reading the code
+        ├── 04-read-the-code.md   ← where to start reading the code
         ├── code-map.yml          ← modules, classes, routes (design target)
         ├── request-flow.json     ← how one request travels, step by step
         ├── 05-guides/            ← tasks, step by step
@@ -35,7 +35,7 @@ AAD-docs/
 | What is this and what does it not do? | [01-overview.md](../aad_docs/docs/01-overview.md) |
 | How do I install it? | [02-getting-started.md](02-getting-started.md) |
 | How is it built? | [03-architecture.md](03-architecture.md) |
-| Which file holds a class or route? | [04-code-map.md](../aad_docs/docs/04-code-map.md) |
+| Which file holds a class or route? | [04-read-the-code.md](../aad_docs/docs/04-read-the-code.md) |
 | How do I document one of my apps? | [document-an-app.md](../aad_docs/docs/05-guides/document-an-app.md) |
 | How do I browse the documentation? | [browse-the-docs.md](../aad_docs/docs/05-guides/browse-the-docs.md) |
 | What are the exact options of a node? | [node-options.csv](../aad_docs/docs/06-reference/node-options.csv) |

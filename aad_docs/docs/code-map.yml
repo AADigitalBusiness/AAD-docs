@@ -27,14 +27,18 @@ routes:
 modules:
   - file: aad_docs/__init__.py
     exports: [Node, docs_url]
+    does: Imports no Django code. docs_url loads routing on its first call, so a docs/__init__.py can import Node before Django is ready.
 
   - file: aad_docs/apps.py
     classes:
       - name: AadDocsConfig
         kind: app config
-        does: Registers the app and runs the startup checks.
+        does: Registers the app and its Django system checks.
 
   - file: aad_docs/conf.py
+    data:
+      - name: DEFAULTS
+        does: Default value of every setting. Owner of settings.csv.
     functions:
       - name: get_settings
         does: Returns the AAD_DOCS setting merged over its defaults.
@@ -43,11 +47,11 @@ modules:
     classes:
       - name: Node
         kind: data
-        does: One documentation folder. Holds slug, titles, order, pages and children.
+        does: One documentation folder. Holds slug, titles, order, pages, visible and children. Owner of node-options.csv.
         used_by: [build_tree, NodeView, PageView]
       - name: Page
         kind: data
-        does: One file inside a node. Holds slug, title, kind, languages and content.
+        does: One file inside a node. Holds slug, title, kind, languages, variants, frontmatter and content.
         used_by: [read_page, PageView]
 
   - file: aad_docs/discovery.py
@@ -55,13 +59,16 @@ modules:
       - name: find_doc_dirs
         does: Walks INSTALLED_APPS and the root folder and returns each docs/ that has an __init__.py.
       - name: resolve_node
-        does: Imports a docs package, reads its node attribute and applies defaults.
+        does: Loads a docs package by file path under a unique module name, reads its node attribute and applies defaults. A failure is recorded and the node skipped.
         uses: [Node]
       - name: build_tree
         does: Builds and caches the full node tree.
         uses: [find_doc_dirs, resolve_node]
 
   - file: aad_docs/readers/__init__.py
+    data:
+      - name: READERS
+        does: Registry of extensions and their readers. Owner of file-types.csv.
     functions:
       - name: read_page
         does: Picks the reader for a file extension and returns a Page.
@@ -71,9 +78,12 @@ modules:
       - name: read
         does: Renders a .md to HTML, keeping Mermaid blocks for the browser.
   - file: aad_docs/readers/mdx.py
+    data:
+      - name: MDX_TAGS
+        does: Closed registry of tags and their attributes. Owner of mdx-tags.csv.
     functions:
       - name: read
-        does: Renders the Markdown of a .mdx and replaces each known tag with the data of its piece.
+        does: Renders the Markdown of a .mdx with raw HTML disabled and replaces each known tag, alone on its line and outside code, with the data of its piece.
   - file: aad_docs/readers/yaml.py
     functions:
       - name: read
@@ -90,12 +100,12 @@ modules:
   - file: aad_docs/language.py
     functions:
       - name: pick_variant
-        does: Returns name.<lang>.md when it exists for the active language, else name.md.
+        does: Normalizes the active language against LANGUAGES and returns that variant of a page, else the one of the first language.
 
   - file: aad_docs/routing.py
     functions:
       - name: resolve_path
-        does: Turns the path after the app slug into a section, a model or a page.
+        does: Turns the path after the app slug into a section, a model or a page. Rejects a path that leaves the node folder. The section wins over a model with the same slug.
         uses: [build_tree]
       - name: docs_url
         does: Returns the address of an app, a model or one of their pages.
@@ -118,7 +128,7 @@ modules:
         uses: [resolve_path, read_page]
       - name: AssetView
         kind: view
-        does: Serves a screenshot from a node's assets folder.
+        does: Serves an image of a closed list of types, SVG excluded, from a node's assets folder.
       - name: DocsAccessMixin
         kind: mixin
         does: Applies the ACCESS setting to every view.
@@ -138,16 +148,19 @@ modules:
   - file: aad_docs/codemap/writer.py
     functions:
       - name: write_codemap
-        does: Writes code-map.yml and the reference tables through the generated-file guard.
+        does: Writes code-map.yml and, from M3, the reference tables through the generated-file guard.
         uses: [GeneratedManifest]
 
   - file: aad_docs/generated.py
     classes:
       - name: GeneratedManifest
         kind: service
-        does: Tracks the hash of each generated file and refuses to overwrite one edited by hand.
+        does: Tracks the hash of each generated file and refuses to overwrite one edited by hand. Replaces once a file of the initial design-target set that has no entry.
 
   - file: aad_docs/checks.py
+    data:
+      - name: CHECKS
+        does: Registry of the rules D001 to D062. Owner of checks.csv.
     functions:
       - name: run_checks
         does: Runs every docs_check rule and returns the findings.
@@ -174,3 +187,4 @@ static:
   - aad_docs/static/aad_docs/table.js
   - aad_docs/static/aad_docs/simulator.js
   - aad_docs/static/aad_docs/vendor/mermaid.min.js
+  - aad_docs/static/aad_docs/vendor/mermaid.LICENSE

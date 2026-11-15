@@ -34,6 +34,8 @@ The address is derived from metadata that already exists. No setting maps a page
 - The language is not part of the address.
 - `docs_url()` returns the address of an app, a model or a page, so no code writes a path.
 - The project chooses only the `/docs/` prefix, where it mounts the URLs.
+- A section and a model that produce the same slug collide: the section answers and the model page is out of reach until one is renamed.
+- Two files of one folder that produce the same slug collide too, whatever their type. A data file is addressed by its stem like a page.
 
 ## Alternatives
 
@@ -44,7 +46,7 @@ The address is derived from metadata that already exists. No setting maps a page
 ## Consequences
 
 - Renaming an app or a model changes its address. Linking through `docs_url()` keeps links correct.
-- A section and a model of the same app can produce the same slug. `docs_check` reports it as D007.
+- A collision is reported as D007 (section and model) or D008 (two files). Nothing resolves it silently.
 - The model slug cannot be overridden, so a link to a model never depends on a second source of truth.
 
 ## Next

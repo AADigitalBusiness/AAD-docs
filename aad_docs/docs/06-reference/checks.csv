@@ -1,25 +1,25 @@
-code,finding,fix
-D001,An installed app has no docs/ folder,Create <app>/docs/ with an __init__.py or add the app to EXCLUDE_APPS
-D002,A docs/ folder or subfolder has no __init__.py,Add an __init__.py; without it the folder is not a node
-D003,A node's __init__.py fails to import or declares no valid node,Fix the error; the node is skipped until then
-D004,A name in pages matches no file or child node,Fix the name or remove it
-D005,A link points to a file that does not exist,Fix the link
-D006,A file has an extension the app does not read,"Move it to assets/ if it is an image, else remove it"
-D007,A section and a model of the same app produce the same slug,Rename the section folder
-D008,A .md and a .mdx with the same name sit in the same folder,Keep one of the two
-D010,A Spanish page was synced before its source last changed,Update the Spanish page and its synced date
-D011,A Spanish page has no source and synced header,Add the header
-D012,A Spanish page names a source that does not exist,Fix the source name
-D020,A model has no docstring,Add a docstring that says what the model represents
-D021,A model field has no help_text,Add help_text
-D030,A .md repeats a help_text or a model docstring,Remove the copy and reference the model
-D031,A .md contains a hand-written table of model fields,Remove it; the field table is generated
-D032,The same paragraph appears in two pages,Keep it in its owner and link from the other
-D040,A generated file was edited by hand,Restore it or delete it and run docs_codemap
-D041,A generated file is out of date with the code,Run docs_codemap
-D050,A page does not open with a purpose line,Add one line under the title that says what the reader gets
-D051,A .md page has no diagram,Add a Mermaid diagram after the purpose line
-D052,A guide step with interface has no screenshot,Run docs_screenshots
-D060,A .mdx uses a tag that is not listed in mdx-tags.csv,Use a listed tag or remove it
-D061,A tag points to a file or a model that does not exist,Fix its src or name
-D062,A .mdx contains import or export or a JavaScript expression,Remove it; the app compiles nothing
+code,finding,detected_by,fix
+D001,An installed app has no docs/ folder,"An app in INSTALLED_APPS, not in EXCLUDE_APPS, has no folder named docs",Create <app>/docs/ with an __init__.py or add the app to EXCLUDE_APPS
+D002,A docs/ folder or subfolder has no __init__.py,A docs/ folder or a subfolder of a node has no __init__.py; a folder named after a model slug is exempt,Add an __init__.py; without it the folder is not a node
+D003,A node's __init__.py fails to import or declares no valid node,"Importing __init__.py raises, or `node` is missing or is not a Node",Fix the error; the node is skipped until then
+D004,A name in pages matches no file or child node,"A name in `pages` matches no file stem, slug or child folder",Fix the name or remove it
+D005,A link points to a file that does not exist,A relative link in a .md or .mdx resolves to no file,Fix the link
+D006,A file has an extension the app does not read,A file outside assets/ has an extension the app does not read,"Move it to assets/ if it is an image, else remove it"
+D007,A section and a model of the same app produce the same slug,The slug of a section folder equals the model_name of a model of the same app,Rename the section folder. Until then the section answers at that address and the model page does not
+D008,Two files in the same folder produce the same slug,"Two files of one folder have the same stem once numeric prefix, language suffix and extension are removed",Rename one of them
+D010,A Spanish page was synced before its source last changed,The synced date is earlier than `git log -1 --format=%cs` of the source file; skipped with a notice when there is no git repository,Update the Spanish page and its synced date
+D011,A Spanish page has no source and synced header,A page named *.es.* lacks source or synced in its header,Add the header
+D012,A Spanish page names a source that does not exist,The source named in the header is not a file of the same folder,Fix the source name
+D020,A model has no docstring,"__doc__ is empty or is the one Django generates, Model(field, ...)",Add a docstring that says what the model represents
+D021,A model field has no help_text,help_text is empty on a local field; the automatic primary key is exempt,Add help_text
+D030,A .md repeats a help_text or a model docstring,"The normalized text of a help_text of 20 characters or more, or of a docstring of 40 or more, appears in a page",Remove the copy and reference the model
+D031,A .md contains a hand-written table of model fields,A Markdown table whose header defines fields and that names two or more real fields of a model of the app,Remove it; the field table is generated
+D032,The same paragraph appears in two pages,"A plain paragraph of 120 characters or 20 words, outside code, headings and tables, appears in two pages once lowercased, with spaces collapsed and no punctuation",Keep it in its owner and link from the other
+D040,A generated file was edited by hand,The hash of a generated file differs from .generated.yml,Restore it or delete it and run docs_codemap
+D041,A generated file is out of date with the code,Regenerating gives a file different from the one on disk,Run docs_codemap
+D050,A page does not open with a purpose line,No paragraph follows the title directly,Add one line under the title that says what the reader gets
+D051,A .md page has no diagram,A .md page has no Mermaid block; .mdx pages are exempt,Add a Mermaid diagram after the purpose line
+D052,A guide step with interface has no screenshot,"In 05-guides/, a numbered step under ## Steps or ## Pasos has no CLI block, image or Screenshot tag and names an interface term: click, open, select, button, menu, screen, form, or their Spanish equivalents",Run docs_screenshots
+D060,A .mdx uses a tag that is not listed in mdx-tags.csv,A tag outside code blocks and inline code is not in mdx-tags.csv,Use a listed tag or remove it
+D061,A tag points to a file or a model that does not exist,The src or name of a tag resolves to no file inside the node folder or to no model,Fix its src or name
+D062,A .mdx contains import or export or a JavaScript expression,"import, export or a JavaScript expression appears outside code blocks and inline code",Remove it; the app compiles nothing

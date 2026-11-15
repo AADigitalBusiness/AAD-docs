@@ -31,7 +31,9 @@ The design used `appdocs` as a provisional name. The repository is `AAD-docs`. T
 | Markdown | `markdown-it-py` |
 | YAML | `PyYAML` |
 | CSV, JSON | Standard library |
-| Mermaid | Vendored static file, runs in the browser |
+| Mermaid | Vendored static file of a pinned version, with its license beside it; runs in the browser in strict mode |
+| Tests | `pytest` and `pytest-django`, in the `[dev]` extra |
+| Screenshots | Playwright, in the `[screenshots]` extra |
 | Default access | Staff users only |
 
 ## Alternatives
@@ -42,7 +44,7 @@ The design used `appdocs` as a provisional name. The repository is `AAD-docs`. T
 
 ## Consequences
 
-- Two runtime dependencies.
+- Two runtime dependencies. Test and screenshot tools install only with their extra.
 - Diagrams need JavaScript in the browser; on GitHub they render without the app.
 - Projects that want open documentation set `ACCESS`.
 

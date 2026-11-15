@@ -8,4 +8,8 @@
 - Added the address scheme: every app, page and model gets an address under `/docs/` taken from its metadata (architecture, decision 0010).
 - Added `.mdx` pages: Markdown plus a closed list of tags that embed a table, a flow or a model (decision 0011, guide `embed-a-piece.mdx`, reference `mdx-tags.csv`).
 - Added the guideline to write each document for its reader (`HOW-DOCS-WORK.md`).
+- Revised the plan after review: M1a (package, demo, tests) before M1; language selection and the Spanish header handling move to M1; the reference tables are generated at M3; the order of closing M4 is set.
+- Renamed `04-code-map.md` to `04-read-the-code.md`: it produced the same address as `code-map.yml`. D008 now reports any two files of a folder with the same slug.
+- Added decision 0012: each reference table is generated from its owner in Python.
+- Documented the rules of the reader: loading a node by path, safe import, raw HTML off, a closed list of image types, tags alone on a line, section precedence, criteria for each check.
 - No code yet.

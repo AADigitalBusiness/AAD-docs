@@ -36,7 +36,11 @@ Orders move through these states:
 - No `import`, no `export` and no JavaScript expressions. `docs_check` reports them as D062.
 - Nothing is compiled. The reader is Python and the browser mounts the piece, as for any other page.
 - A page is either `.md` or `.mdx`, never both with the same name (D008).
-- A Spanish page is `name.es.mdx`.
+- A Spanish page is `name.es.mdx`; its header is removed before rendering.
+- A tag goes alone on its line. A tag inside a sentence is not replaced and shows as text.
+- Tags inside code blocks and inline code are text, so a guide can show an example without running it.
+- Raw HTML outside the tags is disabled.
+- The `src` of a tag resolves inside the folder of its node. A path that leaves it is an error.
 
 ## Alternatives
 
@@ -55,3 +59,4 @@ Orders move through these states:
 - Use it: [embed-a-piece.mdx](../05-guides/embed-a-piece.mdx)
 - The tags: [mdx-tags.csv](../06-reference/mdx-tags.csv)
 - Where the reader sits: [03-architecture.md](../../../docs/03-architecture.md)
+- [0012 · Reference tables are generated from their owner in code](0012-reference-tables-from-their-owner.md)

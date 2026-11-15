@@ -32,7 +32,8 @@ Each documentation folder has an `__init__.py` that exposes `node`. A folder wit
 
 - The node can decide: hide a page by permission, build children on the fly.
 - Importing the file runs code. A node that fails to import is skipped and reported, never fatal.
-- The folder becomes a Python package, so it follows Python naming for imports.
+- Each `__init__.py` is loaded by file path under a unique module name, so a `docs/` folder never collides with another package of the same name, such as a Sphinx `docs`.
+- A node file does `from aad_docs import Node`. The package imports no Django code at that point, so the import is safe before Django is ready.
 
 ## Next
 

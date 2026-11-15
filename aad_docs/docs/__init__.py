@@ -8,7 +8,7 @@ node = Node(
     order=10,
     pages=[
         "01-overview",
-        "04-code-map",
+        "04-read-the-code",
         "code-map",
         "request-flow",
         "05-guides",

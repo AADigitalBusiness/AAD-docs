@@ -18,7 +18,7 @@ flowchart TB
 | `01-overview.md` | What is it for, and what does it not do? | App node | Explanatory, brief |
 | `02-getting-started.md` | How do I get it running? | Root node | Imperative, copyable commands |
 | `03-architecture.md` | How is it built? | Root node | Technical, with diagrams |
-| `04-code-map.md` | Where do I start reading the code? | App node | Entry points only |
+| `04-read-the-code.md` | Where do I start reading the code? | App node | Entry points only |
 | `05-guides/` | How do I do task X? | App node | Step by step |
 | `06-reference/` | What are the exact parameters? | App node | Tables, exhaustive |
 | `07-decisions/` | Why was it done this way? | App node | Context, alternatives, consequences |
@@ -61,7 +61,7 @@ A document written during a conversation tends to answer the person who asked fo
 | README | Anyone who arrives at the project | Nothing about the project |
 | `01-overview` and guides in Spanish | The person who uses the system | The business, not the code |
 | `02-getting-started`, `08-operations` | The person who installs or maintains the project | Django and the terminal |
-| `03-architecture`, `04-code-map`, `06-reference` | The person who will change the code | Django, not this project |
+| `03-architecture`, `04-read-the-code`, `06-reference` | The person who will change the code | Django, not this project |
 | `07-decisions` | The person who picks the project up months later | The code as it is today, not its history |
 | `HOW-DOCS-WORK` | The person who will write documentation | The project, not the standard |
 
@@ -117,12 +117,13 @@ Example: the `status` field of `Order` is explained in its `help_text`. No page 
 | Fact | Owner | Not repeated in |
 |---|---|---|
 | Name, fields, types and relations of a model | Model metadata: `Meta`, field options | Any `.md`; any hand-written `.csv` |
-| What a model, view or service is | Its docstring | `04-code-map.md` |
-| Routes, views and classes that exist | The code, through `code-map.yml` | `04-code-map.md`, guides |
+| What a model, view or service is | Its docstring | `04-read-the-code.md` |
+| Routes, views and classes that exist | The code, through `code-map.yml` | `04-read-the-code.md`, guides |
 | What the app is for, when to use it | `01-overview.md` and the guides | `help_text`, docstrings |
 | How to do a task | `05-guides/` | README, overview |
 | Why it was designed this way | `07-decisions/` | Comments, docstrings, README |
 | How to run the project | `02-getting-started.md` | README, which only links |
+| Settings, node options, tags, file types, commands and checks | The Python registry that defines each one | Any hand-written table, once the registry exists |
 
 - A file is generated or hand-written, never both.
 - Commands write only generated files and never touch a `.md`.
@@ -143,7 +144,7 @@ Example: the `status` field of `Order` is explained in its `help_text`. No page 
 
 One page here is an `.mdx`, as the example of that format: [embed-a-piece.mdx](../aad_docs/docs/05-guides/embed-a-piece.mdx).
 
-Until the commands exist, three kinds of file here are written by hand as the design target: `code-map.yml`, `request-flow.json` and the tables in `06-reference/`. `code-map.yml` becomes generated at milestone 2 and the reference tables at milestone 3, and the first run replaces them. No screenshots exist yet; `docs_screenshots` takes them at milestone 4.
+Until the commands exist, the files here are written by hand as the design target. `code-map.yml` becomes generated at milestone 2 and the tables of `06-reference/` at milestone 3; the first run replaces each once. `request-flow.json` stays hand-written, because nothing extracts it. No screenshots exist yet; `docs_screenshots` takes them at milestone 4, and a person links them in the guide, because commands never write a `.md`.
 
 ## Next
 

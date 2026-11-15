@@ -1,4 +1,4 @@
-# Code map
+# Read the code
 
 Use this page to decide where to start reading the code of `aad_docs`.
 
@@ -19,6 +19,8 @@ flowchart LR
 |---|---|
 | Understand how a `docs/` folder becomes a node | `discovery.py`, then `nodes.py` |
 | Change what a node can declare | `nodes.py` |
+| Change a setting or its default | `conf.py` |
+| Change what an address resolves to, or how a path is kept inside its folder | `routing.py` |
 | Add or change how a file type is read | `readers/` |
 | Change which language a page shows in | `language.py` |
 | Change what the browser receives | `views.py` and `templates/aad_docs/` |

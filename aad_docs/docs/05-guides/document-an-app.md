@@ -38,7 +38,7 @@ The examples use an app called `orders`.
        title="Orders",
        title_es="Pedidos",
        order=20,
-       pages=["01-overview", "04-code-map", "code-map"],
+       pages=["01-overview", "04-read-the-code", "code-map"],
    )
    ```
 
