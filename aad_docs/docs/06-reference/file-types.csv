@@ -1,0 +1,6 @@
+extension,holds,written_by,reader,shown_as,milestone
+.md,Pages,A person,readers/markdown.py,Text with Mermaid diagrams and screenshots,M1
+.yml,"Structured data: the code map, a glossary",A command,readers/yaml.py,Click-through explorer,M2
+.csv,"Tables: fields, parameters, permissions",A command,readers/csv.py,Table that sorts and filters,M3
+.json,"Data for interactive pieces: flows, API schemas",A person or a command,readers/json.py,Step-by-step simulator or viewer,M3
+.png in assets/,Screenshots,docs_screenshots,none; served as a file,Image inside a .md,M4

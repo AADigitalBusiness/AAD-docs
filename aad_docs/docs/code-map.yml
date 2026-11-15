@@ -1,0 +1,162 @@
+# Design target, written by hand. Not generated yet.
+# docs_codemap replaces this file at milestone 2 (see docs/PLAN.md).
+app: aad_docs
+status: planned
+
+models: []   # aad_docs defines no models: documentation is flat files.
+
+routes:
+  - path: /docs/
+    name: aad_docs:index
+    view: IndexView
+    file: aad_docs/views.py
+  - path: /docs/<slug>/
+    name: aad_docs:node
+    view: NodeView
+    file: aad_docs/views.py
+  - path: /docs/<slug>/<path:page>/
+    name: aad_docs:page
+    view: PageView
+    file: aad_docs/views.py
+  - path: /docs/<slug>/assets/<path:file>
+    name: aad_docs:asset
+    view: AssetView
+    file: aad_docs/views.py
+
+modules:
+  - file: aad_docs/__init__.py
+    exports: [Node]
+
+  - file: aad_docs/apps.py
+    classes:
+      - name: AadDocsConfig
+        kind: app config
+        does: Registers the app and runs the startup checks.
+
+  - file: aad_docs/conf.py
+    functions:
+      - name: get_settings
+        does: Returns the AAD_DOCS setting merged over its defaults.
+
+  - file: aad_docs/nodes.py
+    classes:
+      - name: Node
+        kind: data
+        does: One documentation folder. Holds slug, titles, order, pages and children.
+        used_by: [build_tree, NodeView, PageView]
+      - name: Page
+        kind: data
+        does: One file inside a node. Holds slug, title, kind, languages and content.
+        used_by: [read_page, PageView]
+
+  - file: aad_docs/discovery.py
+    functions:
+      - name: find_doc_dirs
+        does: Walks INSTALLED_APPS and the root folder and returns each docs/ that has an __init__.py.
+      - name: resolve_node
+        does: Imports a docs package, reads its node attribute and applies defaults.
+        uses: [Node]
+      - name: build_tree
+        does: Builds and caches the full node tree.
+        uses: [find_doc_dirs, resolve_node]
+
+  - file: aad_docs/readers/__init__.py
+    functions:
+      - name: read_page
+        does: Picks the reader for a file extension and returns a Page.
+        uses: [pick_variant]
+  - file: aad_docs/readers/markdown.py
+    functions:
+      - name: read
+        does: Renders a .md to HTML, keeping Mermaid blocks for the browser.
+  - file: aad_docs/readers/yaml.py
+    functions:
+      - name: read
+        does: Parses a .yml into data for the explorer.
+  - file: aad_docs/readers/csv.py
+    functions:
+      - name: read
+        does: Parses a .csv into columns and rows for the table.
+  - file: aad_docs/readers/json.py
+    functions:
+      - name: read
+        does: Parses a .json and validates its type for the simulator or viewer.
+
+  - file: aad_docs/language.py
+    functions:
+      - name: pick_variant
+        does: Returns name.<lang>.md when it exists for the active language, else name.md.
+
+  - file: aad_docs/urls.py
+    does: URL patterns under the aad_docs namespace.
+
+  - file: aad_docs/views.py
+    classes:
+      - name: IndexView
+        kind: view
+        does: Shows the root node and the list of app nodes.
+      - name: NodeView
+        kind: view
+        does: Shows one node with its pages and children.
+        uses: [build_tree]
+      - name: PageView
+        kind: view
+        does: Shows one page in the active language.
+        uses: [build_tree, read_page]
+      - name: AssetView
+        kind: view
+        does: Serves a screenshot from a node's assets folder.
+      - name: DocsAccessMixin
+        kind: mixin
+        does: Applies the ACCESS setting to every view.
+
+  - file: aad_docs/codemap/models.py
+    functions:
+      - name: describe_models
+        does: Reads _meta, field options and docstrings of an app's models.
+  - file: aad_docs/codemap/routes.py
+    functions:
+      - name: describe_routes
+        does: Reads the URL resolver and maps each route to its view and file.
+  - file: aad_docs/codemap/classes.py
+    functions:
+      - name: describe_classes
+        does: Lists views, and classes under services/, with their docstrings.
+  - file: aad_docs/codemap/writer.py
+    functions:
+      - name: write_codemap
+        does: Writes code-map.yml and the reference tables through the generated-file guard.
+        uses: [GeneratedManifest]
+
+  - file: aad_docs/generated.py
+    classes:
+      - name: GeneratedManifest
+        kind: service
+        does: Tracks the hash of each generated file and refuses to overwrite one edited by hand.
+
+  - file: aad_docs/checks.py
+    functions:
+      - name: run_checks
+        does: Runs every docs_check rule and returns the findings.
+
+  - file: aad_docs/management/commands/docs_codemap.py
+    commands: [docs_codemap]
+  - file: aad_docs/management/commands/docs_check.py
+    commands: [docs_check]
+  - file: aad_docs/management/commands/docs_screenshots.py
+    commands: [docs_screenshots]
+
+templates:
+  - aad_docs/templates/aad_docs/base.html
+  - aad_docs/templates/aad_docs/node.html
+  - aad_docs/templates/aad_docs/page_md.html
+  - aad_docs/templates/aad_docs/page_explorer.html
+  - aad_docs/templates/aad_docs/page_table.html
+  - aad_docs/templates/aad_docs/page_simulator.html
+
+static:
+  - aad_docs/static/aad_docs/docs.css
+  - aad_docs/static/aad_docs/explorer.js
+  - aad_docs/static/aad_docs/table.js
+  - aad_docs/static/aad_docs/simulator.js
+  - aad_docs/static/aad_docs/vendor/mermaid.min.js

@@ -1,0 +1,5 @@
+command,arguments,writes,meaning,milestone
+docs_codemap,[app_label ...],"code-map.yml, 06-reference/*.csv, .generated.yml","Generates the code map and reference tables from models, routes and classes. Stops when a generated file was edited by hand.",M2
+docs_codemap --check,[app_label ...],nothing,Exits with an error when the generated files are out of date with the code. For CI.,M2
+docs_check,[app_label ...],nothing,Reports every finding listed in checks.csv. Exits with an error when one is found.,M4
+docs_screenshots,[app_label ...],assets/*.png,Retakes the screenshots of the guides against the local server in each language.,M4

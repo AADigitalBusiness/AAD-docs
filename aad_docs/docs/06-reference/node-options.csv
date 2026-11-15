@@ -1,0 +1,7 @@
+option,type,required,default,meaning
+slug,str,no,"App label with underscores as hyphens; folder name for a child node",Address segment of the node: /docs/<slug>/. Does not have to match the app name.
+title,str,no,"verbose_name of the app; folder name without its numeric prefix for a child node",Name shown in the menu.
+title_es,str,no,Value of title,Name shown in the menu when Spanish is active.
+order,int,no,100,Position among sibling nodes. Lower comes first. Ties sort by slug.
+pages,list of str,no,"Every readable file and child node, sorted by name","Pages and child nodes to show, in order, named by file stem or folder name. A name left out is hidden."
+visible,callable,no,Always visible,"Function that receives the request and a page name and returns whether to show it. Use it to hide a page by permission."

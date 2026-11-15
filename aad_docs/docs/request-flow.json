@@ -1,0 +1,49 @@
+{
+  "type": "flow",
+  "title": "How a request to /docs/aad-docs/overview/ becomes a page",
+  "status": "design target",
+  "steps": [
+    {
+      "id": "url",
+      "title": "The URL is matched",
+      "detail": "aad_docs:page matches the node slug 'aad-docs' and the page path 'overview'.",
+      "file": "aad_docs/urls.py"
+    },
+    {
+      "id": "access",
+      "title": "Access is checked",
+      "detail": "DocsAccessMixin applies the ACCESS setting. By default only staff users continue.",
+      "file": "aad_docs/views.py"
+    },
+    {
+      "id": "tree",
+      "title": "The node tree is loaded",
+      "detail": "build_tree() returns the cached tree. On first use it walks INSTALLED_APPS, finds each docs/ with an __init__.py and resolves its node.",
+      "file": "aad_docs/discovery.py"
+    },
+    {
+      "id": "node",
+      "title": "The node is found",
+      "detail": "The tree is searched for the slug 'aad-docs'. An unknown slug returns 404.",
+      "file": "aad_docs/views.py"
+    },
+    {
+      "id": "language",
+      "title": "The language variant is picked",
+      "detail": "pick_variant() returns 01-overview.es.md when Spanish is active and the file exists, else 01-overview.md.",
+      "file": "aad_docs/language.py"
+    },
+    {
+      "id": "read",
+      "title": "The file is read",
+      "detail": "read_page() picks the Markdown reader, which renders HTML and keeps Mermaid blocks for the browser.",
+      "file": "aad_docs/readers/markdown.py"
+    },
+    {
+      "id": "render",
+      "title": "The page is drawn",
+      "detail": "PageView passes the tree and the page to page_md.html. The menu comes from the tree; Mermaid runs in the browser.",
+      "file": "aad_docs/templates/aad_docs/page_md.html"
+    }
+  ]
+}
