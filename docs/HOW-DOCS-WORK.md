@@ -44,7 +44,7 @@ Every page opens the same way and closes the same way, so nobody has to explain 
 The app reads five extensions: `.md`, `.mdx`, `.yml`, `.csv` and `.json`. What each one holds, who writes it and how it is shown is in [file-types.csv](../aad_docs/docs/06-reference/file-types.csv).
 
 - Write pages as `.md`. The `.yml`, `.csv` and `.json` files are data that the app draws as interactive views.
-- Use `.mdx` only when a page needs one of those views inside its text. An `.mdx` is Markdown plus a closed list of tags, listed in [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv). GitHub shows an `.mdx` as plain text, so a page that must read well there stays `.md`.
+- Use `.mdx` only when a page needs a table, a flow, a model or a visual component, such as a callout, steps, tabs or cards, inside its text. An `.mdx` is Markdown plus a closed list of tags, listed in [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv). GitHub shows an `.mdx` as plain text, so a page that must read well there stays `.md`.
 - Screenshots are the only other file allowed. They live in `<app>/docs/assets/` and are only linked from a `.md`.
 
 ## Write for the reader
@@ -81,6 +81,7 @@ A document written during a conversation tends to answer the person who asked fo
 - Model and route diagrams are generated from the code. Only architecture and flow diagrams are drawn by hand.
 - Color only with meaning: one accent for the entry point.
 - A decision shows the state before and after it.
+- Callouts, steps, tabs and cards are components of an `.mdx` page, never hand-written HTML. The list is in [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv).
 
 ## Languages
 

@@ -1,6 +1,6 @@
 # Embed a piece in a page
 
-Follow this guide to place a table, a flow or a model inside a page, next to the text that explains it.
+Follow this guide to place a table, a flow, a model or a visual component inside a page, next to the text that explains it.
 
 ```mermaid
 flowchart LR
@@ -36,7 +36,29 @@ flowchart LR
    <Model name="orders.Order" />
    ```
 
-3. Check the page.
+3. Wrap text in a component when it needs to stand out. A container opens and closes on its own lines and holds Markdown.
+
+   ```mdx
+   <Callout type="warning">
+   Run `docs_codemap --check` before you merge.
+   </Callout>
+
+   <Steps>
+   1. Create the folder.
+   2. Declare the node.
+   </Steps>
+
+   <Tabs>
+   <Tab title="Linux">
+   `python3 -m venv .venv`
+   </Tab>
+   <Tab title="Windows">
+   `py -m venv .venv`
+   </Tab>
+   </Tabs>
+   ```
+
+4. Check the page.
 
    ```bash
    python manage.py docs_check orders
@@ -44,7 +66,7 @@ flowchart LR
 
 ## Result
 
-The page shows the flow and the field table in place. `docs_check` reports no unknown tag, no missing `src` and no import.
+The page shows the flow, the field table and the components in place. `docs_check` reports no unknown tag, no missing `src`, no import, no unclosed container (D063) and no missing attribute (D064).
 
 ## Next
 

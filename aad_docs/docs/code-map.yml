@@ -80,10 +80,10 @@ modules:
   - file: aad_docs/readers/mdx.py
     data:
       - name: MDX_TAGS
-        does: Closed registry of tags and their attributes. Owner of mdx-tags.csv.
+        does: Closed registry of tags: form, attributes, allowed parent and template. Owner of mdx-tags.csv.
     functions:
       - name: read
-        does: Renders the Markdown of a .mdx with raw HTML disabled and replaces each known tag, alone on its line and outside code, with the data of its piece.
+        does: Renders the Markdown of a .mdx with raw HTML disabled and replaces each known tag, outside code, with its component, either a tag on one line or a container whose body is rendered as Markdown.
   - file: aad_docs/readers/yaml.py
     functions:
       - name: read
@@ -160,7 +160,7 @@ modules:
   - file: aad_docs/checks.py
     data:
       - name: CHECKS
-        does: Registry of the rules D001 to D062. Owner of checks.csv.
+        does: Registry of the rules D001 to D064. Owner of checks.csv.
     functions:
       - name: run_checks
         does: Runs every docs_check rule and returns the findings.
@@ -180,11 +180,13 @@ templates:
   - aad_docs/templates/aad_docs/page_explorer.html
   - aad_docs/templates/aad_docs/page_table.html
   - aad_docs/templates/aad_docs/page_simulator.html
+  - aad_docs/templates/aad_docs/components/   # callout, steps, tabs, cards, details
 
 static:
   - aad_docs/static/aad_docs/docs.css
   - aad_docs/static/aad_docs/explorer.js
   - aad_docs/static/aad_docs/table.js
   - aad_docs/static/aad_docs/simulator.js
+  - aad_docs/static/aad_docs/tabs.js
   - aad_docs/static/aad_docs/vendor/mermaid.min.js
   - aad_docs/static/aad_docs/vendor/mermaid.LICENSE

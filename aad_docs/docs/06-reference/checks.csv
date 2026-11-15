@@ -23,3 +23,5 @@ D052,A guide step with interface has no screenshot,"In 05-guides/, a numbered st
 D060,A .mdx uses a tag that is not listed in mdx-tags.csv,A tag outside code blocks and inline code is not in mdx-tags.csv,Use a listed tag or remove it
 D061,A tag points to a file or a model that does not exist,The src or name of a tag resolves to no file inside the node folder or to no model,Fix its src or name
 D062,A .mdx contains import or export or a JavaScript expression,"import, export or a JavaScript expression appears outside code blocks and inline code",Remove it; the app compiles nothing
+D063,"A container tag is not closed, is closed out of order, or sits in a parent the registry does not allow",Tags are matched as a stack; Tab is valid only inside Tabs and Card only inside Cards,"Close the tag, or move it into its parent"
+D064,A tag lacks a required attribute or has a value the registry does not list,"Each attribute is checked against the registry: required, and for type the values note, tip, warning and danger",Add the attribute or use a listed value

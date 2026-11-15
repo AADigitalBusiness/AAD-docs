@@ -44,7 +44,7 @@ AAD-docs/
 | What does `docs_check` verify? | [checks.csv](../aad_docs/docs/06-reference/checks.csv) |
 | Which file types are read, and how is each shown? | [file-types.csv](../aad_docs/docs/06-reference/file-types.csv) |
 | Which address does a page or a model get? | [03-architecture.md](03-architecture.md#addresses) |
-| How do I put a table or a flow inside a page? | [embed-a-piece.mdx](../aad_docs/docs/05-guides/embed-a-piece.mdx) |
+| How do I put a table, a flow or a callout inside a page? | [embed-a-piece.mdx](../aad_docs/docs/05-guides/embed-a-piece.mdx) |
 | Which tags can an `.mdx` page use? | [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv) |
 | Why was it designed this way? | [07-decisions/](../aad_docs/docs/07-decisions/) |
 | How do I release and operate it? | [08-operations.md](08-operations.md) |

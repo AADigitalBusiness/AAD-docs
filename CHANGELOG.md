@@ -12,4 +12,5 @@
 - Renamed `04-code-map.md` to `04-read-the-code.md`: it produced the same address as `code-map.yml`. D008 now reports any two files of a folder with the same slug.
 - Added decision 0012: each reference table is generated from its owner in Python.
 - Documented the rules of the reader: loading a node by path, safe import, raw HTML off, a closed list of image types, tags alone on a line, section precedence, criteria for each check.
+- Added visual components for `.mdx` pages: callout, steps, tabs, cards and details, from a closed registry rendered by Django templates (decision 0013, checks D063 and D064).
 - No code yet.

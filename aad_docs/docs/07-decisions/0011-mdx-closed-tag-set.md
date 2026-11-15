@@ -29,15 +29,20 @@ Orders move through these states:
 <Flow src="order-states.json" />
 
 <Table src="06-reference/order-fields.csv" />
+
+<Callout type="note">
+Orders are never deleted; they are closed.
+</Callout>
 ```
 
 - Only the listed tags exist. An unknown tag is an error, reported as D060.
-- A tag points to data (`src`, `name`) and holds no logic.
+- A tag carries attributes and, for a container, Markdown. It holds no logic.
 - No `import`, no `export` and no JavaScript expressions. `docs_check` reports them as D062.
 - Nothing is compiled. The reader is Python and the browser mounts the piece, as for any other page.
 - A page is either `.md` or `.mdx`, never both with the same name (D008).
 - A Spanish page is `name.es.mdx`; its header is removed before rendering.
-- A tag goes alone on its line. A tag inside a sentence is not replaced and shows as text.
+- A tag is a line, alone on its line, or a container that opens and closes on its own lines. A tag inside a sentence is not replaced and shows as text.
+- The visual components, such as callouts, steps, tabs and cards, are tags of the same registry: [0013](0013-visual-components.md).
 - Tags inside code blocks and inline code are text, so a guide can show an example without running it.
 - Raw HTML outside the tags is disabled.
 - The `src` of a tag resolves inside the folder of its node. A path that leaves it is an error.
@@ -59,4 +64,5 @@ Orders move through these states:
 - Use it: [embed-a-piece.mdx](../05-guides/embed-a-piece.mdx)
 - The tags: [mdx-tags.csv](../06-reference/mdx-tags.csv)
 - Where the reader sits: [03-architecture.md](../../../docs/03-architecture.md)
+- [0013 · Pages use visual components from a closed registry](0013-visual-components.md)
 - [0012 · Reference tables are generated from their owner in code](0012-reference-tables-from-their-owner.md)

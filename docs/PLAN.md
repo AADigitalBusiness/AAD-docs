@@ -22,6 +22,7 @@ Keep the documentation of every project current, navigable and consistent, so th
 | Navigate a project without reading all its code | Code map generated from models, routes and classes |
 | Very visual | Every page opens with a diagram; data files become interactive views |
 | English for technical readers, Spanish for non-technical users | `name.es.md` next to `name.md`; Django translations for model texts |
+| Elements that become visual components | Closed registry of components, rendered by Django templates ([0013](../aad_docs/docs/07-decisions/0013-visual-components.md)) |
 | Screenshots and interactive pieces | `docs_screenshots`; explorer, table and simulator drawn from data files; `.mdx` pages that embed them |
 | Flat files | `.md`, `.mdx`, `.yml`, `.csv`, `.json` inside each app's `docs/` |
 | A fixed address for every app, page and model on the live site | Addresses taken from app and model metadata; `docs_url()` |
@@ -108,8 +109,8 @@ Accepted when:
 
 | Side | Deliverable |
 |---|---|
-| Backend | `.csv`, `.json` and `.mdx` readers; the closed tag registry; each table of `06-reference/` generated from its owner in Python ([0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md)); the field table of a model |
-| Frontend | Table that sorts and filters; simulator for `"type": "flow"`; pieces mounted inside an `.mdx` page |
+| Backend | `.csv`, `.json` and `.mdx` readers; the closed tag registry with its visual components (callout, steps, tabs, cards, details); each table of `06-reference/` generated from its owner in Python ([0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md)); the field table of a model |
+| Frontend | Table that sorts and filters; simulator for `"type": "flow"`; pieces mounted inside an `.mdx` page; one template for each component and `tabs.js` |
 
 Accepted when:
 
@@ -117,6 +118,7 @@ Accepted when:
 - `request-flow.json` plays step by step.
 - `embed-a-piece.mdx` shows its table and its flow inside the page, and the tags in its code blocks stay as text.
 - A tag with a `src` that leaves the node folder is an error.
+- A page with a callout, steps, tabs and cards renders each as a design-system component; an unclosed container is reported (D063).
 - The field table of the demo model is generated, with `help_text` as its description.
 
 ### M4 · Checks and screenshots
@@ -192,6 +194,7 @@ Accepted when:
 | `.mdx` | Markdown plus a closed list of tags; no JavaScript, no build | [0011](../aad_docs/docs/07-decisions/0011-mdx-closed-tag-set.md) |
 | Database index | Optional module on django-tree-queries, in a future delivery | [0009](../aad_docs/docs/07-decisions/0009-optional-database-index.md) |
 | Screenshot tool and test runner | Playwright in the `[screenshots]` extra; `pytest` and `pytest-django` in `[dev]` | [0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md) |
+| Visual components | Closed registry, Django templates, no JavaScript except tabs | [0013](../aad_docs/docs/07-decisions/0013-visual-components.md) |
 | Reference tables | Generated from their owner in Python | [0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md) |
 
 ## Next

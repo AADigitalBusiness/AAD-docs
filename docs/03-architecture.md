@@ -66,7 +66,7 @@ Rules the backend enforces:
 - Every `__init__.py` is loaded by file path under a unique module name, inside a guard. A node that fails is skipped and reported (D003), never fatal. The package `aad_docs` imports no Django code, so a node file can `from aad_docs import Node` before Django is ready; `docs_url` loads the routing on its first call.
 - Siblings sort by `order`, then by `slug`. When a node lists `pages`, only those items show, in that order, and the rest is hidden. Without `pages`, every readable file and child node shows, sorted by name. `visible(request, page_name)` filters the menu and the access to the page.
 - Language variants are one page. `name.es.md` next to `name.md` is a variant of the same page, never a second page. The active Django language is normalized against `LANGUAGES` (`es-co` becomes `es`) and falls back to the first language. The header of a Spanish page is removed before rendering.
-- Markdown is rendered with raw HTML disabled. An `.mdx` is Markdown plus a closed list of tags, each alone on its line; the reader replaces each tag with its piece, leaves tags inside code as text, runs no JavaScript and compiles nothing. The `src` of a tag resolves inside the folder of its node.
+- Markdown is rendered with raw HTML disabled. An `.mdx` is Markdown plus a closed list of tags. A tag stands alone on its line or is a container that opens and closes on its own lines. The reader replaces each tag with its component, leaves tags inside code as text, runs no JavaScript and compiles nothing. The `src` of a tag resolves inside the folder of its node.
 - The tree is built once per process and cached. In `DEBUG` it is rebuilt on every request.
 - A page path is resolved against the node's folder and may not leave it. When a section and a model produce the same slug, the section answers.
 - The checks of the app run with `manage.py check`, as Django system checks.
@@ -124,6 +124,31 @@ docs_url("orders")            # /docs/orders/
 docs_url(Order)               # /docs/orders/order/
 docs_url(Order, "lifecycle")  # /docs/orders/order/lifecycle/
 ```
+
+## Components
+
+A page gets its visual elements from a closed registry. The author writes a tag; the reader checks it against the registry and renders a Django template.
+
+```mermaid
+flowchart LR
+    page[".mdx page"] --> reader["Reader finds the tags"]
+    reader --> registry["MDX_TAGS<br/>form, attributes, parent"]
+    registry --> template["components/&lt;name&gt;.html"]
+    template --> html["Page HTML"]
+```
+
+| Component | Form | Shows |
+|---|---|---|
+| `Callout` | container | A note, tip, warning or danger box |
+| `Steps` | container | A numbered list drawn as a sequence |
+| `Tabs`, `Tab` | container | Alternatives, one panel for each tab |
+| `Cards`, `Card` | container | A grid of linked cards |
+| `Details` | container | A section the reader opens and closes |
+| `Model`, `ModelDiagram`, `Table`, `Explorer`, `Flow`, `Screenshot` | line | The pieces that read data files and model metadata |
+
+- The registry owns [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv), which lists every attribute.
+- Templates use the classes of the design system and need no JavaScript, except `Tabs`.
+- The reasons and the alternatives: [decision 0013](../aad_docs/docs/07-decisions/0013-visual-components.md).
 
 ## Generated files
 

@@ -1,7 +1,14 @@
-tag,attributes,places_in_the_page,reads_from,milestone
-Model,name: app_label.ModelName,Field table of the model,Model metadata,M3
-ModelDiagram,app: app label,Diagram of the models of the app and their relations,Model metadata,M3
-Table,src: path to a .csv,Table that sorts and filters,The .csv file,M3
-Explorer,src: path to a .yml,Click-through view of the code map,The .yml file,M3
-Flow,src: path to a .json,Step-by-step simulator,"The .json file, which must have type flow",M3
-Screenshot,name: file stem in assets/,Screenshot in the active language,assets/,M4
+tag,form,attributes,places_in_the_page,reads_from,milestone
+Model,line,name: app_label.ModelName,Field table of the model,Model metadata,M3
+ModelDiagram,line,app: app label,Diagram of the models of the app and their relations,Model metadata,M3
+Table,line,src: path to a .csv,Table that sorts and filters,The .csv file,M3
+Explorer,line,src: path to a .yml,Click-through view of the code map,The .yml file,M3
+Flow,line,src: path to a .json,Step-by-step simulator,"The .json file, which must have type flow",M3
+Screenshot,line,name: file stem in assets/,Screenshot in the active language,assets/,M4
+Callout,container,"type: note, tip, warning or danger",Highlighted box around the text it holds,The Markdown between its tags,M3
+Steps,container,none,Numbered list drawn as a sequence of steps,The ordered list between its tags,M3
+Tabs,container,none,"Tabs, one for each Tab it holds",Its Tab tags,M3
+Tab,container,title: tab label; only inside Tabs,One panel of a Tabs,The Markdown between its tags,M3
+Cards,container,none,Grid of cards,Its Card tags,M3
+Card,container,title: card heading; href: optional link; only inside Cards,One card,The Markdown between its tags,M3
+Details,container,summary: the line that is always visible,Section the reader opens and closes,The Markdown between its tags,M3
