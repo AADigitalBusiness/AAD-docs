@@ -38,6 +38,23 @@ Keep the documentation of every project current, navigable and consistent, so th
 - Hosting a public documentation site.
 - Documenting code that is not a Django app.
 
+## Roadmap
+
+What the owner can do at the end of each milestone, and what each one waits for.
+
+| Milestone | After it, the owner can | Status | Waits for |
+|---|---|---|---|
+| M0 · Repository | Read the complete design as documentation | Done | — |
+| M1a · Package, demo, tests | Install the app and run the demo | Next | The owner's go-ahead to start code |
+| M1 · Navigable docs | Browse every page of this repository at `/docs/`, in English and Spanish | Planned | M1a |
+| M2 · Code map | Find a model, a route or a class from the browser | Planned | M1 |
+| M3 · Tables and flows | Sort tables, play flows and use callouts, steps, tabs and cards | Planned | M2 |
+| M4 · Checks and screenshots | Trust the docs in CI and see the screens | Planned | M3 |
+| M5 · First project | Use it on a real app | Planned | M4 and the choice of the project |
+| M6 · Database index | Search all pages and link a page to a model | Future | M5 |
+
+Decisions 0007 to 0014 are still proposed. Each one is confirmed or changed before the milestone that builds it starts: 0008 and 0014 before M1a, 0010 before M1, 0011 and 0013 before M3.
+
 ## Milestones
 
 Each milestone advances backend and frontend together and ends with something usable. The documentation of AAD-docs is the acceptance test: each milestone must render more of it.
@@ -52,7 +69,7 @@ Accepted when: every page opens with a purpose line and a diagram, and every lin
 
 | Side | Deliverable |
 |---|---|
-| Backend | `pyproject.toml` with the dependencies, the `[dev]` extra (`pytest`, `pytest-django`), the `[screenshots]` extra (Playwright) and package data for `aad_docs/docs/**`, templates and static files |
+| Backend | `pyproject.toml` with the dependencies, the `[dev]` extra (`pytest`, `pytest-django`), the `[screenshots]` extra (Playwright) and package data for `aad_docs/docs/**`, templates and static files, including the vendored Mermaid and design-system CSS with their licenses ([0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md)) |
 | Backend | `aad_docs/__init__.py` exports `Node`, pure Python, and `docs_url`, which loads the routing on its first call |
 | Backend | `conf.py`: `DEFAULTS` and `get_settings()`, which merges `settings.AAD_DOCS` over them |
 | Backend | `apps.py` registers the system checks, such as the presence of the packaged `docs/` |
@@ -73,7 +90,7 @@ The demo app exists because `aad_docs` has no models. It is the only place where
 | Side | Deliverable |
 |---|---|
 | Backend | Discovery that loads each `__init__.py` by path under a unique module name; nodes with the semantics of `pages` and `visible`; sibling order by `order` and `slug`; language variants grouped under one page |
-| Backend | `.md` reader: header removed, raw HTML disabled, first heading as title; active-language selection with fallback |
+| Backend | `.md` reader: header removed, semantic tags read and any other HTML shown as text, first heading as title; active-language selection with fallback |
 | Backend | Routing, `docs_url()`, views and the staff-only access mixin; the asset view with a closed list of image types |
 | Frontend | Base layout, navigation menu, breadcrumbs, language switcher, page with Mermaid in strict mode |
 
@@ -146,7 +163,7 @@ Install the app in one real project, document one of its apps to the minimum (RE
 
 Accepted when: the owner can find a model, a route and a class of that app from `/docs/` without opening the code.
 
-The project is not chosen yet.
+The project is not chosen yet. `kv` is the candidate: it runs Django 5.2, has its own documentation conventions and a layered frontend, so it shows where the standard fits and where it does not ([0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md)).
 
 ### M6 · Database index (future delivery)
 
@@ -189,7 +206,7 @@ Accepted when:
 | Decision | Proposed | Recorded in |
 |---|---|---|
 | Frontend technology | Django templates and plain JavaScript in the package | [0007](../aad_docs/docs/07-decisions/0007-frontend-django-templates.md) |
-| Package name, versions, libraries | `aad_docs`; Python 3.11+, Django 4.2+; `markdown-it-py`, `PyYAML`; Mermaid vendored | [0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md) |
+| Package name, versions, libraries | `aad_docs`; Python 3.11+, Django 5.2+; `markdown-it-py`, `PyYAML`; Mermaid and the design-system CSS vendored | [0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md) |
 | First project for M5 | Not chosen | This page |
 | Addresses | Taken from app and model metadata; model slug is `model_name` | [0010](../aad_docs/docs/07-decisions/0010-addresses-from-metadata.md) |
 | `.mdx` | Markdown plus a closed list of tags; no JavaScript, no build | [0011](../aad_docs/docs/07-decisions/0011-mdx-closed-tag-set.md) |
@@ -197,6 +214,7 @@ Accepted when:
 | Screenshot tool and test runner | Playwright in the `[screenshots]` extra; `pytest` and `pytest-django` in `[dev]` | [0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md) |
 | Visual components and raw HTML | Closed registry, Django templates; raw HTML never rendered; each component declares if it needs JavaScript | [0013](../aad_docs/docs/07-decisions/0013-visual-components.md) |
 | Reference tables | Generated from their owner in Python | [0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md) |
+| Reuse of the owner's repositories | Copy small primitives, vendor the CSS, depend on no other repository | [0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md) |
 
 ## Next
 

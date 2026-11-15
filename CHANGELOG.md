@@ -14,4 +14,8 @@
 - Documented the rules of the reader: loading a node by path, safe import, raw HTML off, a closed list of image types, tags alone on a line, section precedence, criteria for each check.
 - Added visual components for `.mdx` pages: callout, steps, tabs, cards and details, from a closed registry rendered by Django templates (decision 0013, checks D063 and D064).
 - Raw HTML is never rendered; the semantic tags `details` and `summary` are read in `.md` and `.mdx`, and each component declares whether it needs JavaScript (decision 0013, check D065).
+- Added decision 0014: what AAD-docs copies, vendors or only reads from the owner's other repositories, and which it rejects.
+- Decision 0013 records what the owner confirmed on 2026-11-15: nothing in a Markdown file runs, semantic tags are allowed, each tag declares whether it needs JavaScript, and link attributes accept only `http`, `https`, `mailto` and relative paths (type `url`, check D064).
+- Proposed Django 5.2 or later (decision 0008) and the design-system CSS vendored at a pinned tag.
+- Added a roadmap to the plan: what the owner can do after each milestone, and what each waits for.
 - No code yet.

@@ -46,6 +46,7 @@ AAD-docs/
 | Which address does a page or a model get? | [03-architecture.md](03-architecture.md#addresses) |
 | How do I put a table, a flow or a callout inside a page? | [embed-a-piece.mdx](../aad_docs/docs/05-guides/embed-a-piece.mdx) |
 | Which tags can an `.mdx` page use? | [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv) |
+| What does it reuse from my other repositories? | [0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md) |
 | Why was it designed this way? | [07-decisions/](../aad_docs/docs/07-decisions/) |
 | How do I release and operate it? | [08-operations.md](08-operations.md) |
 | How do I write a page in this standard? | [HOW-DOCS-WORK.md](HOW-DOCS-WORK.md) |

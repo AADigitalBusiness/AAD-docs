@@ -13,7 +13,7 @@ flowchart LR
     before --> after
 ```
 
-**Status:** Proposed · 2026-11-15. Not confirmed by the project owner.
+**Status:** Proposed · 2026-11-15. The owner confirmed on 2026-11-15 that nothing in a Markdown file runs, that semantic tags such as `details` and `summary` are allowed, that each tag declares whether it needs JavaScript, and that link attributes accept only safe schemes. The component list is not yet confirmed.
 
 ## Context
 

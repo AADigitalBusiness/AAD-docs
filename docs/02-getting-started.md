@@ -15,7 +15,7 @@ flowchart LR
 ## Before you start
 
 - A Django project that runs locally.
-- Python 3.11 or later and Django 4.2 or later. These versions are proposed in [decision 0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md).
+- Python 3.11 or later and Django 5.2 or later. These versions are proposed in [decision 0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md).
 - A staff user. The documentation is staff-only by default.
 
 ## Steps
