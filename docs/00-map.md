@@ -7,8 +7,10 @@ AAD-docs/
 ├── README.md                     ← entry point
 ├── README.es.md                  ← entry point in Spanish
 ├── CHANGELOG.md                  ← what changed and when
-├── .agent/skills/                ← skills for coding agents (source)
-├── .claude/skills/               ← symlinks to .agent/skills/
+├── AGENTS.md                     ← instructions for coding agents
+├── CLAUDE.md                     ← imports AGENTS.md
+├── tools/check_docs.py           ← interim documentation check
+├── .claude/skills/               ← skills for coding agents
 ├── docs/                         ← root node: what crosses every app
 │   ├── __init__.py               ← resolves the root node
 │   ├── 00-map.md                 ← this page
@@ -50,7 +52,7 @@ AAD-docs/
 | Which tags can an `.mdx` page use? | [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv) |
 | What does it reuse from my other repositories? | [0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md) |
 | Why was it designed this way? | [07-decisions/](../aad_docs/docs/07-decisions/) |
-| Which skills do agents have here? | [08-operations.md](08-operations.md#agent-skills) |
+| What must an agent follow here? | [AGENTS.md](../AGENTS.md) |
 | How do I release and operate it? | [08-operations.md](08-operations.md) |
 | How do I write a page in this standard? | [HOW-DOCS-WORK.md](HOW-DOCS-WORK.md) |
 | What gets built next? | [PLAN.md](PLAN.md) |

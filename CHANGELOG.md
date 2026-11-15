@@ -18,5 +18,5 @@
 - Decision 0013 records what the owner confirmed on 2026-11-15: nothing in a Markdown file runs, semantic tags are allowed, each tag declares whether it needs JavaScript, and link attributes accept only `http`, `https`, `mailto` and relative paths (type `url`, check D064).
 - Proposed Django 5.2 or later (decision 0008) and the design-system CSS vendored at a pinned tag.
 - Added a roadmap to the plan: what the owner can do after each milestone, and what each waits for.
-- Added the agent skills `repo-docs-canvas` and `pending-decisions-canvas` in `.agent/skills/`, with `.claude/skills/` as symlinks to them (operations).
+- Added `AGENTS.md`, the standard entry for coding agents, with `CLAUDE.md` importing it. Added the skills `repo-docs-canvas` and `pending-decisions-canvas` in `.claude/skills/`, and `tools/check_docs.py` as the interim check (operations).
 - No code yet.

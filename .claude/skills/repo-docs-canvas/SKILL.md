@@ -19,7 +19,7 @@ The page shows the repository **as committed**: the script reads tracked files w
 ## Steps
 
 1. Find the repo root. Ask only if there are several candidates and the request does not name one. Check that it is a git repository and that `markdown-it-py` imports (`pip install --break-system-packages markdown-it-py` if not).
-2. Build: `python3 .agent/skills/repo-docs-canvas/scripts/repo_canvas.py <repo_root> <scratchpad>/canvas.html --title "<Repo name>"`. The script prints the number of files and pending items. A link that renders as `#` points to a file that is not tracked: report it, do not hide it.
+2. Build: `python3 .claude/skills/repo-docs-canvas/scripts/repo_canvas.py <repo_root> <scratchpad>/canvas.html --title "<Repo name>"`. The script prints the number of files and pending items. A link that renders as `#` points to a file that is not tracked: report it, do not hide it.
 3. Publish with the Artifact tool, `file_path` set to `<scratchpad>/canvas.html`. First publish: pass `icon` (`docs`) and a one-sentence `description`. Later publishes of the same path keep the URL; do not pass `icon` again.
 4. Reply in one or two sentences: what the page holds and what changed since the last version. Do not paste the link; the card carries it.
 

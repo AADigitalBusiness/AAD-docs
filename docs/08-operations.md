@@ -58,16 +58,11 @@ The documentation exposes models, routes and class names. Treat it as internal.
 
 `docs/` folders hold non-Python files. AAD-docs declares `aad_docs/docs/**`, templates and static files as package data in `pyproject.toml`, and a Django system check warns when the packaged `docs/` is missing. A distributed app of yours must declare its own, or only the `.py` files ship.
 
-## Agent skills
+## Agent instructions
 
-Skills for coding agents live in `.agent/skills/<name>/`, each with a `SKILL.md` and, when it needs them, a `scripts/` folder. `.agent/` is the source. `.claude/skills/<name>` is a symlink to it, so Claude Code finds the same skill and there is one copy to maintain. On a system without symlinks, copy the folder and keep `.agent/` as the one you edit.
+`AGENTS.md` at the root is the standard entry for coding agents ([agents.md](https://github.com/agentsmd/agents.md)): plain Markdown that holds the checks, conventions and rules an agent follows. `CLAUDE.md` only imports it (`@AGENTS.md`), so there is one file to maintain. `AGENTS.md` links to the documents that own each fact and does not repeat them.
 
-| Skill | Use |
-|---|---|
-| `repo-docs-canvas` | Publishes the documentation files of the repository as one navigable page, built from the committed files |
-| `pending-decisions-canvas` | Marks in the warning color the decisions that wait for the owner, on that page |
-
-A skill never edits the documentation to produce its output.
+Skills for agents live in `.claude/skills/<name>/`, each with a `SKILL.md` and, when it needs them, a `scripts/` folder. The skills and their use are listed in `AGENTS.md`. A skill never edits the documentation to produce its output.
 
 ## If something fails
 
