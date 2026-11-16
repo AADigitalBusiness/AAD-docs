@@ -1,6 +1,6 @@
 ---
 source: README.md
-synced: 2026-11-14
+synced: 2026-11-15
 ---
 
 # AAD-docs
@@ -13,9 +13,9 @@ flowchart LR
     aad --> pagina["Páginas de documentación<br/>en el navegador"]
 ```
 
-AAD-docs muestra la documentación de un proyecto en el navegador. Cada parte del proyecto trae su propia documentación, y AAD-docs la reúne en un solo lugar con un menú para recorrerla.
+AAD-docs muestra la documentación de un proyecto en el navegador. Cada parte del proyecto trae su propia documentación, y AAD-docs la reúne en un solo lugar con un menú para recorrerla. Las páginas podrán incluir tablas, capturas de pantalla, avisos destacados, pasos y pestañas.
 
-**Estado: en planificación.** Todavía no se puede usar. Este repositorio contiene el plan y la documentación del proyecto.
+**Estado: en diseño.** El diseño está escrito, pero todavía no se puede usar. Este repositorio contiene el plan, la documentación del proyecto y unas herramientas que la revisan.
 
 ## Cómo se usa
 
