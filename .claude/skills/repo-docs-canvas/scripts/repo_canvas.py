@@ -10,12 +10,15 @@ ap = argparse.ArgumentParser()
 ap.add_argument('root'); ap.add_argument('out')
 ap.add_argument('--title', default='Repository docs')
 ap.add_argument('--pending-regex', default=r'^(Proposed|Draft|Pending)')
+ap.add_argument('--show-agent-docs', action='store_true', help='start with the agent documentation (AGENTS.md, CLAUDE.md, .claude/) visible; hidden by default')
 ap.add_argument('--approvals', action='store_true', help='add Approve / Request changes controls to pending decisions (needs the db and user capabilities)')
 a = ap.parse_args()
 R = a.root
 EXT = ('.md', '.mdx', '.yml', '.yaml', '.csv', '.json', '.py')
 tracked = subprocess.check_output(['git', 'ls-files'], cwd=R, text=True).split()
-files = [f for f in tracked if f.endswith(EXT) and ('/docs/' in '/' + f or '/' not in f and f.endswith('.md'))]
+def is_agent(f):
+    return posixpath.basename(f) in ('AGENTS.md', 'CLAUDE.md') or f.startswith(('.claude/', '.agent/'))
+files = [f for f in tracked if f.endswith(EXT) and ('/docs/' in '/' + f or '/' not in f and f.endswith('.md') or is_agent(f) and f.endswith('.md'))]
 ids = {f: 'f-' + re.sub(r'[^a-z0-9]+', '-', f.lower()).strip('-') for f in files}
 
 md = MarkdownIt('commonmark').enable('table')
@@ -81,9 +84,9 @@ groups = {}
 for f in files: groups.setdefault(group(f), []).append(f)
 nav = body = ''
 for g in sorted(groups, key=lambda x: (x != 'Root', x)):
-    nav += '<div class="g"><h3>%s</h3>' % html.escape(g)
+    nav += '<div class="g%s"><h3>%s</h3>' % (' agent' if all(is_agent(f) for f in groups[g]) else '', html.escape(g))
     for f in groups[g]:
-        nav += '<a href="#%s"%s>%s</a>' % (ids[f], ' class="warn"' if f in pend else '', html.escape(posixpath.basename(f)))
+        nav += '<a href="#%s"%s>%s</a>' % (ids[f], ' class="%s"' % ' '.join(c for c, on in (('warn', f in pend), ('agent', is_agent(f))) if on) if (f in pend or is_agent(f)) else '', html.escape(posixpath.basename(f)))
         r = render(f)
         if f in pend:
             r = re.sub(r'<p><strong>Status:</strong>(.*?)</p>', r'<p class="warnbox"><strong>Pending · Status:</strong>\1</p>', r, count=1)
@@ -91,7 +94,8 @@ for g in sorted(groups, key=lambda x: (x != 'Root', x)):
             m = re.search(r'/(\d{4})-[^/]*$', f)
             if m:
                 r = re.sub(r'(</p>)', r'\1<div class="appr" data-id="%s" data-title="%s"></div>' % (m.group(1), html.escape(title_of(f), quote=True)), r, count=1) if 'warnbox' not in r else re.sub(r'(<p class="warnbox">.*?</p>)', r'\1<div class="appr" data-id="%s" data-title="%s"></div>' % (m.group(1), html.escape(title_of(f), quote=True)), r, count=1)
-        body += '<section id="%s"%s><div class="path">%s</div>%s</section>\n' % (ids[f], ' class="pend"' if f in pend else '', html.escape(f), r)
+        cls = ' '.join(c for c, on in (('pend', f in pend), ('agent', is_agent(f))) if on)
+        body += '<section id="%s"%s><div class="path">%s</div>%s</section>\n' % (ids[f], ' class="%s"' % cls if cls else '', html.escape(f), r)
     nav += '</div>'
 if pend:
     def dec(f):
@@ -104,7 +108,11 @@ if pend:
 here = os.path.dirname(os.path.abspath(__file__))
 tpl = open(os.path.join(here, 'repo_canvas.template.html'), encoding='utf-8').read()
 out = (tpl.replace('%%TITLE%%', html.escape(a.title)).replace('%%NAV%%', nav)
-          .replace('%%BODY%%', body).replace('%%COUNT%%', str(len(files))))
+          .replace('%%BODY%%', body).replace('%%COUNT%%', str(len([f for f in files if not is_agent(f)]))))
+has_agent = any(is_agent(f) for f in files)
+toggle = ('<label class="tg"><input type="checkbox" id="show-agent" data-initial="%d"> Show agent documentation (%d files)</label>'
+          % (1 if a.show_agent_docs else 0, len([f for f in files if is_agent(f)]))) if has_agent else ''
+out = out.replace('%%TOGGLE%%', toggle)
 script = open(os.path.join(here, 'approvals.js.html'), encoding='utf-8').read() if a.approvals else ''
 out = out.replace('%%SCRIPT%%', script)
 open(a.out, 'w', encoding='utf-8').write(out)

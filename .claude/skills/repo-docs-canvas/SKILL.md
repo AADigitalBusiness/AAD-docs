@@ -25,6 +25,10 @@ The page shows the repository **as committed**: the script reads tracked files w
 4. With `--approvals`, each pending decision gets Approve and Request changes controls, plus an optional note. Publish that page with `capabilities: {db: {rules: [{path: "approvals", read: "view", write: "owner"}]}, user: {}}`. Only the artifact's owner can write, so a reader who is not the owner sees "Waiting for the owner". Each verdict is one document, `approvals/<decision number>`, with `decision`, `title`, `verdict` (`approved` or `changes`), `note` and `at`. Later publishes of the same path keep the capabilities when `capabilities` is omitted. The page never edits the repository: `pending-decisions-canvas` describes how the verdicts reach the files.
 5. Reply in one or two sentences: what the page holds and what changed since the last version. Do not paste the link; the card carries it.
 
+## Agent documentation
+
+The documentation written for coding agents (`AGENTS.md`, `CLAUDE.md` and everything under `.claude/`) is hidden by default, because the people who read the canvas are not its audience. A checkbox in the header, "Show agent documentation", shows it for technical readers, and a link that points to one of those files shows it by itself. Pass `--show-agent-docs` to open the page with them visible. The count in the header leaves them out.
+
 ## Rules
 
 - Mermaid renders natively in artifacts through `<pre class="mermaid">`. Do not load a Mermaid library.

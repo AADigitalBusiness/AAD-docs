@@ -52,7 +52,16 @@ section.pend{border-left:4px solid var(--warnln)}
 .appr.done-approved{background:var(--okbg);border-color:var(--ok)}.appr.done-approved .st{color:var(--ok)}
 .appr.done-changes{background:var(--warnbg);border-color:var(--warnln)}.appr.done-changes .st{color:var(--warn)}
 .chip{font-size:12px;padding:1px 8px;border-radius:99px;margin-left:6px;background:var(--okbg);color:var(--ok)}
+body:not(.show-agent) .agent{display:none}
+.tg{display:inline-flex;gap:6px;align-items:center;margin-top:8px;font-size:13px;color:var(--mut);cursor:pointer}
 </style>
-<div class="wrap"><header><h1 class="t">%%TITLE%%</h1><p>%%COUNT%% files as they stand in the repository after the latest commit. Links between pages work as they would in the documentation site.</p></header>
+<div class="wrap"><header><h1 class="t">%%TITLE%%</h1><p>%%COUNT%% files as they stand in the repository after the latest commit. Links between pages work as they would in the documentation site.</p>%%TOGGLE%%</header>
 <nav>%%NAV%%</nav><main>%%BODY%%</main></div>
+<script>
+(()=>{const cb=document.getElementById('show-agent');if(!cb)return;
+const set=v=>{document.body.classList.toggle('show-agent',v);cb.checked=v};
+set(cb.dataset.initial==='1');cb.onchange=()=>set(cb.checked);
+const reveal=()=>{const t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(t&&t.closest('.agent')){set(true);t.scrollIntoView()}};
+addEventListener('hashchange',reveal);reveal()})();
+</script>
 %%SCRIPT%%
