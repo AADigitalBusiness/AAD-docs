@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE | default:'en' }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Documentation{% endblock %} - AAD-docs</title>
+    <link rel="stylesheet" href="{% static 'aad_docs/docs.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="docs-header">
+        <h1>AAD-docs</h1>
+        {% if show_language_switcher %}
+        <div class="language-switcher">
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <select name="language" onchange="this.form.submit()">
+                    {% for lang_code, lang_name in LANGUAGES %}
+                    <option value="{{ lang_code }}" {% if request.LANGUAGE_CODE == lang_code %}selected{% endif %}>
+                        {{ lang_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        {% endif %}
+    </header>
+
+    <nav class="docs-nav" role="navigation" aria-label="Documentation">
+        {% if show_tree %}
+        <ul class="node-tree">
+            {% for child in node.children %}
+            <li class="node-item {% if child.slug == node.slug %}active{% endif %}">
+                <a href="{% url 'aad_docs:node' app_slug=child.slug %}">{{ child.title }}</a>
+                {% if child.children %}
+                <ul class="node-children">
+                    {% for subchild in child.children %}
+                    <li class="node-item">
+                        <a href="{% url 'aad_docs:node' app_slug=subchild.slug %}">{{ subchild.title }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </nav>
+
+    <main class="docs-main" role="main">
+        {% block breadcrumbs %}{% endblock %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="docs-footer">
+        <p>Powered by AAD-docs</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
