@@ -53,7 +53,7 @@ What the owner can do at the end of each milestone, and what each one waits for.
 | M5 · First project | Use it on a real app | Planned | M4 and the choice of the project |
 | M6 · Database index | Search all pages and link a page to a model | Future | M5 |
 
-Decisions 0007 to 0014 are still proposed. Each one is confirmed or changed before the milestone that builds it starts: 0008 and 0014 before M1a, 0010 before M1, 0011 and 0013 before M3.
+Decisions 0007, 0008 and 0010 to 0015 are still proposed; 0009 is a recommendation for M6. Each one is confirmed or changed before the milestone that builds it starts: 0007, 0008, 0014 and 0015 before M1a, 0010 before M1, 0011, 0012 and 0013 before M3.
 
 ## Milestones
 
@@ -75,7 +75,7 @@ Accepted when: every page opens with a purpose line and a diagram, and every lin
 | Backend | `apps.py` registers the system checks, such as the presence of the packaged `docs/` |
 | Demo | `demo/` with `USE_I18N`, `LocaleMiddleware`, `LANGUAGES` in English and Spanish, `AAD_DOCS["ROOT"]` pointing at this repository's `docs/`, and the `i18n/` and `docs/` URLs |
 | Demo | `demo/catalog`: models with `verbose_name`, `help_text`, relations and translations |
-| CI | Tests and lint on every pull request |
+| CI | Tests, lint and `tools/check.sh` on every pull request |
 
 Accepted when:
 
@@ -196,7 +196,7 @@ Accepted when:
 | A reference table and its owner in code disagree | The table lies | Tables are generated from the owner; `docs_codemap --check` in CI |
 | Docs expose internal structure | Models and routes visible to the wrong reader | Staff-only by default; `ACCESS` setting |
 | Class discovery is fuzzy | The code map lists noise or misses services | Start with models, views and URL patterns, which Django can enumerate; add other classes by convention (`services/`) and by opt-in |
-| Spanish falls behind | Users read outdated pages | `synced` header checked by `docs_check` in CI |
+| A translation falls behind | Readers see outdated pages | `synced` header checked by `docs_check` in CI |
 | Generated files drift from code | The map lies | `docs_codemap --check` in CI |
 | The database index falls behind the files (M6) | Search and links show outdated content | The index is never edited by hand; `docs_sync --check` in CI |
 | Docs missing from installed packages | Empty nodes in production | Package data declared at M1a; a system check at startup |

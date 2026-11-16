@@ -30,7 +30,7 @@ flowchart LR
 
 ## Checks in CI
 
-Run these on every pull request, in this repository and in every project that installs the app.
+In this repository, `tools/check.sh` is the check of every pull request until `docs_check` exists ([Agent tooling](#agent-tooling)). In every project that installs the app, run these on every pull request.
 
 ```bash
 pytest
