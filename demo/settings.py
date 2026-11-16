@@ -1,24 +1,14 @@
-"""
-Django settings for AAD-docs demo project.
-"""
+"""Django settings for the AAD-docs demo project."""
+from __future__ import annotations
 
-import os
 from pathlib import Path
 
-# Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = BASE_DIR.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-demo-key-for-aad-docs-only"
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
-
-
-# Application definition
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]", "testserver"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -27,21 +17,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # AAD-docs
     "aad_docs",
-    # Demo apps
     "demo.catalog",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "demo.urls"
@@ -49,7 +37,7 @@ ROOT_URLCONF = "demo.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -64,10 +52,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "demo.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -75,71 +59,23 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = "en"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
-# Languages
 LANGUAGES = [
     ("en", "English"),
     ("es", "Spanish"),
 ]
 
 LOCALE_PATHS = [
-    BASE_DIR / "locale",
+    BASE_DIR / "catalog" / "locale",
 ]
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
+STATIC_URL = "/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
-# AAD-docs configuration
 AAD_DOCS = {
-    # Point to the repository's docs/ folder
-    "ROOT": str(PROJECT_ROOT / "docs"),
-    # Allow public access for demo purposes
-    "ACCESS": "public",
-    # Show tree and language switcher
-    "SHOW_TREE": True,
-    "SHOW_LANGUAGE_SWITCHER": True,
+    "ROOT": PROJECT_ROOT / "docs",
 }
-
-# Add the project root to the template dirs so docs can be found
-TEMPLATES[0]["DIRS"].append(str(PROJECT_ROOT / "docs"))

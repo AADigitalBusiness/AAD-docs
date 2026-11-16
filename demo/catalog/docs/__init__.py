@@ -1,16 +1,10 @@
-"""Catalog app documentation node."""
-
+"""Documentation node for demo.catalog."""
 from aad_docs import Node
-
 
 node = Node(
     slug="catalog",
-    title="Product Catalog",
-    title_es="Cat\u00e1logo de Productos",
+    title="Catalog",
+    title_es="Catálogo",
     order=20,
-    pages=[
-        "01-overview",
-        "02-models",
-        "03-usage",
-    ],
+    pages=["01-overview"],
 )

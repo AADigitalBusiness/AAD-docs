@@ -1,0 +1,64 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: es\n"
+
+msgid "Catalog"
+msgstr "Catálogo"
+
+msgid "Category"
+msgstr "Categoría"
+
+msgid "Categories"
+msgstr "Categorías"
+
+msgid "Category name"
+msgstr "Nombre de la categoría"
+
+msgid "Human-readable name shown in the store navigation."
+msgstr "Nombre legible mostrado en la navegación de la tienda."
+
+msgid "Slug"
+msgstr "Identificador URL"
+
+msgid "URL segment that identifies this category."
+msgstr "Segmento de URL que identifica esta categoría."
+
+msgid "Parent category"
+msgstr "Categoría padre"
+
+msgid "Optional parent category in the hierarchy."
+msgstr "Categoría padre opcional en la jerarquía."
+
+msgid "Product"
+msgstr "Producto"
+
+msgid "Products"
+msgstr "Productos"
+
+msgid "SKU"
+msgstr "Código SKU"
+
+msgid "Unique stock keeping unit code for inventory tracking."
+msgstr "Código único de referencia para el control de inventario."
+
+msgid "Product name"
+msgstr "Nombre del producto"
+
+msgid "Display title of the product shown to buyers."
+msgstr "Título del producto mostrado a los compradores."
+
+msgid "Category under which this product is listed."
+msgstr "Categoría bajo la cual se lista este producto."
+
+msgid "Price"
+msgstr "Precio"
+
+msgid "Unit sale price in the store currency."
+msgstr "Precio unitario de venta en la moneda de la tienda."
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Whether the product is available for purchase."
+msgstr "Indica si el producto está disponible para la venta."

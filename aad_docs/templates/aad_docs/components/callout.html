@@ -1,0 +1,4 @@
+<aside class="plt-callout plt-callout--{{ type|default:'note' }}" data-component="callout" data-callout-type="{{ type|default:'note' }}">
+    {% if title %}<div class="plt-callout__title">{{ title }}</div>{% endif %}
+    <div class="plt-callout__body">{{ body|safe }}</div>
+</aside>

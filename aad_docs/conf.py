@@ -1,50 +1,91 @@
-"""
-Configuration defaults for AAD-docs.
+"""Configuration defaults and settings accessor for AAD-docs.
 
-This module is the owner of settings.csv.
+Copied and adapted from the settings pattern in django-dsadmin (see decision 0014).
+Owner of settings.csv.
 """
+from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 
 DEFAULTS: dict[str, Any] = {
-    # Root documentation folder (default: project's docs/)
-    "ROOT": None,
-    # Access control: "staff" (default), "public", or callable
+    "ROOT": "BASE_DIR / docs",
     "ACCESS": "staff",
-    # Whether to show the node tree in the menu
-    "SHOW_TREE": True,
-    # Whether to enable the language switcher
-    "SHOW_LANGUAGE_SWITCHER": True,
-    # Allowed asset file types for serving
-    "ASSET_TYPES": [".png", ".jpg", ".jpeg", ".webp", ".gif"],
-    # Cache timeout for node tree (seconds, None = no cache)
-    "CACHE_TIMEOUT": None,
-    # Debug mode: rebuild tree on every request
-    "DEBUG": False,
+    "LANGUAGES": ["en", "es"],
+    "EXCLUDE_APPS": [],
+    "CODEMAP_CLASS_DIRS": ["services"],
+    "CACHE_TREE": "not DEBUG",
 }
+
+SETTINGS_SPEC: tuple[dict[str, str], ...] = (
+    {
+        "key": "ROOT",
+        "type": "path",
+        "default": "BASE_DIR / docs",
+        "meaning": "Folder of the root node: documentation that crosses every app. Set to None to have no root node.",
+    },
+    {
+        "key": "ACCESS",
+        "type": "str or callable",
+        "default": "staff",
+        "meaning": "Who can open /docs/. staff: staff users. authenticated: any signed-in user. public: anyone. A callable receives the request and returns a boolean.",
+    },
+    {
+        "key": "LANGUAGES",
+        "type": "list of str",
+        "default": "en, es",
+        "meaning": "Languages a page can exist in. The first one is the default language: every page exists in it and it is the fallback.",
+    },
+    {
+        "key": "EXCLUDE_APPS",
+        "type": "list of str",
+        "default": "empty",
+        "meaning": "App labels whose docs/ folder is ignored.",
+    },
+    {
+        "key": "CODEMAP_CLASS_DIRS",
+        "type": "list of str",
+        "default": "services",
+        "meaning": "Folders inside an app whose classes docs_codemap lists in addition to models and views.",
+    },
+    {
+        "key": "CACHE_TREE",
+        "type": "bool",
+        "default": "not DEBUG",
+        "meaning": "Build the node tree once per process. When false it is rebuilt on every request.",
+    },
+)
 
 
 def get_settings() -> dict[str, Any]:
-    """
-    Return AAD_DOCS settings merged over defaults.
-    
-    Reads from django.conf.settings.AAD_DOCS if Django is configured,
-    otherwise returns only the defaults.
-    """
-    from django.conf import settings as django_settings
-    
-    # Check if Django settings are configured by checking if we can access INSTALLED_APPS
+    """Return the AAD_DOCS setting merged over its defaults."""
+    resolved: dict[str, Any] = {
+        "ROOT": None,
+        "ACCESS": "staff",
+        "LANGUAGES": list(DEFAULTS["LANGUAGES"]),
+        "EXCLUDE_APPS": list(DEFAULTS["EXCLUDE_APPS"]),
+        "CODEMAP_CLASS_DIRS": list(DEFAULTS["CODEMAP_CLASS_DIRS"]),
+        "CACHE_TREE": False,
+    }
     try:
-        # Try to access a setting to see if Django is configured
-        _ = django_settings.INSTALLED_APPS
-        configured = True
+        from django.conf import settings as django_settings
+
+        if not django_settings.configured:
+            return resolved
+
+        base_dir = getattr(django_settings, "BASE_DIR", None)
+        if base_dir is not None:
+            resolved["ROOT"] = Path(base_dir) / "docs"
+        resolved["CACHE_TREE"] = not bool(getattr(django_settings, "DEBUG", False))
+
+        user_cfg = getattr(django_settings, "AAD_DOCS", None)
+        if isinstance(user_cfg, dict):
+            for k, v in user_cfg.items():
+                resolved[k] = v
+            if "ROOT" in user_cfg and user_cfg["ROOT"] is not None:
+                resolved["ROOT"] = Path(user_cfg["ROOT"])
     except Exception:
-        configured = False
-    
-    if configured and hasattr(django_settings, "AAD_DOCS") and django_settings.AAD_DOCS:
-        custom = django_settings.AAD_DOCS
-        if isinstance(custom, dict):
-            return {**DEFAULTS, **custom}
-    
-    return DEFAULTS.copy()
+        pass
+
+    return resolved

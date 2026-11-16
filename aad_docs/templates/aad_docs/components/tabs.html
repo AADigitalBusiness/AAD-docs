@@ -1,0 +1,15 @@
+<div class="plt-tabs" data-component="tabs">
+    <div class="plt-tabs__nav" role="tablist">
+        {% for item in items %}
+        <button type="button" class="plt-tabs__btn {% if forloop.first %}is-active{% endif %}" role="tab" data-tab-index="{{ forloop.counter0 }}">{{ item.title }}</button>
+        {% endfor %}
+    </div>
+    <div class="plt-tabs__panels">
+        {% for item in items %}
+        <section class="plt-tabs__panel {% if forloop.first %}is-active{% endif %}" role="tabpanel" data-tab-panel="{{ forloop.counter0 }}">
+            <h3 class="plt-tabs__heading">{{ item.title }}</h3>
+            {{ item.body|safe }}
+        </section>
+        {% endfor %}
+    </div>
+</div>

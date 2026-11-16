@@ -1,0 +1,6 @@
+<div class="plt-card" data-component="card">
+    <h3 class="plt-card__title">
+        {% if href %}<a href="{{ href }}">{{ title }}</a>{% else %}{{ title }}{% endif %}
+    </h3>
+    <div class="plt-card__body">{{ body|safe }}</div>
+</div>

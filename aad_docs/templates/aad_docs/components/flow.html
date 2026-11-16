@@ -1,0 +1,19 @@
+<div class="plt-flow" data-component="flow" data-src="{{ src }}">
+    <noscript><p class="plt-js-notice">This flow simulator requires JavaScript.</p></noscript>
+    <div class="plt-flow__header">
+        <strong>{{ flow.title }}</strong>
+        <div class="plt-flow__controls">
+            <button type="button" class="plt-flow__prev">Previous</button>
+            <button type="button" class="plt-flow__next">Next</button>
+        </div>
+    </div>
+    <ol class="plt-flow__steps">
+        {% for step in flow.steps %}
+        <li class="plt-flow__step {% if forloop.first %}is-active{% endif %}" data-step-index="{{ forloop.counter0 }}">
+            <code>{{ step.actor }}</code> · <strong>{{ step.action }}</strong>
+            {% if step.reads %}<span class="plt-flow__meta">reads: {{ step.reads }}</span>{% endif %}
+            {% if step.returns %}<span class="plt-flow__meta">returns: {{ step.returns }}</span>{% endif %}
+        </li>
+        {% endfor %}
+    </ol>
+</div>

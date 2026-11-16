@@ -1,0 +1,34 @@
+{% extends "aad_docs/base.html" %}
+
+{% block content %}
+<article class="plt-doc-model">
+    <h1>{{ model.verbose_name }} <small>({{ model.app_label }}.{{ model.name }})</small></h1>
+    {% if model.docstring %}
+    <p class="plt-doc-model__purpose">{{ model.docstring }}</p>
+    {% endif %}
+
+    {% if diagram %}
+    <section class="plt-doc-model__diagram">
+        <pre class="mermaid">{{ diagram }}</pre>
+    </section>
+    {% endif %}
+
+    <section class="plt-doc-model__fields">
+        <h2>Fields</h2>
+        {% include "aad_docs/components/model.html" with model=model %}
+    </section>
+
+    {% if model_pages %}
+    <section class="plt-doc-model__pages">
+        <h2>Related pages</h2>
+        <ul>
+            {% for pg in model_pages %}
+            <li>
+                <a href="{% url 'aad_docs:page' app_slug=app_node.slug path=model.model_name|add:'/'|add:pg.slug %}">{{ pg.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+</article>
+{% endblock %}

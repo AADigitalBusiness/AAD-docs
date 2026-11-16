@@ -1,0 +1,42 @@
+<div class="plt-explorer" data-component="explorer" data-src="{{ src }}">
+    <noscript><p class="plt-js-notice">This interactive explorer requires JavaScript.</p></noscript>
+    {% if codemap.routes %}
+    <section class="plt-explorer__section">
+        <h3>Routes</h3>
+        <table class="plt-table">
+            <thead><tr><th>Path</th><th>Name</th><th>View</th><th>File</th></tr></thead>
+            <tbody>
+                {% for r in codemap.routes %}
+                <tr><td><code>{{ r.path }}</code></td><td>{{ r.name }}</td><td>{{ r.view }}</td><td><code>{{ r.file }}</code></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    {% endif %}
+    {% if codemap.models %}
+    <section class="plt-explorer__section">
+        <h3>Models</h3>
+        <table class="plt-table">
+            <thead><tr><th>Model</th><th>Verbose name</th><th>Docstring</th><th>File</th></tr></thead>
+            <tbody>
+                {% for m in codemap.models %}
+                <tr><td><code>{{ m.name }}</code></td><td>{{ m.verbose_name }}</td><td>{{ m.docstring }}</td><td><code>{{ m.file }}</code></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    {% endif %}
+    {% if codemap.modules %}
+    <section class="plt-explorer__section">
+        <h3>Modules</h3>
+        <ul class="plt-explorer__modules">
+            {% for mod in codemap.modules %}
+            <li>
+                <code>{{ mod.file }}</code>
+                {% if mod.does %} — {{ mod.does }}{% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+</div>

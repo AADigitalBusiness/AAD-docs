@@ -1,233 +1,194 @@
-"""
-Views for AAD-docs.
+"""Views and access control for AAD-docs."""
+from __future__ import annotations
 
-Handles requests to /docs/ URLs and renders documentation pages.
-"""
+from copy import copy
+from pathlib import Path
+from typing import Any
 
-from django.conf import settings as django_settings
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_cookie
 
 from aad_docs.conf import get_settings
 from aad_docs.discovery import build_tree
-from aad_docs.language import pick_variant
+from aad_docs.language import get_active_language
+from aad_docs.nodes import Node, Page
 from aad_docs.readers import read_page
+from aad_docs.routing import _find_app_node, resolve_path
+
+ALLOWED_ASSET_TYPES: dict[str, str] = {
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".webp": "image/webp",
+    ".gif": "image/gif",
+}
+
+
+def _is_item_visible(node: Node, request: HttpRequest, item_name: str, alt_name: str = "") -> bool:
+    if not callable(node.visible):
+        return True
+    if not node.visible(request, item_name):
+        return False
+    if alt_name and alt_name != item_name and not node.visible(request, alt_name):
+        return False
+    return True
+
+
+def _filter_node_for_request(node: Node, request: HttpRequest) -> Node:
+    filtered = copy(node)
+    filtered.page_items = [
+        pg for pg in node.page_items if _is_item_visible(node, request, pg.slug, pg.raw_stem)
+    ]
+    filtered.children = [
+        _filter_node_for_request(ch, request)
+        for ch in node.children
+        if _is_item_visible(node, request, ch.slug or "", ch.raw_name)
+    ]
+    return filtered
+
+
+def _base_context(request: HttpRequest, *, active_app_node: Node | None = None, current_node: Node | None = None) -> dict[str, Any]:
+    cfg = get_settings()
+    raw_tree = build_tree()
+    tree = [_filter_node_for_request(n, request) for n in raw_tree]
+    lang = get_active_language(getattr(request, "LANGUAGE_CODE", None))
+    return {
+        "tree": tree,
+        "app_node": _filter_node_for_request(active_app_node, request) if active_app_node else None,
+        "node": _filter_node_for_request(current_node, request) if current_node else None,
+        "active_language": lang,
+        "configured_languages": cfg.get("LANGUAGES", ["en", "es"]),
+        "scripts": [],
+    }
 
 
 class DocsAccessMixin:
-    """
-    Mixin that applies the ACCESS setting to every view.
-    
-    By default, documentation is staff-only.
-    """
-    
-    def dispatch(self, request: HttpRequest, *args, **kwargs):
-        settings = get_settings()
-        access = settings.get("ACCESS", "staff")
-        
-        if access == "staff":
-            if not request.user.is_staff:
-                return render(request, "aad_docs/access_denied.html", status=403)
-        elif access == "public":
-            pass  # Always allow
+    """Applies the ACCESS setting to every view."""
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        cfg = get_settings()
+        access = cfg.get("ACCESS", "staff")
+        user = getattr(request, "user", None)
+
+        if access == "public":
+            allowed = True
+        elif access == "authenticated":
+            allowed = bool(user and getattr(user, "is_authenticated", False))
+        elif access == "staff":
+            allowed = bool(user and getattr(user, "is_authenticated", False) and getattr(user, "is_staff", False))
         elif callable(access):
-            if not access(request):
-                return render(request, "aad_docs/access_denied.html", status=403)
-        
-        return super().dispatch(request, *args, **kwargs)
+            allowed = bool(access(request))
+        else:
+            allowed = False
+
+        if not allowed:
+            return HttpResponseForbidden("Access denied.")
+        return super().dispatch(request, *args, **kwargs)  # type: ignore[misc]
 
 
 class IndexView(DocsAccessMixin, View):
-    """Show the root node and the list of app nodes."""
-    
-    @method_decorator(cache_page(60 * 15))  # 15 minutes
-    @method_decorator(vary_on_cookie)
+    """Shows the root node and the list of app nodes."""
+
     def get(self, request: HttpRequest) -> HttpResponse:
-        tree = build_tree()
-        
-        context = {
-            "node": tree,
-            "show_tree": get_settings().get("SHOW_TREE", True),
-            "show_language_switcher": get_settings().get("SHOW_LANGUAGE_SWITCHER", True),
-        }
-        
-        return render(request, "aad_docs/index.html", context)
+        ctx = _base_context(request)
+        root_node = ctx["tree"][0] if ctx["tree"] else None
+        ctx["node"] = root_node
+        return render(request, "aad_docs/node.html", ctx)
 
 
 class NodeView(DocsAccessMixin, View):
-    """Show one node with its pages and children."""
-    
-    @method_decorator(cache_page(60 * 15))
-    @method_decorator(vary_on_cookie)
+    """Shows one node with its pages and children."""
+
     def get(self, request: HttpRequest, app_slug: str) -> HttpResponse:
-        tree = build_tree()
-        
-        # Find the node
-        node = None
-        for child in tree.children:
-            if child.slug == app_slug:
-                node = child
-                break
-        
-        if node is None:
-            raise Http404(f"No documentation found for app: {app_slug}")
-        
-        context = {
-            "node": node,
-            "parent": tree,
-            "show_tree": get_settings().get("SHOW_TREE", True),
-            "show_language_switcher": get_settings().get("SHOW_LANGUAGE_SWITCHER", True),
-        }
-        
-        return render(request, "aad_docs/node.html", context)
+        app_node = _find_app_node(app_slug)
+        if app_node is None or app_node.slug != app_slug:
+            raise Http404(f"Node not found: {app_slug}")
+        ctx = _base_context(request, active_app_node=app_node, current_node=app_node)
+        return render(request, "aad_docs/node.html", ctx)
 
 
 class PageView(DocsAccessMixin, View):
-    """Show one page or model in the active language."""
-    
-    @method_decorator(cache_page(60 * 15))
-    @method_decorator(vary_on_cookie)
+    """Shows one page, one section or one model in the active language."""
+
     def get(self, request: HttpRequest, app_slug: str, path: str) -> HttpResponse:
-        from pathlib import Path
-        
-        tree = build_tree()
-        
-        # Find the app node
-        app_node = None
-        for child in tree.children:
-            if child.slug == app_slug:
-                app_node = child
-                break
-        
-        if app_node is None:
-            raise Http404(f"No documentation found for app: {app_slug}")
-        
-        # Resolve the path to a file
-        # Try to find a matching page in the node's docs directory
-        docs_dir = None
-        for app_config in django_settings.INSTALLED_APPS:
-            if app_config.split(".")[-1] == app_slug:
-                try:
-                    import importlib
-                    mod = importlib.import_module(app_config)
-                    if hasattr(mod, "__path__"):
-                        docs_dir = Path(mod.__path__[0]) / "docs"
-                        break
-                except ImportError:
-                    continue
-        
-        if docs_dir is None:
-            # Try project-level docs
-            from aad_docs.discovery import find_doc_dirs
-            for doc_dir in find_doc_dirs():
-                if doc_dir.name == app_slug or doc_dir.parent.name == app_slug:
-                    docs_dir = doc_dir
-                    break
-        
-        if docs_dir is None:
-            raise Http404(f"No docs directory found for app: {app_slug}")
-        
-        # Try to find the file
-        file_path = docs_dir / f"{path}.md"
-        if not file_path.exists():
-            # Try without .md extension
-            file_path = docs_dir / path
-            if not file_path.exists():
-                # Try all possible extensions
-                for ext in [".md", ".mdx", ".yml", ".yaml", ".csv", ".json"]:
-                    try_path = docs_dir / f"{path}{ext}"
-                    if try_path.exists():
-                        file_path = try_path
-                        break
-        
-        if not file_path.exists():
-            raise Http404(f"No documentation file found: {path}")
-        
-        # Read the page
-        page = read_page(str(file_path))
-        
-        # Pick the variant for the active language
-        lang_code = request.LANGUAGE_CODE if hasattr(request, "LANGUAGE_CODE") else "en"
-        variant_path = pick_variant(page, lang_code)
-        
-        # If variant is different from requested, re-read
-        if variant_path and variant_path != str(file_path):
-            page = read_page(variant_path)
-        
-        context = {
-            "node": app_node,
-            "page": page,
-            "parent": tree,
-            "show_tree": get_settings().get("SHOW_TREE", True),
-            "show_language_switcher": get_settings().get("SHOW_LANGUAGE_SWITCHER", True),
+        app_node = _find_app_node(app_slug)
+        if app_node is None or app_node.slug != app_slug:
+            raise Http404(f"Node not found: {app_slug}")
+
+        kind, resolved = resolve_path(app_slug, path)
+        lang = get_active_language(getattr(request, "LANGUAGE_CODE", None))
+
+        if kind == "section":
+            section_node: Node = resolved
+            if not _is_item_visible(app_node, request, section_node.slug or "", section_node.raw_name):
+                raise Http404("Section is hidden")
+            ctx = _base_context(request, active_app_node=app_node, current_node=section_node)
+            return render(request, "aad_docs/node.html", ctx)
+
+        if kind == "model":
+            owner_node, model_cls = resolved
+            from aad_docs.codemap.models import build_model_mermaid_diagram, describe_single_model
+            from aad_docs.routing import _find_model_folder_page
+
+            model_info = describe_single_model(model_cls)
+            diagram_code = build_model_mermaid_diagram(model_cls._meta.app_label)
+            model_dir = (owner_node.path / model_cls._meta.model_name) if owner_node.path else None
+            extra_pages: list[Page] = []
+            if model_dir and model_dir.is_dir():
+                for entry in sorted(model_dir.iterdir(), key=lambda p: p.name):
+                    if not entry.is_dir() and not entry.name.startswith("."):
+                        pg = _find_model_folder_page(model_dir, entry.stem.split(".")[0])
+                        if pg and all(x.slug != pg.slug for x in extra_pages):
+                            extra_pages.append(pg)
+
+            ctx = _base_context(request, active_app_node=owner_node, current_node=owner_node)
+            ctx["model"] = model_info
+            ctx["diagram"] = diagram_code
+            ctx["model_pages"] = extra_pages
+            ctx["scripts"] = ["aad_docs/vendor/mermaid.min.js"]
+            return render(request, "aad_docs/page_model.html", ctx)
+
+        owner_node, page_meta = resolved
+        if not _is_item_visible(owner_node, request, page_meta.slug, page_meta.raw_stem):
+            raise Http404("Page is hidden")
+
+        try:
+            rendered_page = read_page(page_meta, lang_code=lang, node_dir=owner_node.path)
+        except (ValueError, FileNotFoundError) as exc:
+            raise Http404(str(exc)) from exc
+
+        ctx = _base_context(request, active_app_node=app_node, current_node=owner_node)
+        ctx["page"] = rendered_page
+        ctx["scripts"] = rendered_page.scripts
+
+        template_map = {
+            "md": "aad_docs/page_md.html",
+            "mdx": "aad_docs/page_md.html",
+            "yml": "aad_docs/page_explorer.html",
+            "yaml": "aad_docs/page_explorer.html",
+            "csv": "aad_docs/page_table.html",
+            "json": "aad_docs/page_simulator.html",
         }
-        
-        # Use template based on page kind
-        template_name = f"aad_docs/page_{page.kind}.html"
-        if page.kind == "md":
-            template_name = "aad_docs/page_md.html"
-        elif page.kind == "mdx":
-            template_name = "aad_docs/page_mdx.html"
-        else:
-            template_name = "aad_docs/page_default.html"
-        
-        return render(request, template_name, context)
+        template_name = template_map.get(rendered_page.kind, "aad_docs/page_md.html")
+        return render(request, template_name, ctx)
 
 
 class AssetView(DocsAccessMixin, View):
-    """Serve an image of a closed list of types from a node's assets folder."""
-    
-    def get(self, request: HttpRequest, app_slug: str, file_path: str) -> HttpResponse:
-        settings = get_settings()
-        allowed_types = settings.get("ASSET_TYPES", [".png", ".jpg", ".jpeg", ".webp", ".gif"])
-        
-        # Check file extension
-        import os
-        ext = os.path.splitext(file_path)[1].lower()
-        if ext not in allowed_types:
+    """Serves an image of a closed list of types, SVG excluded, from a node's assets folder."""
+
+    def get(self, request: HttpRequest, app_slug: str, file: str) -> HttpResponse:
+        app_node = _find_app_node(app_slug)
+        if app_node is None or app_node.slug != app_slug or app_node.path is None:
+            raise Http404("Node not found")
+
+        ext = Path(file).suffix.lower()
+        if ext not in ALLOWED_ASSET_TYPES:
             raise Http404("Asset type not allowed")
-        
-        # Check for path traversal
-        if ".." in file_path or file_path.startswith("/"):
-            raise Http404("Invalid asset path")
-        
-        # Find the asset in the app's docs/assets folder
-        from pathlib import Path
-        from django.conf import settings as django_settings
-        
-        asset_path = None
-        for app_config in django_settings.INSTALLED_APPS:
-            if app_config.split(".")[-1] == app_slug:
-                try:
-                    import importlib
-                    mod = importlib.import_module(app_config)
-                    if hasattr(mod, "__path__"):
-                        docs_assets = Path(mod.__path__[0]) / "docs" / "assets" / file_path
-                        if docs_assets.exists():
-                            asset_path = docs_assets
-                            break
-                except ImportError:
-                    continue
-        
-        if asset_path is None:
+
+        assets_root = (app_node.path / "assets").resolve()
+        target = (assets_root / file).resolve()
+        if not target.is_relative_to(assets_root) or not target.is_file():
             raise Http404("Asset not found")
-        
-        # Serve the file
-        with open(asset_path, "rb") as f:
-            content = f.read()
-        
-        # Determine content type
-        content_types = {
-            ".png": "image/png",
-            ".jpg": "image/jpeg",
-            ".jpeg": "image/jpeg",
-            ".webp": "image/webp",
-            ".gif": "image/gif",
-        }
-        content_type = content_types.get(ext, "application/octet-stream")
-        
-        return HttpResponse(content, content_type=content_type)
+
+        return HttpResponse(target.read_bytes(), content_type=ALLOWED_ASSET_TYPES[ext])

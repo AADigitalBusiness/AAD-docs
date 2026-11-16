@@ -1,0 +1,22 @@
+<div class="plt-model-table" data-component="model" data-model="{{ model.app_label }}.{{ model.name }}">
+    <table class="plt-table">
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Verbose name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in model.fields %}
+            <tr>
+                <td><code>{{ f.name }}</code></td>
+                <td>{{ f.type }}</td>
+                <td>{{ f.verbose_name }}</td>
+                <td>{{ f.help_text }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

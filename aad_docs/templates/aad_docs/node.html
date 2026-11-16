@@ -1,52 +1,38 @@
 {% extends "aad_docs/base.html" %}
 
-{% block title %}{{ node.title }}{% endblock %}
-
-{% block breadcrumbs %}
-<nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol>
-        <li><a href="{% url 'aad_docs:index' %}">Documentation</a></li>
-        <li aria-current="page">{{ node.title }}</li>
-    </ol>
-</nav>
-{% endblock %}
-
 {% block content %}
-<article class="docs-page">
-    <header class="page-header">
-        <h1>{{ node.title }}</h1>
-    </header>
-    
-    <section class="page-content">
-        {% if node.pages %}
-        <div class="page-list">
-            <h2>Pages</h2>
-            <ul>
-                {% for page_slug in node.pages %}
-                <li>
-                    <a href="{% url 'aad_docs:page' app_slug=node.slug path=page_slug %}">
-                        {{ page_slug|title|replace:"-", " " }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+<article class="plt-doc-node">
+    {% if node %}
+    <h1>{% if active_language == 'es' and node.title_es %}{{ node.title_es }}{% else %}{{ node.title }}{% endif %}</h1>
+
+    {% if node.page_items %}
+    <section class="plt-doc-node__pages">
+        <h2>Pages</h2>
+        <ul class="plt-doc-list">
+            {% for pg in node.page_items %}
+            <li>
+                <a href="{% url 'aad_docs:page' app_slug=app_node.slug|default:node.slug path=pg.slug %}">{{ pg.title }}</a>
+                <span class="plt-badge">{{ pg.kind }}</span>
+            </li>
+            {% endfor %}
+        </ul>
     </section>
-    
+    {% endif %}
+
     {% if node.children %}
-    <section class="sub-sections">
+    <section class="plt-doc-node__children">
         <h2>Sections</h2>
-        <ul class="section-list">
+        <ul class="plt-doc-list">
             {% for child in node.children %}
             <li>
-                <a href="{% url 'aad_docs:node' app_slug=child.slug %}">
-                    {{ child.title }}
+                <a href="{% url 'aad_docs:page' app_slug=app_node.slug|default:node.slug path=child.slug %}">
+                    {% if active_language == 'es' and child.title_es %}{{ child.title_es }}{% else %}{{ child.title }}{% endif %}
                 </a>
             </li>
             {% endfor %}
         </ul>
     </section>
+    {% endif %}
     {% endif %}
 </article>
 {% endblock %}

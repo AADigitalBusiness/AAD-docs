@@ -1,0 +1,4 @@
+<details class="plt-details" data-component="details"{% if open %} open{% endif %}>
+    {% if summary %}<summary class="plt-summary">{{ summary }}</summary>{% endif %}
+    <div class="plt-details__body">{{ body|safe }}</div>
+</details>

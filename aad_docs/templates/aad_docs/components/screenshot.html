@@ -1,0 +1,3 @@
+<figure class="plt-screenshot" data-component="screenshot">
+    <img src="assets/{% if lang != 'en' %}{{ name }}.{{ lang }}.png{% else %}{{ name }}.png{% endif %}" alt="{{ alt|default:name }}">
+</figure>

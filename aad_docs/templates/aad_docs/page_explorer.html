@@ -1,0 +1,8 @@
+{% extends "aad_docs/base.html" %}
+
+{% block content %}
+<article class="plt-doc-explorer">
+    <h1>Code Map · {{ page.content.app|default:page.title }}</h1>
+    {% include "aad_docs/components/explorer.html" with codemap=page.content src=page.slug %}
+</article>
+{% endblock %}

@@ -1,0 +1,23 @@
+<div class="plt-table-widget" data-component="table" data-src="{{ src }}">
+    <div class="plt-table-widget__controls">
+        <input type="search" class="plt-table-widget__filter" placeholder="Filter rows..." aria-label="Filter table rows">
+    </div>
+    <table class="plt-table">
+        <thead>
+            <tr>
+                {% for col in table.columns %}
+                <th data-col-index="{{ forloop.counter0 }}">{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in table.rows %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

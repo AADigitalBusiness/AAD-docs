@@ -1,49 +1,37 @@
-"""
-AAD-docs app configuration.
+"""App configuration and Django system checks for AAD-docs."""
+from __future__ import annotations
 
-Registers the app and its Django system checks.
-"""
+from pathlib import Path
+from typing import Any
 
 from django.apps import AppConfig
 from django.core.checks import Error, register
 
 
 class AadDocsConfig(AppConfig):
-    """AAD-docs Django app configuration."""
-    
+    """Registers the app and its Django system checks."""
+
     default_auto_field = "django.db.models.BigAutoField"
     name = "aad_docs"
+    label = "aad_docs"
     verbose_name = "AAD-docs"
+
+    def ready(self) -> None:
+        # System checks are registered at module import time below.
+        pass
 
 
 @register()
-def check_docs_folders(app_configs, **kwargs):
-    """
-    System check: verify that docs/ folders have __init__.py files.
-    
-    This is a Django system check that runs with `python manage.py check`.
-    """
-    from aad_docs.discovery import find_doc_dirs
-    
-    errors = []
-    
-    try:
-        doc_dirs = find_doc_dirs()
-        for doc_dir in doc_dirs:
-            init_path = doc_dir / "__init__.py"
-            if not init_path.exists():
-                errors.append(
-                    Error(
-                        f"Documentation folder {doc_dir} is missing __init__.py",
-                        id="aad_docs.E001",
-                    )
-                )
-    except Exception as e:
+def check_aad_docs_packaged_docs(app_configs: Any, **kwargs: Any) -> list[Error]:
+    """Verify that the packaged aad_docs/docs/ folder and __init__.py exist."""
+    errors: list[Error] = []
+    pkg_docs = Path(__file__).resolve().parent / "docs"
+    if not (pkg_docs / "__init__.py").is_file():
         errors.append(
             Error(
-                f"Error checking docs folders: {e}",
-                id="aad_docs.E002",
+                "Packaged documentation folder aad_docs/docs/__init__.py is missing.",
+                hint="Check package-data in pyproject.toml.",
+                id="aad_docs.E001",
             )
         )
-    
     return errors

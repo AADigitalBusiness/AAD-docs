@@ -52,4 +52,5 @@ node_modules/
 
 # AAD-docs specific
 demo/db.sqlite3
-.docusaurus/
+tools/node_modules/
+tools/.approvals.json

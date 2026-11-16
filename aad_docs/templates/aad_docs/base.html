@@ -1,61 +1,94 @@
-<!DOCTYPE html>
-<html lang="{{ request.LANGUAGE_CODE | default:'en' }}">
+{% load static i18n %}<!DOCTYPE html>
+<html lang="{{ active_language|default:'en' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Documentation{% endblock %} - AAD-docs</title>
+    <title>{% block title %}{% if page %}{{ page.title }}{% elif node %}{{ node.title }}{% else %}Documentation{% endif %}{% endblock %} · AAD-docs</title>
     <link rel="stylesheet" href="{% static 'aad_docs/docs.css' %}">
-    {% block extra_css %}{% endblock %}
 </head>
-<body>
-    <header class="docs-header">
-        <h1>AAD-docs</h1>
-        {% if show_language_switcher %}
-        <div class="language-switcher">
-            <form action="{% url 'set_language' %}" method="post">
-                {% csrf_token %}
-                <select name="language" onchange="this.form.submit()">
-                    {% for lang_code, lang_name in LANGUAGES %}
-                    <option value="{{ lang_code }}" {% if request.LANGUAGE_CODE == lang_code %}selected{% endif %}>
-                        {{ lang_name }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </form>
+<body class="plt-docs">
+    <header class="plt-docs__header">
+        <div class="plt-docs__brand">
+            <a href="{% url 'aad_docs:index' %}">AAD-docs</a>
         </div>
-        {% endif %}
+        <form class="plt-docs__lang" action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <label for="aad-docs-lang-select" class="plt-sr-only">Language</label>
+            <select id="aad-docs-lang-select" name="language" onchange="this.form.submit()">
+                {% for lang_code in configured_languages %}
+                <option value="{{ lang_code }}" {% if active_language == lang_code %}selected{% endif %}>{{ lang_code|upper }}</option>
+                {% endfor %}
+            </select>
+        </form>
     </header>
 
-    <nav class="docs-nav" role="navigation" aria-label="Documentation">
-        {% if show_tree %}
-        <ul class="node-tree">
-            {% for child in node.children %}
-            <li class="node-item {% if child.slug == node.slug %}active{% endif %}">
-                <a href="{% url 'aad_docs:node' app_slug=child.slug %}">{{ child.title }}</a>
-                {% if child.children %}
-                <ul class="node-children">
-                    {% for subchild in child.children %}
-                    <li class="node-item">
-                        <a href="{% url 'aad_docs:node' app_slug=subchild.slug %}">{{ subchild.title }}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
+    <div class="plt-docs__layout">
+        <nav class="plt-docs__nav" aria-label="Documentation navigation">
+            <ul class="plt-nav-tree">
+                {% for top_node in tree %}
+                <li class="plt-nav-tree__item {% if app_node and top_node.slug == app_node.slug %}is-active{% endif %}">
+                    <a href="{% url 'aad_docs:node' app_slug=top_node.slug %}">
+                        {% if active_language == 'es' and top_node.title_es %}{{ top_node.title_es }}{% else %}{{ top_node.title }}{% endif %}
+                    </a>
+                    {% if top_node.page_items or top_node.children %}
+                    <ul class="plt-nav-tree__sub">
+                        {% for pg in top_node.page_items %}
+                        <li>
+                            <a href="{% url 'aad_docs:page' app_slug=top_node.slug path=pg.slug %}">{{ pg.title }}</a>
+                        </li>
+                        {% endfor %}
+                        {% for child in top_node.children %}
+                        <li>
+                            <a href="{% url 'aad_docs:page' app_slug=top_node.slug path=child.slug %}">
+                                {% if active_language == 'es' and child.title_es %}{{ child.title_es }}{% else %}{{ child.title }}{% endif %}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+
+        <main class="plt-docs__main">
+            <nav class="plt-breadcrumbs" aria-label="Breadcrumbs">
+                <a href="{% url 'aad_docs:index' %}">Docs</a>
+                {% if app_node %}
+                <span>/</span>
+                <a href="{% url 'aad_docs:node' app_slug=app_node.slug %}">
+                    {% if active_language == 'es' and app_node.title_es %}{{ app_node.title_es }}{% else %}{{ app_node.title }}{% endif %}
+                </a>
                 {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </nav>
+                {% if node and app_node and node.slug != app_node.slug %}
+                <span>/</span>
+                <a href="{% url 'aad_docs:page' app_slug=app_node.slug path=node.slug %}">
+                    {% if active_language == 'es' and node.title_es %}{{ node.title_es }}{% else %}{{ node.title }}{% endif %}
+                </a>
+                {% endif %}
+                {% if page %}
+                <span>/</span>
+                <span aria-current="page">{{ page.title }}</span>
+                {% elif model %}
+                <span>/</span>
+                <span aria-current="page">{{ model.verbose_name }}</span>
+                {% endif %}
+            </nav>
 
-    <main class="docs-main" role="main">
-        {% block breadcrumbs %}{% endblock %}
-        {% block content %}{% endblock %}
-    </main>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
 
-    <footer class="docs-footer">
-        <p>Powered by AAD-docs</p>
-    </footer>
-
-    {% block extra_js %}{% endblock %}
+    {% for script_path in scripts %}
+    <script src="{% static script_path %}"></script>
+    {% endfor %}
+    {% if 'aad_docs/vendor/mermaid.min.js' in scripts %}
+    <script>
+        if (window.mermaid) {
+            window.mermaid.initialize({ startOnLoad: true, securityLevel: 'strict' });
+        }
+    </script>
+    {% endif %}
 </body>
 </html>
