@@ -1,0 +1,24 @@
+{
+    "frontMatter.framework.id": "next",
+    "frontMatter.preview.host": "http://localhost:3000",
+    "frontMatter.content.publicFolder": "public",
+    "frontMatter.content.pageFolders": [
+        {
+            "path": "[[workspace]]/docs",
+            "title": "docs"
+        },
+        {
+            "path": "[[workspace]]/aad_docs/docs/07-decisions"
+        },
+        {
+            "path": "[[workspace]]/aad_docs/docs/05-guides"
+        },
+        {
+            "path": "[[workspace]]/.claude/skills/repo-docs-canvas"
+        },
+        {
+            "path": "[[workspace]]/.claude/skills/pending-decisions-canvas"
+        }
+    ],
+    "frontMatter.git.enabled": true
+}
