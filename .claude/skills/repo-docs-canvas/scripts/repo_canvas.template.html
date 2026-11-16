@@ -3,10 +3,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
 <style>
 /* Layout: sticky file tree on the left, every repository file as a section on the right, in repo order */
-:root{--bg:#f7f8f7;--panel:#fff;--fg:#1c2421;--mut:#5d6b66;--line:#dde3e0;--acc:#0f6b57;--accbg:#e3f1ed;--code:#eef1ef;--warn:#8a5200;--warnbg:#fff1d2;--warnln:#e0a53a;
+:root{--bg:#f7f8f7;--panel:#fff;--fg:#1c2421;--mut:#5d6b66;--line:#dde3e0;--acc:#0f6b57;--accbg:#e3f1ed;--code:#eef1ef;--warn:#8a5200;--warnbg:#fff1d2;--warnln:#e0a53a;--ok:#176b3e;--okbg:#dff3e6;
 --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111614;--panel:#171d1a;--fg:#e4eae7;--mut:#93a39c;--line:#27302c;--acc:#5cc9ac;--accbg:#183029;--code:#1d2521;--warn:#f2bd62;--warnbg:#33270f;--warnln:#a87a22;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#111614;--panel:#171d1a;--fg:#e4eae7;--mut:#93a39c;--line:#27302c;--acc:#5cc9ac;--accbg:#183029;--code:#1d2521;--warn:#f2bd62;--warnbg:#33270f;--warnln:#a87a22;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111614;--panel:#171d1a;--fg:#e4eae7;--mut:#93a39c;--line:#27302c;--acc:#5cc9ac;--accbg:#183029;--code:#1d2521;--warn:#f2bd62;--warnbg:#33270f;--warnln:#a87a22;--ok:#6ad79a;--okbg:#14301f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111614;--panel:#171d1a;--fg:#e4eae7;--mut:#93a39c;--line:#27302c;--acc:#5cc9ac;--accbg:#183029;--code:#1d2521;--warn:#f2bd62;--warnbg:#33270f;--warnln:#a87a22;--ok:#6ad79a;--okbg:#14301f;color-scheme:dark}
 body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:20px}
 .wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;max-width:1180px;margin:0 auto}
 header{grid-column:1/-1}
@@ -43,6 +43,16 @@ section.pend{border-left:4px solid var(--warnln)}
 .warnbox{background:var(--warnbg);color:var(--warn);border:1px solid var(--warnln);border-radius:6px;padding:6px 12px;max-width:none}
 .pl{padding-left:18px}.pl li{margin:4px 0}.pl span{color:var(--warn);background:var(--warnbg);padding:1px 8px;border-radius:99px;font-size:12px;margin-left:6px}
 .note{color:var(--mut);font-size:13px}
+.appr{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--code)}
+.appr input{flex:1 1 200px;min-width:0;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--fg);font:inherit;font-size:13px}
+.appr button{font:inherit;font-size:13px;padding:5px 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+.appr button.go{background:var(--ok);color:var(--bg);border-color:var(--ok)}
+.appr button:focus-visible,.appr input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.appr .st{font-size:13px;color:var(--mut)}
+.appr.done-approved{background:var(--okbg);border-color:var(--ok)}.appr.done-approved .st{color:var(--ok)}
+.appr.done-changes{background:var(--warnbg);border-color:var(--warnln)}.appr.done-changes .st{color:var(--warn)}
+.chip{font-size:12px;padding:1px 8px;border-radius:99px;margin-left:6px;background:var(--okbg);color:var(--ok)}
 </style>
 <div class="wrap"><header><h1 class="t">%%TITLE%%</h1><p>%%COUNT%% files as they stand in the repository after the latest commit. Links between pages work as they would in the documentation site.</p></header>
 <nav>%%NAV%%</nav><main>%%BODY%%</main></div>
+%%SCRIPT%%

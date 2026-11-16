@@ -1,0 +1,28 @@
+<script>
+(async()=>{
+const bars=[...document.querySelectorAll('.appr')]; if(!bars.length) return;
+const L={approved:'Approved',changes:'Changes requested'};
+let db=null,user=null,owner=false,docs={},got=false;
+try{db=await claude.use('db')}catch(e){}
+try{user=await claude.use('user'); owner=!!(user&&user.isOwner&&user.isOwner())}catch(e){}
+function paint(bar){
+  const id=bar.dataset.id,d=docs[id];bar.className='appr'+(d?' done-'+d.verdict:'');bar.textContent='';
+  const st=document.createElement('span');st.className='st';
+  if(d){st.textContent=L[d.verdict]+' by the owner, '+new Date(d.at).toLocaleDateString()+(d.note?': '+d.note:'')+'. Claude applies it to the repository when asked.';bar.append(st)}
+  else if(!db){st.textContent='Approvals are unavailable in this view.';bar.append(st);return}
+  else if(!owner){st.textContent=got?'Waiting for the owner.':'Loading approvals…';bar.append(st);return}
+  if(!owner||!db) return;
+  const note=document.createElement('input');note.id='apr-note-'+id;note.placeholder='Note (optional)';note.setAttribute('aria-label','Note for decision '+id);
+  const mk=(txt,v,cls)=>{const b=document.createElement('button');b.textContent=txt;if(cls)b.className=cls;b.onclick=async()=>{b.disabled=true;try{await db.doc('approvals/'+id).set({decision:id,title:bar.dataset.title,verdict:v,note:note.value.trim(),at:new Date().toISOString()})}catch(e){st.textContent='Could not save: '+(e&&e.code||'error');if(!st.parentNode)bar.prepend(st)}b.disabled=false};return b};
+  if(!d){bar.append(note,mk('Approve','approved','go'),mk('Request changes','changes'))}
+  else{const r=document.createElement('button');r.textContent='Reset';r.onclick=async()=>{try{await db.doc('approvals/'+id).delete()}catch(e){}};bar.append(r)}
+}
+function chips(){document.querySelectorAll('li[data-decision]').forEach(li=>{const d=docs[li.dataset.decision];let c=li.querySelector('.chip');if(c)c.remove();if(d){c=document.createElement('span');c.className='chip';c.textContent=L[d.verdict];li.append(c)}})}
+function all(){bars.forEach(paint);chips()}
+all();
+if(db){
+  const t=setTimeout(()=>{if(!got)bars.forEach(b=>{if(!b.querySelector('.st'))return;if(!docs[b.dataset.id]&&!owner)b.querySelector('.st').textContent='Approvals cannot be reached yet.'})},10000);
+  db.collection('approvals').onSnapshot(s=>{got=true;clearTimeout(t);docs={};s.docs.forEach(x=>{docs[x.id]=x.data()});all()},e=>{got=true;clearTimeout(t);all()});
+}
+})();
+</script>

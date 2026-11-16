@@ -28,7 +28,7 @@ After you change a Mermaid diagram, render it once (`mmdc -i page.md`) to confir
 
 ## Decisions
 
-A decision page has a `**Status:**` line. Only the owner moves a decision from `Proposed` to `Accepted`: change it when the owner says so, never on your own reading. Decisions that wait for the owner are listed under "Open decisions" in the plan.
+A decision page has a `**Status:**` line. Only the owner moves a decision from `Proposed` to `Accepted`: change it when the owner says so, never on your own reading. A verdict the owner saves with Approve in the repository canvas counts as the owner saying so; apply it as the `pending-decisions-canvas` skill describes. Decisions that wait for the owner are listed under "Open decisions" in the plan.
 
 ## Skills
 

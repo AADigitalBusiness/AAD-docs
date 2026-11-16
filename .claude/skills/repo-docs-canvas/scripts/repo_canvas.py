@@ -10,6 +10,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument('root'); ap.add_argument('out')
 ap.add_argument('--title', default='Repository docs')
 ap.add_argument('--pending-regex', default=r'^(Proposed|Draft|Pending)')
+ap.add_argument('--approvals', action='store_true', help='add Approve / Request changes controls to pending decisions (needs the db and user capabilities)')
 a = ap.parse_args()
 R = a.root
 EXT = ('.md', '.mdx', '.yml', '.yaml', '.csv', '.json', '.py')
@@ -86,10 +87,17 @@ for g in sorted(groups, key=lambda x: (x != 'Root', x)):
         r = render(f)
         if f in pend:
             r = re.sub(r'<p><strong>Status:</strong>(.*?)</p>', r'<p class="warnbox"><strong>Pending · Status:</strong>\1</p>', r, count=1)
+        if a.approvals and f in pend:
+            m = re.search(r'/(\d{4})-[^/]*$', f)
+            if m:
+                r = re.sub(r'(</p>)', r'\1<div class="appr" data-id="%s" data-title="%s"></div>' % (m.group(1), html.escape(title_of(f), quote=True)), r, count=1) if 'warnbox' not in r else re.sub(r'(<p class="warnbox">.*?</p>)', r'\1<div class="appr" data-id="%s" data-title="%s"></div>' % (m.group(1), html.escape(title_of(f), quote=True)), r, count=1)
         body += '<section id="%s"%s><div class="path">%s</div>%s</section>\n' % (ids[f], ' class="pend"' if f in pend else '', html.escape(f), r)
     nav += '</div>'
 if pend:
-    li = ''.join('<li><a href="#%s">%s</a> <span>%s</span></li>' % (ids[f], html.escape(title_of(f)), html.escape(st[:60])) for f, st in pend.items())
+    def dec(f):
+        m = re.search(r'/(\d{4})-[^/]*$', f)
+        return ' data-decision="%s"' % m.group(1) if a.approvals and m else ''
+    li = ''.join('<li%s><a href="#%s">%s</a> <span>%s</span></li>' % (dec(f), ids[f], html.escape(title_of(f)), html.escape(st[:60])) for f, st in pend.items())
     body = '<section id="pending" class="pend"><div class="path">Needs the owner</div><h1>Pending decisions</h1><ul class="pl">%s</ul></section>\n' % li + body
     nav = '<div class="g"><h3>Needs the owner</h3><a class="warn" href="#pending">Pending (%d)</a></div>' % len(pend) + nav
 
@@ -97,5 +105,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 tpl = open(os.path.join(here, 'repo_canvas.template.html'), encoding='utf-8').read()
 out = (tpl.replace('%%TITLE%%', html.escape(a.title)).replace('%%NAV%%', nav)
           .replace('%%BODY%%', body).replace('%%COUNT%%', str(len(files))))
+script = open(os.path.join(here, 'approvals.js.html'), encoding='utf-8').read() if a.approvals else ''
+out = out.replace('%%SCRIPT%%', script)
 open(a.out, 'w', encoding='utf-8').write(out)
 print('files', len(files), 'pending', len(pend), 'bytes', len(out))
