@@ -7,6 +7,10 @@ description: Identificar las decisiones pendientes de un repo (estado Proposed, 
 
 Finds the decisions of a repository that still wait for the owner and shows them in the warning (amber) color inside the canvas built by `repo-docs-canvas`. That skill owns the script and the template; this one decides what counts as pending and how to report it.
 
+## Requirements
+
+Run `tools/setup.sh` once. The full list of what this skill needs is in [08-operations.md](../../../docs/08-operations.md#agent-tooling).
+
 ## What counts as pending
 
 Read the `**Status:**` line of each decision page (here, `aad_docs/docs/07-decisions/`). Classify it by the text, never by memory of earlier turns.

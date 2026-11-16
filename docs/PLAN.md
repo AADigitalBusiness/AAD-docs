@@ -214,6 +214,7 @@ Accepted when:
 | Screenshot tool and test runner | Playwright in the `[screenshots]` extra; `pytest` and `pytest-django` in `[dev]` | [0008](../aad_docs/docs/07-decisions/0008-package-name-and-dependencies.md) |
 | Visual components and raw HTML | Closed registry, Django templates; raw HTML never rendered; each component declares if it needs JavaScript | [0013](../aad_docs/docs/07-decisions/0013-visual-components.md) |
 | Reference tables | Generated from their owner in Python | [0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md) |
+| Agent tooling | Dependencies and executables pinned and kept in the repository; the Mermaid check is mandatory | [0015](../aad_docs/docs/07-decisions/0015-the-repository-carries-its-agent-tooling.md) |
 | Reuse of the owner's repositories | Copy small primitives, vendor the CSS, depend on no other repository | [0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md) |
 
 ## Next

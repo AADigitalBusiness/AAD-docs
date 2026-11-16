@@ -14,10 +14,11 @@ AAD-docs is a Django app that reads flat documentation files from `<app>/docs/` 
 Run before every commit and chain it with `&&` before `git push`, so a failed check stops the push:
 
 ```bash
-python3 tools/check_docs.py   # relative links, CSV columns, JSON and YAML syntax; needs PyYAML
+tools/setup.sh   # once: installs the dependencies listed in docs/08-operations.md
+tools/check.sh   # links, CSV columns, JSON and YAML syntax, and Mermaid diagrams
 ```
 
-After you change a Mermaid diagram, render it once (`mmdc -i page.md`) to confirm it parses. `docs_check` replaces this at milestone M4.
+The requirements are listed in [08-operations.md](docs/08-operations.md#agent-tooling). `docs_check` replaces these checks at milestone M4.
 
 ## Conventions
 

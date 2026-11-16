@@ -8,7 +8,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 bad = 0
 for f in glob.glob('**/*', recursive=True) + glob.glob('.claude/**/*', recursive=True):
-    if not os.path.isfile(f): continue
+    if not os.path.isfile(f) or {'node_modules', '.venv'} & set(f.split(os.sep)): continue
     if f.endswith(('.md', '.mdx')):
         for m in re.finditer(r'\]\(([^)#\s]+)(#[^)]*)?\)', open(f, encoding='utf-8').read()):
             u = m.group(1)

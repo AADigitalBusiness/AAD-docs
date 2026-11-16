@@ -9,6 +9,10 @@ Publishes the documentation files of a git repository as one self-contained HTML
 
 The page shows the repository **as committed**: the script reads tracked files with `git ls-files`. Commit first, or tell the person the canvas shows tracked files only.
 
+## Requirements
+
+Run `tools/setup.sh` once. The full list of what this skill needs is in [08-operations.md](../../../docs/08-operations.md#agent-tooling).
+
 ## Files of this skill
 
 | File | Use |

@@ -64,6 +64,22 @@ The documentation exposes models, routes and class names. Treat it as internal.
 
 Skills for agents live in `.claude/skills/<name>/`, each with a `SKILL.md` and, when it needs them, a `scripts/` folder. The skills and their use are listed in `AGENTS.md`. A skill never edits the documentation to produce its output.
 
+## Agent tooling
+
+What an agent needs to run the checks and the skills of this repository ([0015](../aad_docs/docs/07-decisions/0015-the-repository-carries-its-agent-tooling.md)).
+
+| Requirement | Used by | How it arrives |
+|---|---|---|
+| `python3`, `git`, Node 20 or later | Everything below | Installed on the machine; `tools/setup.sh` stops if one is missing |
+| `markdown-it-py`, `PyYAML` | The canvas script, `tools/check_docs.py` | `requirements-dev.txt`, installed by `tools/setup.sh` |
+| `jsdom`, `mermaid` | `tools/check_mermaid.mjs` | `tools/package.json` with its lockfile, installed by `tools/setup.sh` |
+| Write access to `origin` | Commit and push | Credentials of the session or the machine |
+| The `Artifact` tool | Publishing the canvas | Provided by the session |
+| The `ArtifactData` tool | Reading approvals | Provided by the session; load it first if it is deferred |
+| The `ArtifactComments` tool | Answering comments on the canvas | Provided by the session; load it first if it is deferred |
+
+Run `tools/setup.sh` once, then `tools/check.sh` before every commit. The canvas needs no network access on the agent's machine; the reader's browser loads the fonts.
+
 ## If something fails
 
 | Symptom | Check |

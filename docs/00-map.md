@@ -9,7 +9,8 @@ AAD-docs/
 ├── CHANGELOG.md                  ← what changed and when
 ├── AGENTS.md                     ← instructions for coding agents
 ├── CLAUDE.md                     ← imports AGENTS.md
-├── tools/check_docs.py           ← interim documentation check
+├── requirements-dev.txt          ← Python dependencies of the tools
+├── tools/                        ← setup.sh, check.sh, check_docs.py, check_mermaid.mjs
 ├── .claude/skills/               ← skills for coding agents
 ├── docs/                         ← root node: what crosses every app
 │   ├── __init__.py               ← resolves the root node

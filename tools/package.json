@@ -1,0 +1,10 @@
+{
+  "name": "aad-docs-tools",
+  "private": true,
+  "type": "module",
+  "description": "Node dependencies of tools/check_mermaid.mjs",
+  "dependencies": {
+    "jsdom": "31.0.1",
+    "mermaid": "12.3.0"
+  }
+}
