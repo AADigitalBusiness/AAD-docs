@@ -1,7 +1,7 @@
 key,type,default,meaning
 ROOT,path,BASE_DIR / docs,Folder of the root node: documentation that crosses every app. Set to None to have no root node.
 ACCESS,str or callable,staff,"Who can open /docs/. staff: staff users. authenticated: any signed-in user. public: anyone. A callable receives the request and returns a boolean."
-LANGUAGES,list of str,"en, es",Languages a page can exist in. The first one is the source language.
+LANGUAGES,list of str,"en, es",Languages a page can exist in. The first one is the default language: every page exists in it and it is the fallback.
 EXCLUDE_APPS,list of str,empty,App labels whose docs/ folder is ignored.
 CODEMAP_CLASS_DIRS,list of str,services,Folders inside an app whose classes docs_codemap lists in addition to models and views.
 CACHE_TREE,bool,not DEBUG,Build the node tree once per process. When false it is rebuilt on every request.

@@ -27,7 +27,7 @@ AAD-docs is a Django app that turns the `docs/` folder of each installed app int
 
 - A project has grown past what its owner can hold in memory.
 - You come back to a project after months and need to find where things are.
-- A non-technical user needs to know how to use the system, in Spanish.
+- A non-technical user needs to know how to use the system, in their own language (Spanish in this project).
 
 ## What it does not do
 

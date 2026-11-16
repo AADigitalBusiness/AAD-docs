@@ -39,4 +39,4 @@ Each documentation folder has an `__init__.py` that exposes `node`. A folder wit
 
 - Every option: [node-options.csv](../06-reference/node-options.csv)
 - The one folder that needs no `__init__.py`: [0010 · Addresses come from metadata](0010-addresses-from-metadata.md)
-- [0004 · English is the source](0004-english-source-spanish-for-users.md)
+- [0004 · English is the default language; other languages are added per page](0004-default-language-english-others-added.md)

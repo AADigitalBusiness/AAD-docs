@@ -10,7 +10,7 @@ flowchart LR
     aad --> gen["Generated files<br/>code-map.yml, reference tables"]
 ```
 
-AAD-docs is an installable Django app. It finds the `docs/` folder inside each of your Django apps and serves it as navigable documentation at `/docs/`. The documentation is flat files that live next to the code they describe. Pages are written in English for technical readers and in Spanish for people who use the system, and they can embed tables, flows, screenshots and visual components such as callouts, steps, tabs and cards.
+AAD-docs is an installable Django app. It finds the `docs/` folder inside each of your Django apps and serves it as navigable documentation at `/docs/`. The documentation is flat files that live next to the code they describe. English is the default language and other languages are added page by page; this repository adds Spanish for people who use the system. Pages can embed tables, flows, screenshots and visual components such as callouts, steps, tabs and cards.
 
 **Status: design phase.** The design is written and no package code exists yet. This repository holds the plan, the technical documentation, written in the standard the app will enforce, and a few tools that check it. The documentation of AAD-docs is the project's own example. The next step is milestone M1a, the installable package and a demo project: see the [roadmap](docs/PLAN.md#roadmap).
 

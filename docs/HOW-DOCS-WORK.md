@@ -85,7 +85,7 @@ A document written during a conversation tends to answer the person who asked fo
 
 ## Languages
 
-English is the source and the only language for technical documents. Spanish covers what a non-technical user reads.
+English is the default language: every page exists in it, and it is the fallback when a page has no variant for the active language. Other languages are added page by page ([0004](../aad_docs/docs/07-decisions/0004-default-language-english-others-added.md)). This repository adds Spanish as its example, for what a non-technical user reads.
 
 | Document | English | Spanish |
 |---|---|---|
@@ -94,9 +94,9 @@ English is the source and the only language for technical documents. Spanish cov
 | A guide a non-technical user performs | Yes | Yes (`name.es.md`) |
 | Everything else | Yes | No |
 
-- A Spanish page sits next to its English source with the suffix `.es.md`, or `.es.mdx` for an `.mdx`. Both are the same page.
-- Spanish is written for the person who uses the system: no jargon, no commands, a screenshot on each step.
-- A Spanish page starts with a header that names its source and the date it was synced. `docs_check` reports it when the source changed after that date.
+- A page in another language sits next to its English source with the language code as suffix: `name.es.md`, or `name.es.mdx` for an `.mdx`. Both are the same page.
+- A page in another language is written for the person who reads it, not translated word by word. The Spanish pages here have no jargon, no commands and a screenshot on each step.
+- A page in another language starts with a header that names its source and the date it was synced. `docs_check` reports it when the source changed after that date.
 
   ```yaml
   ---

@@ -21,7 +21,7 @@ Keep the documentation of every project current, navigable and consistent, so th
 |---|---|
 | Navigate a project without reading all its code | Code map generated from models, routes and classes |
 | Very visual | Every page opens with a diagram; data files become interactive views |
-| English for technical readers, Spanish for non-technical users | `name.es.md` next to `name.md`; Django translations for model texts |
+| English as the default language, other languages added per page (Spanish here, for non-technical users) | `name.es.md` next to `name.md`; Django translations for model texts |
 | Elements that become visual components | Closed registry of components, rendered by Django templates ([0013](../aad_docs/docs/07-decisions/0013-visual-components.md)) |
 | Screenshots and interactive pieces | `docs_screenshots`; explorer, table and simulator drawn from data files; `.mdx` pages that embed them |
 | Flat files | `.md`, `.mdx`, `.yml`, `.csv`, `.json` inside each app's `docs/` |

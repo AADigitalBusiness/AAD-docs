@@ -20,4 +20,5 @@
 - Added a roadmap to the plan: what the owner can do after each milestone, and what each waits for.
 - Added `AGENTS.md`, the standard entry for coding agents, with `CLAUDE.md` importing it. Added the skills `repo-docs-canvas` and `pending-decisions-canvas` in `.claude/skills/`, and `tools/check_docs.py` as the interim check (operations).
 - Added decision 0015 (proposed): the repository carries the dependencies and executables its agents need. Added `requirements-dev.txt`, `tools/package.json`, `tools/check_mermaid.mjs`, `tools/setup.sh` and `tools/check.sh`, and an "Agent tooling" section in operations. `AGENTS.md` now asks for `tools/check.sh` instead of `mmdc`.
+- Reworded decision 0004: English is the default language and any other language is added per page; Spanish is this project's example. The file is now `0004-default-language-english-others-added.md`, and the standard, plan, settings table and READMEs follow it.
 - No code yet.
