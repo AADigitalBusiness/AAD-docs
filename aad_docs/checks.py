@@ -345,10 +345,11 @@ def _check_md_or_mdx_page(
         ):
             findings.append(CheckFinding("D050", rel, "Page does not open with a purpose line directly under the title"))
 
-    # D051: .md page has no Mermaid diagram (.mdx exempt)
+    # D051: .md page has no Mermaid diagram (.mdx and 00-map.md with a file tree are exempt)
     if ext == ".md":
         has_mermaid = bool(re.search(r"^\s*(?:`{3,}|~{3,})mermaid\b", body, re.MULTILINE))
-        if not has_mermaid:
+        is_map_tree = file_path.name.startswith("00-map.") and ("├──" in body or "└──" in body)
+        if not has_mermaid and not is_map_tree:
             findings.append(CheckFinding("D051", rel, "Markdown page has no Mermaid diagram"))
 
     # D030 & D031: model docstring / help_text repetition and hand-written model field table

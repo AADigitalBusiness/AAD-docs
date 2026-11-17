@@ -1,9 +1,13 @@
-"""
-Pytest configuration for AAD-docs.
-"""
+"""Pytest configuration and shared fixtures for AAD-docs tests."""
+from __future__ import annotations
 
-import os
-import sys
+import pytest
 
-# Add the project root to the path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from aad_docs.discovery import clear_tree_cache
+
+
+@pytest.fixture(autouse=True)
+def _reset_tree_cache() -> None:
+    clear_tree_cache()
+    yield
+    clear_tree_cache()
