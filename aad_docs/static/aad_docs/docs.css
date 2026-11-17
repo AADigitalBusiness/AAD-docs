@@ -66,8 +66,11 @@ body.plt-docs {
     padding-left: 0.875rem;
 }
 
+.plt-nav-tree.d-menu .plt-nav-tree__sub {
+    white-space: normal;
+}
+
 .plt-nav-tree a {
-    display: block;
     padding: 0.25rem 0.5rem;
     color: var(--plt-docs-text-secondary);
     border-radius: var(--plt-radius-field);

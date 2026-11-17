@@ -34,7 +34,7 @@
 
     <div class="plt-docs__layout">
         <nav class="plt-docs__nav d-card theme-elevated" aria-label="Documentation navigation">
-            <ul class="plt-nav-tree d-menu">
+            <ul class="plt-nav-tree d-menu plt-docs-nav-tree__menu">
                 {% for top_node in tree %}
                 <li class="plt-nav-tree__item {% if app_node and top_node.slug == app_node.slug %}is-active{% endif %}">
                     <a href="{% url 'aad_docs:node' app_slug=top_node.slug %}">
