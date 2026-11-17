@@ -14,6 +14,7 @@ authors = [
 ]
 dependencies = [
     "Django>=5.2",
+    "django-dsadmin @ git+ssh://git@github.com/aavendano/django-dsadmin.git@47984103f45d3ee6f34005960aa05f946b7f00ae",
     "markdown-it-py>=3.0",
     "PyYAML>=6.0",
 ]

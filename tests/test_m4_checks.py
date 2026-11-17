@@ -1,7 +1,9 @@
 """Tests for milestone M4: docs_check (D001 to D065) and docs_screenshots."""
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 from django.core.management import call_command
@@ -197,7 +199,7 @@ def test_every_check_rule_has_a_fixture_that_triggers_it(tmp_path: Path, monkeyp
 
 
 def test_docs_screenshots_command(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """docs_screenshots writes the screenshots in both configured languages."""
+    """docs_screenshots opens and writes the guide in both configured languages."""
     app_dir = tmp_path / "app_shots"
     guides_dir = app_dir / "docs" / "05-guides"
     guides_dir.mkdir(parents=True)
@@ -205,6 +207,59 @@ def test_docs_screenshots_command(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
 
     cat_cfg = apps.get_app_config("catalog")
     monkeypatch.setattr(cat_cfg, "path", str(app_dir))
-    call_command("docs_screenshots", "catalog")
+    visits: list[tuple[str, str]] = []
+
+    class FakePage:
+        def __init__(self, locale: str) -> None:
+            self.locale = locale
+            self.url = ""
+
+        def goto(self, url: str, **kwargs: object) -> SimpleNamespace:
+            self.url = url
+            visits.append((self.locale, url))
+            assert kwargs == {"wait_until": "networkidle"}
+            return SimpleNamespace(ok=True, status=200)
+
+        def screenshot(self, *, path: str, full_page: bool) -> None:
+            assert full_page is True
+            Path(path).write_bytes(b"real browser bytes")
+
+    class FakeContext:
+        def __init__(self, locale: str) -> None:
+            self.locale = locale
+
+        def new_page(self) -> FakePage:
+            return FakePage(self.locale)
+
+        def close(self) -> None:
+            pass
+
+    class FakeBrowser:
+        def new_context(self, **kwargs: object) -> FakeContext:
+            assert kwargs["viewport"] == {"width": 1440, "height": 1000}
+            return FakeContext(str(kwargs["locale"]))
+
+        def close(self) -> None:
+            pass
+
+    class FakePlaywright:
+        chromium = SimpleNamespace(launch=lambda: FakeBrowser())
+
+        def __enter__(self) -> "FakePlaywright":
+            return self
+
+        def __exit__(self, *args: object) -> None:
+            pass
+
+    monkeypatch.setitem(
+        sys.modules,
+        "playwright.sync_api",
+        SimpleNamespace(sync_playwright=FakePlaywright),
+    )
+    call_command("docs_screenshots", "catalog", base_url="http://docs.test:8001/")
     assert (app_dir / "docs" / "assets" / "browse-the-docs.png").is_file()
     assert (app_dir / "docs" / "assets" / "browse-the-docs.es.png").is_file()
+    assert visits == [
+        ("en", "http://docs.test:8001/docs/catalog/guides/browse-the-docs/"),
+        ("es", "http://docs.test:8001/docs/catalog/guides/browse-the-docs/"),
+    ]

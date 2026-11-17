@@ -26,6 +26,9 @@ def test_reference_tables_and_request_flow_and_embed_mdx(client: Client) -> None
     res_flow = client.get("/docs/aad-docs/request-flow/")
     assert res_flow.status_code == 200
     assert b'data-component="flow"' in res_flow.content
+    assert b"The URL is matched" in res_flow.content
+    assert b"aad_docs:page matches the node slug" in res_flow.content
+    assert b"aad_docs/urls.py" in res_flow.content
 
     res_mdx = client.get("/docs/aad-docs/guides/embed-a-piece/")
     assert res_mdx.status_code == 200
@@ -40,7 +43,8 @@ def test_mdx_mounts_live_components_and_pieces(tmp_path: Path) -> None:
     """An .mdx page with live Table, Flow, Model, Callout, Steps, Tabs, Cards and details renders each component and requests only needed scripts."""
     (tmp_path / "items.csv").write_text("col1,col2\nval1,val2\n", encoding="utf-8")
     (tmp_path / "flow.json").write_text(
-        '{"type": "flow", "title": "Order flow", "steps": [{"actor": "User", "action": "Submits"}]}',
+        '{"type": "flow", "title": "Order flow", "steps": '
+        '[{"title": "Order submitted", "detail": "The user submits the order.", "file": "orders/views.py"}]}',
         encoding="utf-8",
     )
     mdx_file = tmp_path / "live.mdx"
@@ -101,6 +105,6 @@ def test_mdx_src_path_traversal_and_raw_html_safety(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     pg = read_page(md_file, node_dir=tmp_path)
-    assert '<details class="plt-details"' in pg.content
+    assert '<details class="plt-details d-collapse"' in pg.content
     assert "<script>" not in pg.content
     assert "&lt;script&gt;alert(1)&lt;/script&gt;" in pg.content

@@ -1,7 +1,7 @@
 {% extends "aad_docs/base.html" %}
 
 {% block content %}
-<article class="plt-doc-model">
+<article class="plt-doc-model d-card theme-elevated">
     <h1>{{ model.verbose_name }} <small>({{ model.app_label }}.{{ model.name }})</small></h1>
     {% if model.docstring %}
     <p class="plt-doc-model__purpose">{{ model.docstring }}</p>

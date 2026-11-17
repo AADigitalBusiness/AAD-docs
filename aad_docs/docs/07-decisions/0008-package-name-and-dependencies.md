@@ -30,11 +30,12 @@ The design used `appdocs` as a provisional name. The repository is `AAD-docs`. T
 | Django | 5.2 or later (the long-term release the owner's `kv` project already uses) |
 | Markdown | `markdown-it-py` |
 | YAML | `PyYAML` |
+| Admin presentation | `django-dsadmin`, pinned to commit `4798410` |
 | CSV, JSON | Standard library |
 | Mermaid | Vendored static file of a pinned version, with its license beside it; runs in the browser in strict mode |
 | Tests | `pytest` and `pytest-django`, in the `[dev]` extra |
 | Screenshots | Playwright, in the `[screenshots]` extra |
-| Design system CSS | Compiled file of `plt-design-system`, vendored at a pinned tag: [0014](0014-reuse-from-the-owners-repositories.md) |
+| Design system CSS | Compiled file of `plt-design-system`, vendored at a pinned version and commit: [0014](0014-reuse-from-the-owners-repositories.md) |
 | Default access | Staff users only |
 
 ## Alternatives
@@ -45,7 +46,7 @@ The design used `appdocs` as a provisional name. The repository is `AAD-docs`. T
 
 ## Consequences
 
-- Two runtime dependencies. Test and screenshot tools install only with their extra.
+- Three runtime dependencies. Test and screenshot tools install only with their extra.
 - Diagrams need JavaScript in the browser; on GitHub they render without the app.
 - Projects that want open documentation set `ACCESS`.
 

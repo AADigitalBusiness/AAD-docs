@@ -1,31 +1,40 @@
 {% load static i18n %}<!DOCTYPE html>
-<html lang="{{ active_language|default:'en' }}">
+<html lang="{{ active_language|default:'en' }}" data-theme="brand">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% if page %}{{ page.title }}{% elif node %}{{ node.title }}{% else %}Documentation{% endif %}{% endblock %} · AAD-docs</title>
+    <link rel="stylesheet" href="{% static 'aad_docs/vendor/plt-design-system.css' %}">
     <link rel="stylesheet" href="{% static 'aad_docs/docs.css' %}">
 </head>
 <body class="plt-docs">
-    <header class="plt-docs__header">
+    <header class="plt-docs__header d-navbar">
         <div class="plt-docs__brand">
             <a href="{% url 'aad_docs:index' %}">AAD-docs</a>
         </div>
-        <form class="plt-docs__lang" action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.get_full_path }}">
-            <label for="aad-docs-lang-select" class="plt-sr-only">Language</label>
-            <select id="aad-docs-lang-select" name="language" onchange="this.form.submit()">
-                {% for lang_code in configured_languages %}
-                <option value="{{ lang_code }}" {% if active_language == lang_code %}selected{% endif %}>{{ lang_code|upper }}</option>
-                {% endfor %}
-            </select>
-        </form>
+        <div class="plt-docs__actions">
+            <a class="d-btn d-btn-ghost d-btn-square" href="/admin/" aria-label="Django admin" title="Django admin">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/>
+                    <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.55V21h-4v-.08A1.7 1.7 0 0 0 8.95 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1.03H3v-4h.08A1.7 1.7 0 0 0 4.6 8.95a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.95 4.6 1.7 1.7 0 0 0 10 3.08V3h4v.08a1.7 1.7 0 0 0 1.03 1.55 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.55 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z"/>
+                </svg>
+            </a>
+            <form class="plt-docs__lang" action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                <label for="aad-docs-lang-select" class="plt-sr-only">Language</label>
+                <select id="aad-docs-lang-select" class="d-select" name="language" onchange="this.form.submit()">
+                    {% for lang_code in configured_languages %}
+                    <option value="{{ lang_code }}" {% if active_language == lang_code %}selected{% endif %}>{{ lang_code|upper }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
     </header>
 
     <div class="plt-docs__layout">
-        <nav class="plt-docs__nav" aria-label="Documentation navigation">
-            <ul class="plt-nav-tree">
+        <nav class="plt-docs__nav d-card theme-elevated" aria-label="Documentation navigation">
+            <ul class="plt-nav-tree d-menu">
                 {% for top_node in tree %}
                 <li class="plt-nav-tree__item {% if app_node and top_node.slug == app_node.slug %}is-active{% endif %}">
                     <a href="{% url 'aad_docs:node' app_slug=top_node.slug %}">
@@ -53,7 +62,7 @@
         </nav>
 
         <main class="plt-docs__main">
-            <nav class="plt-breadcrumbs" aria-label="Breadcrumbs">
+            <nav class="plt-breadcrumbs d-breadcrumbs" aria-label="Breadcrumbs">
                 <a href="{% url 'aad_docs:index' %}">Docs</a>
                 {% if app_node %}
                 <span>/</span>
@@ -63,7 +72,7 @@
                 {% endif %}
                 {% if node and app_node and node.slug != app_node.slug %}
                 <span>/</span>
-                <a href="{% url 'aad_docs:page' app_slug=app_node.slug path=node.slug %}">
+                <a href="{% url 'aad_docs:page' app_slug=app_node.slug path=node_path|default:node.slug %}">
                     {% if active_language == 'es' and node.title_es %}{{ node.title_es }}{% else %}{{ node.title }}{% endif %}
                 </a>
                 {% endif %}

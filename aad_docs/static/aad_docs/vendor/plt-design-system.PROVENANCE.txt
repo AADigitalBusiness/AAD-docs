@@ -1,0 +1,13 @@
+plt-design-system vendored artifact
+
+Package: @playlovetoys/design-system
+Package version: 0.7.0
+Source repository: git@github.com:PlayLoveToys/PLT-design-system.git
+Source commit: 975f7a80932b3ef89c095028250a641a3dbb88fa
+Source file: packages/design-system/demo/dist-docs-light.css
+Vendored file: plt-design-system.css
+SHA-256: 46e4aa21460a860db6122fc28157d7ae94a72c4ce1f926261ac99fa02c5a7e63
+Theme: docs-light
+
+The upstream repository did not contain a standalone license file at this pin.
+The compiled artifact retains its embedded Tailwind CSS MIT license notice.

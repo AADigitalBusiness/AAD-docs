@@ -336,8 +336,9 @@ def _render_mdx_lines(
     node_dir: Path,
     lang_code: str,
     used_tags: list[str],
+    source_path: Path,
 ) -> tuple[str, bool]:
-    md, has_mermaid = make_markdown_renderer()
+    md, has_mermaid = make_markdown_renderer(source_path)
     out_lines: list[str] = []
     placeholders: dict[str, str] = {}
     in_fence = False
@@ -422,7 +423,9 @@ def _render_mdx_lines(
                     raise ValueError(f"Unclosed container tag <{tag_name}>")
 
                 used_tags.append(tag_name)
-                frag = _render_container_tag(tag_name, attrs, inner_lines, node_dir, lang_code, used_tags)
+                frag = _render_container_tag(
+                    tag_name, attrs, inner_lines, node_dir, lang_code, used_tags, source_path
+                )
                 out_lines.append(f"\n{add_placeholder(frag)}\n")
                 continue
 
@@ -442,9 +445,10 @@ def _render_container_tag(
     node_dir: Path,
     lang_code: str,
     used_tags: list[str],
+    source_path: Path,
 ) -> str:
     if tag_name == "Callout":
-        body_html, _ = _render_mdx_lines(inner_lines, node_dir, lang_code, used_tags)
+        body_html, _ = _render_mdx_lines(inner_lines, node_dir, lang_code, used_tags, source_path)
         return render_to_string(
             "aad_docs/components/callout.html",
             {
@@ -455,7 +459,7 @@ def _render_container_tag(
         )
 
     if tag_name == "Steps":
-        body_html, _ = _render_mdx_lines(inner_lines, node_dir, lang_code, used_tags)
+        body_html, _ = _render_mdx_lines(inner_lines, node_dir, lang_code, used_tags, source_path)
         return render_to_string("aad_docs/components/steps.html", {"body": body_html})
 
     if tag_name == "details":
@@ -486,7 +490,7 @@ def _render_container_tag(
                 continue
             rest_lines.append(inner_lines[j])
             j += 1
-        body_html, _ = _render_mdx_lines(rest_lines, node_dir, lang_code, used_tags)
+        body_html, _ = _render_mdx_lines(rest_lines, node_dir, lang_code, used_tags, source_path)
         return render_to_string(
             "aad_docs/components/details.html",
             {"open": "open" in attrs, "summary": summary_text, "body": body_html},
@@ -524,7 +528,7 @@ def _render_container_tag(
             if not closed:
                 raise ValueError(f"Unclosed <{child_tag}> inside <{tag_name}>")
             used_tags.append(child_tag)
-            child_html, _ = _render_mdx_lines(child_lines, node_dir, lang_code, used_tags)
+            child_html, _ = _render_mdx_lines(child_lines, node_dir, lang_code, used_tags, source_path)
             items.append({"title": child_attrs["title"], "href": href, "body": child_html})
 
         template_name = "aad_docs/components/tabs.html" if tag_name == "Tabs" else "aad_docs/components/cards.html"
@@ -548,7 +552,9 @@ def read(file_path: Path, node_dir: Path | None = None, lang_code: str = "en") -
 
     effective_node_dir = (node_dir or file_path.parent).resolve()
     used_tags: list[str] = []
-    html_content, has_mermaid = _render_mdx_lines(body.splitlines(), effective_node_dir, lang_code, used_tags)
+    html_content, has_mermaid = _render_mdx_lines(
+        body.splitlines(), effective_node_dir, lang_code, used_tags, file_path
+    )
     scripts = scripts_for(used_tags, has_mermaid=has_mermaid)
 
     return Page(

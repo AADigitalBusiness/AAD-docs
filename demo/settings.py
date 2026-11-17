@@ -11,7 +11,8 @@ DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]", "testserver"]
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "dsadmin",
+    "dsadmin.apps.AdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -78,4 +79,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AAD_DOCS = {
     "ROOT": PROJECT_ROOT / "docs",
+    "ACCESS": "public",
+}
+
+DSADMIN = {
+    "SITE_TITLE": "AAD-docs admin",
+    "SITE_HEADER": "AAD-docs",
+    "SITE_SUBHEADER": "Documentation administration",
+    "THEME": "admin",
+    "DARK_THEME": None,
 }

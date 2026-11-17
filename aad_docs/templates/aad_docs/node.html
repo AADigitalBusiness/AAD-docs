@@ -1,7 +1,7 @@
 {% extends "aad_docs/base.html" %}
 
 {% block content %}
-<article class="plt-doc-node">
+<article class="plt-doc-node d-card theme-elevated">
     {% if node %}
     <h1>{% if active_language == 'es' and node.title_es %}{{ node.title_es }}{% else %}{{ node.title }}{% endif %}</h1>
 
@@ -11,8 +11,8 @@
         <ul class="plt-doc-list">
             {% for pg in node.page_items %}
             <li>
-                <a href="{% url 'aad_docs:page' app_slug=app_node.slug|default:node.slug path=pg.slug %}">{{ pg.title }}</a>
-                <span class="plt-badge">{{ pg.kind }}</span>
+                <a href="{% url 'aad_docs:page' app_slug=app_node.slug|default:node.slug path=node_path_prefix|add:pg.slug %}">{{ pg.title }}</a>
+                <span class="d-badge d-badge-outline theme-label-bold">{{ pg.kind }}</span>
             </li>
             {% endfor %}
         </ul>
@@ -25,7 +25,7 @@
         <ul class="plt-doc-list">
             {% for child in node.children %}
             <li>
-                <a href="{% url 'aad_docs:page' app_slug=app_node.slug|default:node.slug path=child.slug %}">
+                <a href="{% url 'aad_docs:page' app_slug=app_node.slug|default:node.slug path=node_path_prefix|add:child.slug %}">
                     {% if active_language == 'es' and child.title_es %}{{ child.title_es }}{% else %}{{ child.title }}{% endif %}
                 </a>
             </li>

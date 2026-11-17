@@ -5,13 +5,43 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+from django.contrib.auth import get_user_model
 from django.core.management import call_command
-from django.test import override_settings
+from django.test import Client, override_settings
 
 from aad_docs.apps import AadDocsConfig
 from aad_docs.conf import DEFAULTS, get_settings
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def test_demo_home_redirects_to_docs(client: Client) -> None:
+    assert client.get("/").headers["Location"] == "/docs/"
+
+
+def test_demo_uses_vendored_plt_design_system(client: Client) -> None:
+    html = client.get("/docs/").content.decode("utf-8")
+    vendor = REPO_ROOT / "aad_docs/static/aad_docs/vendor/plt-design-system.css"
+    provenance = vendor.with_name("plt-design-system.PROVENANCE.txt")
+
+    assert vendor.is_file() and "--plt-color-primary" in vendor.read_text(encoding="utf-8")
+    assert provenance.is_file() and "@playlovetoys/design-system" in provenance.read_text(encoding="utf-8")
+    assert html.index("aad_docs/vendor/plt-design-system.css") < html.index("aad_docs/docs.css")
+    assert 'data-theme="brand"' in html
+    assert 'class="plt-docs__nav d-card theme-elevated"' in html
+    assert 'class="d-select"' in html
+
+
+@pytest.mark.django_db
+def test_demo_admin_uses_dsadmin(client: Client) -> None:
+    user = get_user_model().objects.create_superuser(username="admin-test", password="pw")
+    client.force_login(user)
+    html = client.get("/admin/").content.decode("utf-8")
+
+    assert "dsadmin/css/themes/admin.css" in html
+    assert "AAD-docs" in html
+    assert 'href="/docs/"' in html
 
 
 def test_import_node_before_django_setup() -> None:

@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
+from urllib.parse import unquote, urlsplit
 
 from django.apps import apps
 from django.http import Http404
@@ -15,6 +16,56 @@ from aad_docs.discovery import (
     strip_numeric_prefix,
 )
 from aad_docs.nodes import Node, Page
+
+
+def _walk_nodes(node: Node, parts: tuple[str, ...] = ()) -> Iterator[tuple[Node, tuple[str, ...]]]:
+    yield node, parts
+    for child in node.children:
+        if child.slug:
+            yield from _walk_nodes(child, (*parts, child.slug))
+
+
+def _documentation_path_url(target: Path) -> str | None:
+    """Return the public URL for a discovered documentation file or folder."""
+    target = target.resolve()
+    for app_node in build_tree():
+        if app_node.path is None or app_node.slug is None:
+            continue
+        for node, section_parts in _walk_nodes(app_node):
+            if node.path is None:
+                continue
+            if target == node.path.resolve():
+                if not section_parts:
+                    return reverse("aad_docs:node", kwargs={"app_slug": app_node.slug})
+                return reverse(
+                    "aad_docs:page",
+                    kwargs={"app_slug": app_node.slug, "path": "/".join(section_parts)},
+                )
+            for page in node.page_items:
+                if any(target == Path(variant).resolve() for variant in page.variants.values()):
+                    return reverse(
+                        "aad_docs:page",
+                        kwargs={
+                            "app_slug": app_node.slug,
+                            "path": "/".join([*section_parts, page.slug]),
+                        },
+                    )
+    return None
+
+
+def resolve_doc_link(source: Path, href: str) -> str:
+    """Translate a relative repository link to its public documentation URL when possible."""
+    parsed = urlsplit(href)
+    if parsed.scheme or parsed.netloc or href.startswith("/") or not parsed.path:
+        return href
+    public_url = _documentation_path_url(source.parent / unquote(parsed.path))
+    if public_url is None:
+        return href
+    if parsed.query:
+        public_url += f"?{parsed.query}"
+    if parsed.fragment:
+        public_url += f"#{parsed.fragment}"
+    return public_url
 
 
 def _find_app_node(slug_or_label: str) -> Node | None:

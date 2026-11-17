@@ -53,7 +53,7 @@ What the owner can do at the end of each milestone, and what each one waits for.
 | M5 · First project | Use it on a real app | Planned | M4 and the choice of the project |
 | M6 · Database index | Search all pages and link a page to a model | Future | M5 |
 
-Decisions 0007, 0008 and 0010 to 0015 are still proposed; 0009 is a recommendation for M6. Each one is confirmed or changed before the milestone that builds it starts: 0007, 0008, 0014 and 0015 before M1a, 0010 before M1, 0011, 0012 and 0013 before M3.
+Decisions 0007, 0008, 0010 to 0013 and 0015 are still proposed; 0014 is accepted, and 0009 is a recommendation for M6. Each proposed decision is confirmed or changed before the milestone that builds it starts: 0007, 0008 and 0015 before M1a, 0010 before M1, 0011, 0012 and 0013 before M3.
 
 ## Milestones
 
@@ -69,7 +69,7 @@ Accepted when: every page opens with a purpose line and a diagram, and every lin
 
 | Side | Deliverable |
 |---|---|
-| Backend | `pyproject.toml` with the dependencies, the `[dev]` extra (`pytest`, `pytest-django`), the `[screenshots]` extra (Playwright) and package data for `aad_docs/docs/**`, templates and static files, including the vendored Mermaid and design-system CSS with their licenses ([0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md)) |
+| Backend | `pyproject.toml` with the dependencies, including pinned `django-dsadmin`, the `[dev]` extra (`pytest`, `pytest-django`), the `[screenshots]` extra (Playwright) and package data for `aad_docs/docs/**`, templates and static files, including vendored Mermaid and the pinned design-system CSS with their provenance ([0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md)) |
 | Backend | `aad_docs/__init__.py` exports `Node`, pure Python, and `docs_url`, which loads the routing on its first call |
 | Backend | `conf.py`: `DEFAULTS` and `get_settings()`, which merges `settings.AAD_DOCS` over them |
 | Backend | `apps.py` registers the system checks, such as the presence of the packaged `docs/` |
@@ -215,7 +215,6 @@ Accepted when:
 | Visual components and raw HTML | Closed registry, Django templates; raw HTML never rendered; each component declares if it needs JavaScript | [0013](../aad_docs/docs/07-decisions/0013-visual-components.md) |
 | Reference tables | Generated from their owner in Python | [0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md) |
 | Agent tooling | Dependencies and executables pinned and kept in the repository; the Mermaid check is mandatory | [0015](../aad_docs/docs/07-decisions/0015-the-repository-carries-its-agent-tooling.md) |
-| Reuse of the owner's repositories | Copy small primitives, vendor the CSS, depend on no other repository | [0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md) |
 
 ## Next
 

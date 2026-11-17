@@ -13,6 +13,7 @@ from aad_docs.discovery import build_tree, resolve_node
 from aad_docs.routing import resolve_path
 
 
+@override_settings(AAD_DOCS={"ROOT": Path(__file__).resolve().parent.parent / "docs"})
 @pytest.mark.django_db
 def test_staff_only_access_by_default(client: Client) -> None:
     """A non-staff user gets no access by default; a staff user gets 200."""
@@ -38,6 +39,7 @@ def test_render_every_md_in_aad_docs_and_project(client: Client) -> None:
     for root_slug in ("project", "aad-docs"):
         res = client.get(f"/docs/{root_slug}/")
         assert res.status_code == 200
+        assert 'href="/admin/" aria-label="Django admin"' in res.content.decode("utf-8")
 
     # Check read-the-code vs code-map answer at different addresses
     r_md = client.get("/docs/aad-docs/read-the-code/")
@@ -71,6 +73,24 @@ def test_render_every_md_in_aad_docs_and_project(client: Client) -> None:
         res_fallback = client.get("/docs/aad-docs/read-the-code/", HTTP_ACCEPT_LANGUAGE="es")
         assert res_fallback.status_code == 200
         assert "Read the code" in res_fallback.content.decode("utf-8")
+
+
+@override_settings(AAD_DOCS={"ROOT": Path(__file__).resolve().parent.parent / "docs", "ACCESS": "public"})
+def test_markdown_links_use_documentation_urls(client: Client) -> None:
+    response = client.get("/docs/project/map/")
+
+    assert response.status_code == 200
+    assert '<a href="/docs/aad-docs/overview/">01-overview.md</a>' in response.content.decode("utf-8")
+    assert client.get("/docs/aad-docs/overview/").status_code == 200
+
+
+@override_settings(AAD_DOCS={"ROOT": Path(__file__).resolve().parent.parent / "docs", "ACCESS": "public"})
+def test_section_page_links_keep_the_section_path(client: Client) -> None:
+    response = client.get("/docs/aad-docs/decisions/")
+
+    assert response.status_code == 200
+    assert 'href="/docs/aad-docs/decisions/docs-inside-each-app/"' in response.content.decode("utf-8")
+    assert client.get("/docs/aad-docs/decisions/docs-inside-each-app/").status_code == 200
 
 
 def test_empty_missing_and_broken_init(tmp_path: Path) -> None:

@@ -1,4 +1,4 @@
-<aside class="plt-callout plt-callout--{{ type|default:'note' }}" data-component="callout" data-callout-type="{{ type|default:'note' }}">
+<aside class="plt-callout d-alert {% if type == 'warning' %}d-alert-warning{% elif type == 'danger' %}d-alert-error{% elif type == 'tip' %}d-alert-success{% else %}d-alert-info{% endif %}" data-component="callout" data-callout-type="{{ type|default:'note' }}">
     {% if title %}<div class="plt-callout__title">{{ title }}</div>{% endif %}
     <div class="plt-callout__body">{{ body|safe }}</div>
 </aside>

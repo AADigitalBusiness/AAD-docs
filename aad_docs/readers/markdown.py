@@ -58,7 +58,7 @@ def extract_title(body: str, fallback: str) -> str:
     return fallback
 
 
-def make_markdown_renderer() -> tuple[MarkdownIt, list[bool]]:
+def make_markdown_renderer(source_path: Path | None = None) -> tuple[MarkdownIt, list[bool]]:
     """Create a MarkdownIt instance with raw HTML disabled and Mermaid fence support."""
     has_mermaid = [False]
     md = MarkdownIt("commonmark", {"html": False}).enable("table")
@@ -73,12 +73,23 @@ def make_markdown_renderer() -> tuple[MarkdownIt, list[bool]]:
         return f"<pre><code{lang_cls}>{html.escape(tok.content)}</code></pre>\n"
 
     md.add_render_rule("fence", render_fence)
+    if source_path is not None:
+
+        def render_link_open(self: Any, tokens: Any, idx: int, options: Any, env: Any) -> str:
+            from aad_docs.routing import resolve_doc_link
+
+            href = tokens[idx].attrGet("href")
+            if href:
+                tokens[idx].attrSet("href", resolve_doc_link(source_path, href))
+            return self.renderToken(tokens, idx, options, env)
+
+        md.add_render_rule("link_open", render_link_open)
     return md, has_mermaid
 
 
-def _render_md_with_details(body: str) -> tuple[str, bool]:
+def _render_md_with_details(body: str, source_path: Path) -> tuple[str, bool]:
     """Render Markdown while supporting semantic <details> and <summary> blocks outside code fences."""
-    md, has_mermaid = make_markdown_renderer()
+    md, has_mermaid = make_markdown_renderer(source_path)
     lines = body.splitlines()
     out_lines: list[str] = []
     placeholders: dict[str, str] = {}
@@ -130,7 +141,7 @@ def _render_md_with_details(body: str) -> tuple[str, bool]:
                 i += 1
 
             if closed:
-                inner_html, inner_mermaid = _render_md_with_details("\n".join(inner_lines))
+                inner_html, inner_mermaid = _render_md_with_details("\n".join(inner_lines), source_path)
                 if inner_mermaid:
                     has_mermaid[0] = True
                 token_key = f"AADDOCSDETAILSPLACEHOLDER{counter}END"
@@ -168,7 +179,7 @@ def read(file_path: Path, node_dir: Path | None = None, lang_code: str = "en") -
     slug = strip_numeric_prefix(raw_stem)
     title = extract_title(body, slug)
 
-    html_content, has_mermaid = _render_md_with_details(body)
+    html_content, has_mermaid = _render_md_with_details(body, file_path)
     scripts = ["aad_docs/vendor/mermaid.min.js"] if has_mermaid else []
 
     return Page(

@@ -58,6 +58,35 @@ The documentation exposes models, routes and class names. Treat it as internal.
 
 `docs/` folders hold non-Python files. AAD-docs declares `aad_docs/docs/**`, templates and static files as package data in `pyproject.toml`, and a Django system check warns when the packaged `docs/` is missing. A distributed app of yours must declare its own, or only the `.py` files ship.
 
+## Update the design system
+
+AAD-docs vendors the compiled `docs-light` theme so an installed Django project needs neither npm nor access to the design-system repository. The pin and checksum are in `aad_docs/static/aad_docs/vendor/plt-design-system.PROVENANCE.txt`.
+
+1. Check out the chosen `plt-design-system` commit and run its design-system checks, including `build:themes`.
+2. Copy `packages/design-system/demo/dist-docs-light.css` to `aad_docs/static/aad_docs/vendor/plt-design-system.css`.
+3. Update the version, commit and SHA-256 in the provenance file.
+4. Run the AAD-docs tests and `tools/check.sh`.
+
+Keep environment-specific layout in `docs.css`. Shared tokens, primitives, visual states and accessibility fixes belong upstream in `plt-design-system`; update the pin instead of forking them here ([0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md)).
+
+## Retake guide screenshots
+
+Install the optional browser tooling once and start the project locally.
+
+```bash
+pip install -e '.[screenshots]'
+playwright install chromium
+python demo/manage.py runserver 8001
+```
+
+In another terminal, capture the English and Spanish guide pages from that server.
+
+```bash
+python demo/manage.py docs_screenshots --base-url http://127.0.0.1:8001
+```
+
+The command is adapted from the installed `django-dsadmin` commit `4798410`. It writes real full-page captures under `aad_docs/docs/assets/` and stops on a missing browser, unreachable server or non-success response.
+
 ## Agent instructions
 
 `AGENTS.md` at the root is the standard entry for coding agents ([agents.md](https://github.com/agentsmd/agents.md)): plain Markdown that holds the checks, conventions and rules an agent follows. `CLAUDE.md` only imports it (`@AGENTS.md`), so there is one file to maintain. `AGENTS.md` links to the documents that own each fact and does not repeat them.

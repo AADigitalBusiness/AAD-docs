@@ -3,7 +3,7 @@
     {% if codemap.routes %}
     <section class="plt-explorer__section">
         <h3>Routes</h3>
-        <table class="plt-table">
+        <table class="plt-table d-table">
             <thead><tr><th>Path</th><th>Name</th><th>View</th><th>File</th></tr></thead>
             <tbody>
                 {% for r in codemap.routes %}
@@ -16,7 +16,7 @@
     {% if codemap.models %}
     <section class="plt-explorer__section">
         <h3>Models</h3>
-        <table class="plt-table">
+        <table class="plt-table d-table">
             <thead><tr><th>Model</th><th>Verbose name</th><th>Docstring</th><th>File</th></tr></thead>
             <tbody>
                 {% for m in codemap.models %}

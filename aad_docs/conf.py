@@ -1,6 +1,7 @@
 """Configuration defaults and settings accessor for AAD-docs.
 
-Copied and adapted from the settings pattern in django-dsadmin (see decision 0014).
+Copied and adapted from the settings pattern in django-dsadmin commit
+47984103f45d3ee6f34005960aa05f946b7f00ae (see decision 0014).
 Owner of settings.csv.
 """
 from __future__ import annotations

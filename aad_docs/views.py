@@ -124,6 +124,8 @@ class PageView(DocsAccessMixin, View):
             if not _is_item_visible(app_node, request, section_node.slug or "", section_node.raw_name):
                 raise Http404("Section is hidden")
             ctx = _base_context(request, active_app_node=app_node, current_node=section_node)
+            ctx["node_path"] = path
+            ctx["node_path_prefix"] = f"{path}/"
             return render(request, "aad_docs/node.html", ctx)
 
         if kind == "model":
@@ -159,6 +161,7 @@ class PageView(DocsAccessMixin, View):
             raise Http404(str(exc)) from exc
 
         ctx = _base_context(request, active_app_node=app_node, current_node=owner_node)
+        ctx["node_path"] = path.rsplit("/", 1)[0] if "/" in path else ""
         ctx["page"] = rendered_page
         ctx["scripts"] = rendered_page.scripts
 

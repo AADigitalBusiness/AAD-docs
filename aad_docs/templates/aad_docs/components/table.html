@@ -1,8 +1,8 @@
 <div class="plt-table-widget" data-component="table" data-src="{{ src }}">
     <div class="plt-table-widget__controls">
-        <input type="search" class="plt-table-widget__filter" placeholder="Filter rows..." aria-label="Filter table rows">
+        <input type="search" class="plt-table-widget__filter d-input" placeholder="Filter rows..." aria-label="Filter table rows">
     </div>
-    <table class="plt-table">
+    <table class="plt-table d-table">
         <thead>
             <tr>
                 {% for col in table.columns %}
