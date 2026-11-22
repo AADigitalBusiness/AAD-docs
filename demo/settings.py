@@ -11,8 +11,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]", "testserver"]
 
 INSTALLED_APPS = [
-    "dsadmin",
-    "dsadmin.apps.AdminConfig",
+    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -82,10 +81,3 @@ AAD_DOCS = {
     "ACCESS": "public",
 }
 
-DSADMIN = {
-    "SITE_TITLE": "AAD-docs admin",
-    "SITE_HEADER": "AAD-docs",
-    "SITE_SUBHEADER": "Documentation administration",
-    "THEME": "admin",
-    "DARK_THEME": None,
-}
