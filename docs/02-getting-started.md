@@ -10,7 +10,7 @@ flowchart LR
     folder --> open["Open /docs/ in the browser"]
 ```
 
-**Status: planned.** These steps describe the target. Milestones M1a and M1 of the [plan](PLAN.md) make them true.
+**Status: release candidate.** The package implementation exists; the PyPI installation command will work after the first release is published.
 
 ## Before you start
 
@@ -23,8 +23,10 @@ flowchart LR
 1. Install the package.
 
    ```bash
-   pip install git+ssh://git@github.com/AADigitalBusiness/AAD-docs.git
+   pip install aad-docs
    ```
+
+   Before the initial PyPI release, use `pip install git+https://github.com/AADigitalBusiness/AAD-docs.git` instead.
 
 2. Add the app to `INSTALLED_APPS`.
 
