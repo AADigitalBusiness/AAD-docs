@@ -12,7 +12,17 @@ flowchart LR
 
 AAD-docs is an installable Django app. It finds the `docs/` folder inside each of your Django apps and serves it as navigable documentation at `/docs/`. The documentation is flat files that live next to the code they describe. English is the default language and other languages are added page by page; this repository adds Spanish for people who use the system. Pages can embed tables, flows, screenshots and visual components such as callouts, steps, tabs and cards.
 
-**Status: design phase.** The design is written and no package code exists yet. This repository holds the plan, the technical documentation, written in the standard the app will enforce, and a few tools that check it. The documentation of AAD-docs is the project's own example. The next step is milestone M1a, the installable package and a demo project: see the [roadmap](docs/PLAN.md#roadmap).
+**Status: initial package candidate (0.1.0).** The Django app and demo are implemented. A public PyPI release is pending the package CI checks and the trusted-publisher setup. See the [roadmap](docs/PLAN.md#roadmap) for the remaining scope.
+
+## Install
+
+After the first PyPI publication:
+
+```bash
+python -m pip install aad-docs
+```
+
+Add `aad_docs` to `INSTALLED_APPS` and mount `path("docs/", include("aad_docs.urls"))`. See [Getting started](docs/02-getting-started.md) for a full example. Until publication, install from GitHub.
 
 ## Where to go
 

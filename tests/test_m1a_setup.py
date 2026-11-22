@@ -34,13 +34,13 @@ def test_demo_uses_vendored_plt_design_system(client: Client) -> None:
 
 
 @pytest.mark.django_db
-def test_demo_admin_uses_dsadmin(client: Client) -> None:
+def test_demo_admin_uses_standard_django_admin(client: Client) -> None:
     user = get_user_model().objects.create_superuser(username="admin-test", password="pw")
     client.force_login(user)
     html = client.get("/admin/").content.decode("utf-8")
 
-    assert "dsadmin/css/themes/admin.css" in html
-    assert "AAD-docs" in html
+    assert "Django site admin" in html
+    assert "dsadmin/css/themes/admin.css" not in html
     assert 'href="/docs/"' in html
 
 
