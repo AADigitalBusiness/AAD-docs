@@ -1,0 +1,5 @@
+include LICENSE CHANGELOG.md README.md README.es.md
+graft docs
+graft demo
+graft tests
+global-exclude __pycache__ *.py[cod] .DS_Store

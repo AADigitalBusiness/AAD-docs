@@ -10,7 +10,7 @@ AAD-docs/
 ├── AGENTS.md                     ← instructions for coding agents
 ├── CLAUDE.md                     ← imports AGENTS.md
 ├── requirements-dev.txt          ← Python dependencies of the tools
-├── tools/                        ← setup.sh, check.sh, check_docs.py, check_mermaid.mjs
+├── tools/                        ← setup.sh, check.sh, check_docs.py, check_mermaid.mjs, release.py
 ├── .claude/skills/               ← skills for coding agents
 ├── docs/                         ← root node: what crosses every app
 │   ├── __init__.py               ← resolves the root node
@@ -55,5 +55,6 @@ AAD-docs/
 | Why was it designed this way? | [07-decisions/](../aad_docs/docs/07-decisions/) |
 | What must an agent follow here? | [AGENTS.md](../AGENTS.md) |
 | How do I release and operate it? | [08-operations.md](08-operations.md) |
+| How are versions numbered, and what counts as a breaking change? | [0017](../aad_docs/docs/07-decisions/0017-versioning-and-releases.md) |
 | How do I write a page in this standard? | [HOW-DOCS-WORK.md](HOW-DOCS-WORK.md) |
 | What gets built next? | [PLAN.md](PLAN.md) |

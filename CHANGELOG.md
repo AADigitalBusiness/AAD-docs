@@ -23,3 +23,6 @@
 - Reworded decision 0004: English is the default language and any other language is added per page; Spanish is this project's example. The file is now `0004-default-language-english-others-added.md`, and the standard, plan, settings table and READMEs follow it.
 - Synced the plan and operations with the new tooling and decisions: decisions still proposed (0007, 0008, 0010 to 0015) and the milestone before which each is settled; `tools/check.sh` as the check of pull requests.
 - No code yet.
+- Packaged for PyPI: the distribution is named `aad-docs`, the version lives only in `aad_docs/_version.py` and `aad_docs.__version__` exposes it, and the wheel and the source archive carry the `LICENSE`. `pyproject.toml` now needs setuptools 77 or later, declares classifiers and project URLs, and `MANIFEST.in` adds the changelog, the demo and the tests to the source archive.
+- Added `tools/release.py`, which sets the version and closes the `Unreleased` section; the publish workflow checks the tag against `_version.py`, requires a changelog section and creates the GitHub release with the files; CI checks the vendored and packaged files inside the built wheel.
+- Added decision 0017 (proposed): versions follow SemVer, live in one file and are published by a tag.

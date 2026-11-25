@@ -1,16 +1,30 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "aad_docs"
-version = "0.1.0"
-description = "Django app that turns docs/ folders into navigable, visual documentation."
+name = "aad-docs"
+dynamic = ["version"]
+description = "Django app that turns docs/ folders into navigable, visual, bilingual documentation."
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 authors = [
     {name = "AADigitalBusiness"}
+]
+keywords = ["django", "documentation", "docs", "markdown", "mdx", "mermaid"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 5.2",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Documentation",
 ]
 dependencies = [
     "Django>=5.2",
@@ -29,6 +43,12 @@ screenshots = [
 
 [project.urls]
 Homepage = "https://github.com/AADigitalBusiness/AAD-docs"
+Documentation = "https://github.com/AADigitalBusiness/AAD-docs/blob/main/docs/00-map.md"
+Changelog = "https://github.com/AADigitalBusiness/AAD-docs/blob/main/CHANGELOG.md"
+Issues = "https://github.com/AADigitalBusiness/AAD-docs/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "aad_docs._version.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["."]

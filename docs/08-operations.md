@@ -10,23 +10,46 @@ flowchart LR
     tag --> install["Projects install the tag"]
 ```
 
-**Status: planned.** CI and releases start at milestone M1a of the [plan](PLAN.md).
+**Status: active.** CI runs on every pull request, and a tag publishes the release ([0017](../aad_docs/docs/07-decisions/0017-versioning-and-releases.md)).
 
 ## Release
 
-1. Update `CHANGELOG.md`.
-2. Tag the version.
+Versions follow [0017](../aad_docs/docs/07-decisions/0017-versioning-and-releases.md): `X.Y.Z`, one source in `aad_docs/_version.py`, one tag `vX.Y.Z`.
+
+1. While you work, add each change under `## Unreleased` in `CHANGELOG.md`.
+2. Prepare the release. This sets the version and renames `Unreleased` to the new version and date.
 
    ```bash
-   git tag v0.1.0
-   git push origin v0.1.0
+   python3 tools/release.py 0.2.0
    ```
 
-3. In each project, install the tag.
+3. Check, commit, tag and push.
 
    ```bash
-   pip install git+ssh://git@github.com/AADigitalBusiness/AAD-docs.git@v0.1.0
+   tools/check.sh && python3 -m pytest -q
+   git commit -am "chore(release): v0.2.0"
+   git tag v0.2.0
+   git push origin main v0.2.0
    ```
+
+4. The tag starts `publish-pypi.yml`. It confirms the tag equals `_version.py` and that the changelog has the section, builds the files, runs `twine check` and the tests, publishes to PyPI and creates the GitHub release with the files attached.
+5. In each project, install the version.
+
+   ```bash
+   pip install aad-docs==0.2.0
+   pip install git+https://github.com/AADigitalBusiness/AAD-docs.git@v0.2.0   # from GitHub
+   ```
+
+A pre-release such as `0.3.0rc1` goes through the same steps; install it with `pip install --pre aad-docs`.
+
+**Once, before the first release.** Register the project on PyPI as a trusted publisher so the workflow needs no token.
+
+| Field | Value |
+|---|---|
+| PyPI project | `aad-docs` (as a pending publisher, until the first upload) |
+| Owner and repository | `AADigitalBusiness` and `AAD-docs` |
+| Workflow | `publish-pypi.yml` |
+| Environment | `pypi`, also created in the repository settings |
 
 ## Checks in CI
 

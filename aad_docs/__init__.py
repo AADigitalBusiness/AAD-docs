@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from aad_docs._version import __version__
 from aad_docs.nodes import Node
 
 
@@ -16,4 +17,4 @@ def docs_url(target: Any, *parts: str) -> str:
     return _docs_url(target, *parts)
 
 
-__all__ = ["Node", "docs_url"]
+__all__ = ["Node", "__version__", "docs_url"]

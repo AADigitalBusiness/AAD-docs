@@ -2,7 +2,7 @@ name: Publish to PyPI
 on:
   push:
     tags:
-      - 'v*'
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
 permissions:
   contents: read
 jobs:
@@ -20,11 +20,16 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           python - <<'PY'
-          import os, pathlib, tomllib
-          metadata = tomllib.loads(pathlib.Path('pyproject.toml').read_text())
-          expected = 'v' + metadata['project']['version']
+          import os, pathlib, re
+          text = pathlib.Path('aad_docs/_version.py').read_text()
+          version = re.search(r'^__version__ = "([^"]+)"$', text, re.MULTILINE).group(1)
+          expected = 'v' + version
           assert os.environ['RELEASE_TAG'] == expected, f"Expected {expected}, got {os.environ['RELEASE_TAG']}"
           PY
+      - name: Confirm the changelog has a section for this version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: grep -q "^## ${RELEASE_TAG#v} " CHANGELOG.md
       - name: Build and validate
         run: |
           python -m build
@@ -53,3 +58,24 @@ jobs:
           path: dist/
       - name: Publish with PyPI trusted publishing
         uses: pypa/gh-action-pypi-publish@release/v1
+  github-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-distributions
+          path: dist/
+      - name: Create the GitHub release with the distributions
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          version="${RELEASE_TAG#v}"
+          awk -v v="$version" '$0 ~ "^## " v " " {p=1; next} /^## / {p=0} p' CHANGELOG.md > notes.md
+          flags=""
+          if [[ "$version" =~ (a|b|rc)[0-9]+$ ]]; then flags="--prerelease"; fi
+          gh release create "$RELEASE_TAG" dist/* --title "$RELEASE_TAG" --notes-file notes.md $flags
