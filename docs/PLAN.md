@@ -53,7 +53,7 @@ What the owner can do at the end of each milestone, and what each one waits for.
 | M5 · First project | Use it on a real app | Planned | M4 and the choice of the project |
 | M6 · Database index | Search all pages and link a page to a model | Future | M5 |
 
-Decisions 0007, 0008, 0010 to 0013 and 0015 are still proposed; 0014 is accepted, and 0009 is a recommendation for M6. Each proposed decision is confirmed or changed before the milestone that builds it starts: 0007, 0008 and 0015 before M1a, 0010 before M1, 0011, 0012 and 0013 before M3.
+Decisions 0007, 0008, 0010 to 0013, 0015 and 0016 are still proposed; 0014 is accepted, and 0009 is a recommendation for M6. Each proposed decision is confirmed or changed before the milestone that builds it starts: 0007, 0008 and 0015 before M1a, 0010 before M1, 0011, 0012 and 0013 before M3, and 0016 before the requirements delivery.
 
 ## Milestones
 
@@ -185,6 +185,24 @@ Accepted when:
 - A search for a word in any page returns that page with its path in the tree.
 - The admin of a linked model opens its documentation page.
 
+### Delivery · Requirements pages in EARS (future)
+
+Recommended, not scheduled. Start it after [0016](../aad_docs/docs/07-decisions/0016-requirements-in-ears.md) is accepted and the registry of [0013](../aad_docs/docs/07-decisions/0013-visual-components.md) and `docs_check` exist.
+
+| Step | Side | Deliverable |
+|---|---|---|
+| E1 · Parser and tag | Backend | `aad_docs/ears.py` with the patterns, the `Requirement` entry in `MDX_TAGS`, its template and `ears-patterns.csv` generated from the parser |
+| E2 · Checks | Backend | D070 to D073 in `checks.py`, regenerated `checks.csv`, a test for each |
+| E3 · Pages and standard | Frontend and content | `02-requirements/` in the app node with its Spanish variant, a guide `write-requirements`, and a row and a section in `HOW-DOCS-WORK.md` |
+| E4 · Traceability | Backend and frontend | `implements` resolved to models and routes (D075), a generated `requirements.csv` shown with `<Table>`, and `proposed` requirements in the pending-decisions canvas |
+
+Accepted when:
+
+- A `Requirement` renders as a card with one pattern label for each criterion and loads no script.
+- A criterion without `SHALL`, a duplicated `id` and a translated page with different `id` values are reported, each on a fixture built to break it.
+- `docs_check` passes on the requirements pages of this repository.
+- Only the owner moves a requirement from `proposed` to `accepted`.
+
 ## Risks
 
 | Risk | Effect | Response |
@@ -215,6 +233,7 @@ Accepted when:
 | Visual components and raw HTML | Closed registry, Django templates; raw HTML never rendered; each component declares if it needs JavaScript | [0013](../aad_docs/docs/07-decisions/0013-visual-components.md) |
 | Reference tables | Generated from their owner in Python | [0012](../aad_docs/docs/07-decisions/0012-reference-tables-from-their-owner.md) |
 | Agent tooling | Dependencies and executables pinned and kept in the repository; the Mermaid check is mandatory | [0015](../aad_docs/docs/07-decisions/0015-the-repository-carries-its-agent-tooling.md) |
+| Requirements pages | EARS criteria inside a `Requirement` tag of the closed registry, checked by `docs_check` | [0016](../aad_docs/docs/07-decisions/0016-requirements-in-ears.md) |
 
 ## Next
 

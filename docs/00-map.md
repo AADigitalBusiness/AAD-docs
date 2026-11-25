@@ -52,6 +52,7 @@ AAD-docs/
 | How do I put a table, a flow or a callout inside a page? | [embed-a-piece.mdx](../aad_docs/docs/05-guides/embed-a-piece.mdx) |
 | Which tags can an `.mdx` page use? | [mdx-tags.csv](../aad_docs/docs/06-reference/mdx-tags.csv) |
 | What does it reuse from my other repositories? | [0014](../aad_docs/docs/07-decisions/0014-reuse-from-the-owners-repositories.md) |
+| How are system requirements written and checked? | [0016](../aad_docs/docs/07-decisions/0016-requirements-in-ears.md) |
 | Why was it designed this way? | [07-decisions/](../aad_docs/docs/07-decisions/) |
 | What must an agent follow here? | [AGENTS.md](../AGENTS.md) |
 | How do I release and operate it? | [08-operations.md](08-operations.md) |
