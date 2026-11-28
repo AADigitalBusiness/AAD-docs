@@ -41,8 +41,8 @@ body.plt-docs {
 
 .plt-docs__layout {
     display: grid;
-    grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr) minmax(11rem, 15rem);
-    gap: 1.75rem;
+    grid-template-columns: clamp(8rem, 20%, 16rem) minmax(0, 1fr) clamp(7rem, 17%, 15rem);
+    gap: clamp(0.5rem, 1.5vw, 1.75rem);
     box-sizing: border-box;
     width: 100%;
     max-width: none;
@@ -259,14 +259,8 @@ body.plt-docs {
 .plt-docs__main article img { max-width: 100%; height: auto; }
 .plt-docs__main article > table { display: block; max-width: 100%; overflow-x: auto; }
 
-@media (max-width: 75rem) {
-    .plt-docs__layout { grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr); }
-    .plt-docs__outline { grid-column: 2; grid-row: 1; position: static; max-height: none; }
-    .plt-docs__main { grid-column: 2; grid-row: 2; }
-    .plt-docs__nav { grid-row: 1 / span 2; }
-}
-
-@media (max-width: 48rem) {
+/* Keep the documentary layout inside desktop IDE panels, too. */
+@media (max-width: 42rem) {
     .plt-docs__layout {
         grid-template-columns: minmax(0, 1fr);
     }

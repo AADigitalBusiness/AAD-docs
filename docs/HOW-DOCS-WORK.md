@@ -155,4 +155,4 @@ Until the commands exist, the files here are written by hand as the design targe
 
 ## Default document layout
 
-Use the full available page width. On wide screens the default is three regions: documentation navigation, main content, and a local section outline. On smaller screens move the outline above the article and stack regions on narrow screens. Preserve the shared Design System tokens and readable, scrollable content.
+Use the full available page width. On wide screens the default is three regions: documentation navigation, main content, and a local section outline. Keep the three regions in desktop IDE preview panels, with flexible sidebars; only stack below 42rem (672 CSS pixels at the default font size). Preserve the shared Design System tokens and readable, scrollable content.

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% if page %}{{ page.title }}{% elif node %}{{ node.title }}{% else %}Documentation{% endif %}{% endblock %} · AAD-docs</title>
     <link rel="stylesheet" href="{% static 'aad_docs/vendor/plt-design-system.css' %}">
-    <link rel="stylesheet" href="{% static 'aad_docs/docs.css' %}">
+    <link rel="stylesheet" href="{% static 'aad_docs/docs.css' %}?v=0.1.2">
 </head>
 <body class="plt-docs">
     <header class="plt-docs__header d-navbar">
