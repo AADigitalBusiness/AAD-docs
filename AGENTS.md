@@ -43,3 +43,7 @@ Skills live in `.claude/skills/`:
 ## Scope
 
 Work only in this repository. Do not publish, share or delete anything outside it unless the owner asks.
+
+## Development branches
+
+Work in dev-ai or development subbranches. Pin development dependencies by immutable commit; replace with verified official versions at stage promotion. Do not promote to main or stage without owner approval.

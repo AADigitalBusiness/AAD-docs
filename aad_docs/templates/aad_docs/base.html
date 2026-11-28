@@ -87,7 +87,15 @@
 
             {% block content %}{% endblock %}
         </main>
+        <aside class="plt-docs__outline" aria-label="{% translate 'On this page' %}">
+            <nav aria-labelledby="aad-docs-outline-title">
+                <h2 id="aad-docs-outline-title">{% translate "On this page" %}</h2>
+                <ul id="aad-docs-outline"></ul>
+                <p id="aad-docs-outline-empty">{% translate "No sections on this page." %}</p>
+            </nav>
+        </aside>
     </div>
+    <script src="{% static 'aad_docs/outline.js' %}" defer></script>
 
     {% for script_path in scripts %}
     <script src="{% static script_path %}"></script>

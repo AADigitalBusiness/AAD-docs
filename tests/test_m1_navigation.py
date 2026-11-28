@@ -171,3 +171,12 @@ def test_visible_callable_filters_menu_and_page_access(tmp_path: Path, monkeypat
         c = Client()
         assert c.get("/docs/sec/public/").status_code == 200
         assert c.get("/docs/sec/secret/").status_code == 404
+
+
+@override_settings(AAD_DOCS={"ROOT": Path(__file__).resolve().parent.parent / "docs", "ACCESS": "public"})
+def test_default_document_layout(client: Client) -> None:
+    response = client.get("/docs/project/map/")
+    assert response.status_code == 200
+    for marker in (b'plt-docs__nav', b'plt-docs__main', b'plt-docs__outline',
+                   b'id="aad-docs-outline"', b'aad_docs/outline.js'):
+        assert marker in response.content

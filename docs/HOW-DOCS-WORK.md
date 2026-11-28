@@ -152,3 +152,7 @@ Until the commands exist, the files here are written by hand as the design targe
 - Which address a page gets: [03-architecture.md](03-architecture.md#addresses)
 - Document one of your apps: [document-an-app.md](../aad_docs/docs/05-guides/document-an-app.md)
 - Exact options of a node: [node-options.csv](../aad_docs/docs/06-reference/node-options.csv)
+
+## Default document layout
+
+Use the full available page width. On wide screens the default is three regions: documentation navigation, main content, and a local section outline. On smaller screens move the outline above the article and stack regions on narrow screens. Preserve the shared Design System tokens and readable, scrollable content.
